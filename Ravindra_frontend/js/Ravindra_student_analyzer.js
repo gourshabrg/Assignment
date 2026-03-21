@@ -113,3 +113,22 @@ for (let subject in avgData) {
   let avg = avgData[subject].total / avgData[subject].count;
   console.log(`Average ${subject} Score: ${avg.toFixed(2)}`);
 }
+
+// 5. Determine Overall Class Topper
+
+function getTopper(students) {
+  let maxMarks = 0;
+  let topper = "";
+
+  students.forEach((student) => {
+    let total = getTotalMarks(student); // function call of getTotalMarks
+    if (total > maxMarks) {
+      //  compare the total to getTotal if greater then update
+      maxMarks = total;
+      topper = student.name;
+    }
+  });
+  return { topper, maxMarks };
+}
+let top = getTopper(students);
+console.log(`Class Topper: ${top.topper} with ${top.maxMarks} marks`);
