@@ -24,7 +24,8 @@ const students = [
   },
 ];
 //1. TOTAL MARKS
-// this function take one student object and iterate  marks array of object each element and calculate the  total marks
+// this function take student object
+//iterate marks array of object each element and calculate the total marks
 function getTotalMarks(student) {
   let total = 0;
   for (let subject of student.marks) {
