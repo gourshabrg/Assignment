@@ -132,3 +132,28 @@ function getTopper(students) {
 }
 let top = getTopper(students);
 console.log(`Class Topper: ${top.topper} with ${top.maxMarks} marks`);
+
+// 6. GRADE LOGIC
+
+function getGrade(student) {
+  let avg = getAverageMarks(student);
+  // fail if any subject ≤ 40
+  for (let i = 0; i < student.marks.length; i++) {
+    if (student.marks[i].score <= 40) {
+      return `Fail (Failed in ${student.marks[i].subject})`;
+    }
+  }
+  // fail if attendance < 75
+  if (student.attendance < 75) {
+    return "Fail (Low Attendance)";
+  }
+  // grade
+  if (avg >= 85) return "A";
+  else if (avg >= 70) return "B";
+  else if (avg >= 50) return "C";
+  else return "Fail";
+}
+
+students.forEach((student) => {
+  console.log(`${student.name} Grade: ${getGrade(student)}`);
+});
