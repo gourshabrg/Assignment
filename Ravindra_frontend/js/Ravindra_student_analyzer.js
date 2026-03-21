@@ -51,3 +51,40 @@ function getAverageMarks(student) {
 students.forEach((student) => {
   console.log(`${student.name} Average: ${getAverageMarks(student)}`);
 });
+
+// 3. SUBJECT-WISE HIGHEST
+
+// take input array of object
+function getSubjectHighest(students) {
+  let result = {}; // declare the empty object for hashing
+
+  students.forEach((student) => {
+    //  iterate each student of array object
+    student.marks.forEach((mark) => {
+      // iterate each student marks of array object
+      let subject = mark.subject; // use as key of hash
+      let score = mark.score;
+      // check if the key present or not
+      // if present then check the pre value of current value max cur value is max update it
+      // if not resent then add the value
+      if (!result[subject] || score > result[subject].score) {
+        result[subject] = {
+          // this key value of hash
+          name: student.name,
+          score: score,
+        };
+      }
+    });
+  });
+
+  return result;
+}
+
+let highest = getSubjectHighest(students);
+
+// iterate the result array of object and print the value
+for (let subject in highest) {
+  console.log(
+    `Highest in ${subject}: ${highest[subject].name} (${highest[subject].score})`,
+  );
+}
