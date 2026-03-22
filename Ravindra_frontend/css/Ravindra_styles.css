@@ -36,3 +36,16 @@ header img {
   border-radius: 50%;
   margin-top: 10px;
 }
+
+/* navigation style */
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #0077cc;
+}
