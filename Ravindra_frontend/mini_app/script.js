@@ -208,7 +208,7 @@ async function init() {
   let loading = document.getElementById("loading");
 
   let data = await fetchProducts();
-  loading.style.display = "none"; // hide the loading  set css
+  loading.style.display = "none"; // hide the loading for using display css
 
   renderProducts(data);
   updateAnalytics();
