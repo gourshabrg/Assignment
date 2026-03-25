@@ -151,5 +151,19 @@ function applyFilters() {
   if (sort === "az") filtered.sort((a, b) => a.name.localeCompare(b.name));
   if (sort === "za") filtered.sort((a, b) => b.name.localeCompare(a.name));
 
-  renderProducts(filtered);
+  renderProducts(filtered); // show data based on filtered array pass in render function
+}
+
+// analytics
+function updateAnalytics() {
+  // number of product in array
+  document.getElementById("total").innerText = products.length;
+
+  // calculate the price
+  let total = products.reduce((sum, p) => sum + p.price * p.stock, 0);
+  document.getElementById("value").innerText = total;
+
+  // out of product
+  let out = products.filter((p) => p.stock === 0).length;
+  document.getElementById("out").innerText = out;
 }
