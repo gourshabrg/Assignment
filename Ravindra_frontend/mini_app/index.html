@@ -59,6 +59,26 @@
     <button onclick="nextPage()">Next</button>
   </div>
 
+  <!-- In this section we have add product and edit product functionality -->
+  <section class="form">
+    <h2>Add / Edit Product</h2>
+
+    <input id="name" placeholder="Product Name">
+    <input id="price" type="number" placeholder="Price">
+    <input id="stock" type="number" placeholder="Stock">
+
+    <select id="categoryInput">
+      <option value="">Select Category</option>
+      <option value="electronics">Electronics</option>
+      <option value="clothing">Clothing</option>
+      <option value="books">Books</option>
+      <option value="accessories">Accessories</option>
+    </select>
+
+    <button onclick="addProduct()">Save Product</button>
+  </section>
+
+
 </body>
 
 </html>
