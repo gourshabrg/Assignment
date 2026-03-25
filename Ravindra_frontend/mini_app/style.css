@@ -24,3 +24,35 @@ header h1 {
   font-weight: 600;
   letter-spacing: 1px;
 }
+
+/* controls css  */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+
+  /* width: fit-content; */
+  margin: 0 auto 25px auto;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.controls input,
+.controls select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+.controls input:focus,
+.controls select:focus {
+  border-color: #0077cc;
+}
