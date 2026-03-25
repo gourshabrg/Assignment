@@ -8,3 +8,6 @@ let defaultProducts = [
   { id: 4, name: "Headphones", price: 2000, stock: 0, category: "electronics" },
   { id: 5, name: "Watch", price: 3000, stock: 3, category: "accessories" },
 ];
+
+// Load from localStorage or default
+let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
