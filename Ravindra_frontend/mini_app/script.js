@@ -124,3 +124,32 @@ function addProduct() {
   document.getElementById("stock").value = "";
   document.getElementById("categoryInput").value = "";
 }
+
+// filters and sorting logic
+function applyFilters() {
+  let search = document.getElementById("search").value.toLowerCase();
+  let category = document.getElementById("category").value;
+  let lowStock = document.getElementById("lowStock").checked;
+  let sort = document.getElementById("sort").value;
+
+  // search by the name
+  let filtered = products.filter((p) => p.name.toLowerCase().includes(search));
+
+  // search by the category
+  if (category !== "all") {
+    filtered = filtered.filter((p) => p.category === category);
+  }
+
+  // implement the low stack threshold if stock value is less then 5 then stack is low
+  if (lowStock) {
+    filtered = filtered.filter((p) => p.stock < 5);
+  }
+
+  // apply the sorting logic
+  if (sort === "low") filtered.sort((a, b) => a.price - b.price);
+  if (sort === "high") filtered.sort((a, b) => b.price - a.price);
+  if (sort === "az") filtered.sort((a, b) => a.name.localeCompare(b.name));
+  if (sort === "za") filtered.sort((a, b) => b.name.localeCompare(a.name));
+
+  renderProducts(filtered);
+}
