@@ -4,3 +4,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* add the body styling  this can be same in all the page */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f7fb;
+  color: #2c3e50;
+  padding: 20px;
+}
