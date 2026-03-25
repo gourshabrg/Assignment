@@ -193,3 +193,25 @@ document.getElementById("search").addEventListener("input", update);
 document.getElementById("category").addEventListener("change", update);
 document.getElementById("sort").addEventListener("change", update);
 document.getElementById("lowStock").addEventListener("change", update);
+
+// simulate API using the promise and setTimeout
+// return the promise object and also wait same time to fetch data like real api
+function fetchProducts() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(products), 1500);
+  });
+}
+
+// initial function that load the data its async function
+// that get the promise obj
+async function init() {
+  let loading = document.getElementById("loading");
+
+  let data = await fetchProducts();
+  loading.style.display = "none"; // hide the loading  set css
+
+  renderProducts(data);
+  updateAnalytics();
+}
+
+init();
