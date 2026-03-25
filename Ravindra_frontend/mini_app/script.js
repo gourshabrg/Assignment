@@ -81,3 +81,46 @@ function editProduct(id) {
 
   editId = id;
 }
+
+// add / update logic
+function addProduct() {
+  // get the form value that written by user
+  let name = document.getElementById("name").value;
+  let price = +document.getElementById("price").value;
+  let stock = +document.getElementById("stock").value;
+  let category = document.getElementById("categoryInput").value;
+
+  // check the data is valid or not
+  if (!name || price <= 0 || stock < 0 || !category) {
+    alert("Fill all fields correctly");
+    return;
+  }
+
+  // if id is present the edit the that product object
+  if (editId !== null) {
+    let p = products.find((x) => x.id === editId);
+    p.name = name;
+    p.price = price;
+    p.stock = stock;
+    p.category = category;
+    editId = null;
+  } else {
+    // if product object is not present then we create
+    products.push({
+      id: Date.now(), // use id ans date its unique
+      name,
+      price,
+      stock,
+      category,
+    });
+  }
+
+  saveData(); // call the function to save the local storage
+  update(); // this function update the ui part
+
+  // empty the form
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("stock").value = "";
+  document.getElementById("categoryInput").value = "";
+}
