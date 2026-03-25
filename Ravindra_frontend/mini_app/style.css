@@ -132,3 +132,47 @@ button:hover {
 #pagination button {
   margin: 5px;
 }
+
+/*form  */
+.form {
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  max-width: 450px;
+  width: 100%;
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.form input,
+.form select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form input:focus,
+.form select:focus {
+  border-color: #0077cc;
+}
+
+.form button {
+  width: 200px;
+  margin: 10px auto;
+  padding: 12px;
+  font-size: 15px;
+}
