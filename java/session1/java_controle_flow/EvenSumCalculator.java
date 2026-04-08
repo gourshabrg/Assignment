@@ -1,5 +1,4 @@
 
-
 public class EvenSumCalculator {
 
     private static final int START = 1;
