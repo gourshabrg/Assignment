@@ -1,3 +1,4 @@
+import java.util.Scanner;
 // Parent Class
 class Student {
     private String name;
@@ -50,9 +51,26 @@ class GraduateStudent extends Student {
 public class StudentInheritanceApp {
     public static void main(String[] args) {
 
-        GraduateStudent student =
-                new GraduateStudent("Ravi", 101, 85.5, "Computer Science");
+        Scanner scanner = new Scanner(System.in);
 
+        // Taking user input
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter Roll Number: ");
+        int rollNumber = scanner.nextInt();
+
+        System.out.print("Enter Marks: ");
+        double marks = scanner.nextDouble();
+        scanner.nextLine(); // consume leftover newline
+
+        System.out.print("Enter Specialization: ");
+        String specialization = scanner.nextLine();
+
+        GraduateStudent student =
+                new GraduateStudent(name, rollNumber, marks, specialization);
+        System.out.println("\n--- Student Details ---");
         student.displayGraduateDetails();
+        scanner.close();
     }
 }
