@@ -1,5 +1,9 @@
 package com.example.springcoreassignment.component;
 
-public class MessageFormatter {
-  
+// Interface for message formatting
+public interface MessageFormatter {
+
+    String formatMessage();
+
+    String getType(); // to identify formatter
 }
