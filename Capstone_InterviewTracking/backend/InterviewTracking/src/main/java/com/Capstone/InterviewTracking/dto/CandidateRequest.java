@@ -2,6 +2,9 @@ package com.Capstone.InterviewTracking.dto;
 
 import jakarta.validation.constraints.*;
 
+/**
+ * Request DTO for creating or updating a candidate profile.
+ */
 public class CandidateRequest {
 
     @NotBlank(message = "Full name is required")
@@ -25,8 +28,6 @@ public class CandidateRequest {
     private Integer noticePeriod;
     private String preferredLocation;
     private String source;
-
-
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }

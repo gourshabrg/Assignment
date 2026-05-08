@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Represents a scheduled interview session for a candidate.
+ */
 @Entity
 @Table(name = "interview")
 public class Interview extends BaseEntity {
@@ -21,7 +24,6 @@ public class Interview extends BaseEntity {
     private InterviewRound round;
 
     private LocalDateTime interviewDateTime;
-
     private String focusArea;
 
     @Enumerated(EnumType.STRING)

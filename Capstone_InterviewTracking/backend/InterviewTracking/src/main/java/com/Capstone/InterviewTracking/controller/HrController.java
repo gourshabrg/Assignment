@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
+/**
+ * REST controller for all HR-only operations such as managing candidates, interviews, and panels.
+ */
 @RestController
 @RequestMapping(AppConstants.HR_BASE_PATH)
 public class HrController {
@@ -34,6 +37,16 @@ public class HrController {
     private final FeedbackService feedbackService;
     private final InterviewRepository interviewRepository;
 
+    /**
+     * Creates an HrController with all required dependencies.
+     *
+     * @param panelService the panel service
+     * @param applicationRepository the application repository
+     * @param panelRepository the panel repository
+     * @param interviewService the interview service
+     * @param feedbackService the feedback service
+     * @param interviewRepository the interview repository
+     */
     public HrController(PanelService panelService,
                         ApplicationRepository applicationRepository,
                         PanelRepository panelRepository,
@@ -48,12 +61,26 @@ public class HrController {
         this.interviewRepository = interviewRepository;
     }
 
+    /**
+     * Creates a new panel member account and sends a verification email.
+     *
+     * @param request the panel member's details
+     * @return the creation response
+     */
     @PostMapping("/create-panel")
     public ResponseEntity<ApiResponse<String>> createPanel(@RequestBody @Valid PanelRequest request) {
         panelService.createPanel(request);
         return ResponseEntity.ok(ApiResponse.success("Panel created successfully. Email sent.", null));
     }
 
+    /**
+     * Returns a filtered list of all candidate applications.
+     *
+     * @param stage optional hiring stage filter
+     * @param status optional application status filter
+     * @param jobId optional job ID filter
+     * @return the list of candidate applications
+     */
     @GetMapping("/candidates")
     public ResponseEntity<ApiResponse<List<CandidateListResponse>>> getAllCandidates(
             @RequestParam(required = false) String stage,
@@ -89,6 +116,12 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Candidates fetched", result));
     }
 
+    /**
+     * Returns the full profile and interview history for a candidate application.
+     *
+     * @param applicationId the application ID
+     * @return the candidate detail response
+     */
     @GetMapping("/candidates/{applicationId}")
     public ResponseEntity<ApiResponse<CandidateDetailResponse>> getCandidateDetail(
             @PathVariable Long applicationId) {
@@ -100,6 +133,13 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
     }
 
+    /**
+     * Schedules an interview for a candidate's current hiring stage.
+     *
+     * @param request the scheduling details
+     * @param authentication the authenticated HR user
+     * @return the scheduled interview response
+     */
     @PostMapping("/interviews/schedule")
     public ResponseEntity<ApiResponse<InterviewResponse>> scheduleInterview(
             @RequestBody @Valid InterviewScheduleRequest request,
@@ -111,6 +151,11 @@ public class HrController {
                 .body(ApiResponse.success("Interview scheduled successfully", response));
     }
 
+    /**
+     * Returns all HR-round interviews.
+     *
+     * @return the list of HR interview responses
+     */
     @GetMapping("/interviews")
     public ResponseEntity<ApiResponse<List<InterviewResponse>>> getHRInterviews() {
         List<Interview> hrInterviews = interviewRepository
@@ -123,6 +168,12 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("HR interviews fetched", result));
     }
 
+    /**
+     * Returns the candidate detail for a specific HR-round interview.
+     *
+     * @param interviewId the interview ID
+     * @return the candidate detail response
+     */
     @GetMapping("/interviews/{interviewId}/candidate")
     public ResponseEntity<ApiResponse<CandidateDetailResponse>> getCandidateForHRInterview(
             @PathVariable Long interviewId) {
@@ -142,6 +193,14 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
     }
 
+    /**
+     * Submits HR feedback for a completed HR-round interview.
+     *
+     * @param interviewId the interview ID
+     * @param request the feedback details
+     * @param authentication the authenticated HR user
+     * @return the saved feedback response
+     */
     @PostMapping("/interviews/{interviewId}/feedback")
     public ResponseEntity<ApiResponse<FeedbackResponse>> submitHRFeedback(
             @PathVariable Long interviewId,
@@ -154,6 +213,12 @@ public class HrController {
                 .body(ApiResponse.success("HR feedback submitted successfully", response));
     }
 
+    /**
+     * Returns all feedback records for a given interview.
+     *
+     * @param interviewId the interview ID
+     * @return the list of feedback responses
+     */
     @GetMapping("/interviews/{interviewId}/feedback")
     public ResponseEntity<ApiResponse<List<FeedbackResponse>>> getFeedbackForInterview(
             @PathVariable Long interviewId) {
@@ -163,12 +228,11 @@ public class HrController {
     }
 
     /**
-     * Updates the hiring stage of a candidate's application.
-     * <p>
-     * Stage progression is strictly sequential: PROFILING → SCREENING → L1 → L2 → HR.
-     * Skipping stages or moving backwards is not permitted.
-     * Rejected applications cannot have their stage changed.
-     * </p>
+     * Advances a candidate's application to the next hiring stage.
+     *
+     * @param applicationId the application ID
+     * @param request the target stage
+     * @return the stage update response
      */
     @PutMapping("/applications/{applicationId}/stage")
     public ResponseEntity<ApiResponse<String>> updateStage(
@@ -213,6 +277,12 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Stage updated to " + newStage.name(), null));
     }
 
+    /**
+     * Marks a candidate's application as rejected.
+     *
+     * @param applicationId the application ID
+     * @return the rejection response
+     */
     @PutMapping("/applications/{applicationId}/reject")
     public ResponseEntity<ApiResponse<String>> rejectCandidate(
             @PathVariable Long applicationId) {
@@ -226,6 +296,12 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Candidate rejected", null));
     }
 
+    /**
+     * Marks a candidate's application as selected.
+     *
+     * @param applicationId the application ID
+     * @return the selection response
+     */
     @PutMapping("/applications/{applicationId}/select")
     public ResponseEntity<ApiResponse<String>> selectCandidate(
             @PathVariable Long applicationId) {
@@ -243,6 +319,11 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Candidate selected", null));
     }
 
+    /**
+     * Returns all registered panel members.
+     *
+     * @return the list of panel responses
+     */
     @GetMapping("/panels")
     public ResponseEntity<ApiResponse<List<PanelResponse>>> getAllPanels() {
         List<PanelResponse> panels = panelRepository.findAll().stream()
@@ -253,6 +334,12 @@ public class HrController {
         return ResponseEntity.ok(ApiResponse.success("Panels fetched", panels));
     }
 
+    /**
+     * Maps an Application entity to a CandidateListResponse DTO.
+     *
+     * @param app the application entity
+     * @return the candidate list response
+     */
     private CandidateListResponse toCandidateListResponse(Application app) {
         CandidateListResponse r = new CandidateListResponse();
         r.setApplicationId(app.getId());
@@ -268,6 +355,13 @@ public class HrController {
         return r;
     }
 
+    /**
+     * Builds a CandidateDetailResponse for an application, including all interviews.
+     *
+     * @param app the application entity
+     * @param includeFeedback whether to include feedback data
+     * @return the candidate detail response
+     */
     private CandidateDetailResponse buildDetailResponse(Application app, boolean includeFeedback) {
         Candidate c = app.getCandidate();
         JobDescription jd = app.getJob();

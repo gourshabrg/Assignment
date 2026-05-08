@@ -1,16 +1,24 @@
 package com.Capstone.InterviewTracking.dto;
 
+/**
+ * Response DTO representing submitted feedback for an interview round.
+ */
 public class FeedbackResponse {
 
     private Long id;
     private Long interviewId;
     private String round;
+
+    /** Full name of the panel member, or HR reviewer email for the HR round. */
     private String panelName;
+
     private String comments;
     private String strengths;
     private String weaknesses;
     private String areasCovered;
     private int rating;
+
+    /** Final recommendation: SELECTED or REJECTED. */
     private String status;
 
     public FeedbackResponse() {}

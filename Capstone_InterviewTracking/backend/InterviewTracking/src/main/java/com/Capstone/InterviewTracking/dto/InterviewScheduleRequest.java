@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Request DTO for scheduling an interview for a candidate.
+ */
 public class InterviewScheduleRequest {
 
     @NotNull(message = "Application ID is required")
@@ -17,8 +20,10 @@ public class InterviewScheduleRequest {
     @NotNull(message = "Interview date and time is required")
     private LocalDateTime interviewDateTime;
 
+    /** Technical or behavioural focus areas to be covered in this session. */
     private String focusArea;
 
+    /** IDs of the panel members assigned to this interview. */
     private List<Long> panelIds;
 
     public Long getApplicationId() { return applicationId; }

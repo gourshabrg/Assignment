@@ -6,12 +6,18 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Request DTO for submitting post-interview feedback.
+ */
 public class FeedbackRequest {
 
     @NotBlank(message = "Comments are required")
     private String comments;
 
+    /** Positive observations about the candidate's skills or attitude. */
     private String strengths;
+
+    /** Areas where the candidate needs improvement or showed gaps. */
     private String weaknesses;
 
     @NotBlank(message = "Areas covered is required")

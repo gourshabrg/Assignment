@@ -3,6 +3,9 @@ package com.Capstone.InterviewTracking.entity;
 import com.Capstone.InterviewTracking.enums.FeedbackStatus;
 import jakarta.persistence.*;
 
+/**
+ * Represents feedback submitted after an interview round by a panel member or HR.
+ */
 @Entity
 @Table(name = "feedback")
 public class Feedback extends BaseEntity {
@@ -20,12 +23,10 @@ public class Feedback extends BaseEntity {
     private Panel panel;
 
     private String hrReviewer;
-
     private String comments;
     private String strengths;
     private String weaknesses;
     private String areasCovered;
-
     private int rating;
 
     @Enumerated(EnumType.STRING)

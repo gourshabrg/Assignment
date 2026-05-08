@@ -1,10 +1,9 @@
 package com.Capstone.InterviewTracking.entity;
 
-//import com.Capstone.InterviewTracking.enums.*;
 import jakarta.persistence.*;
 
 /**
- * Candidate profile and hiring pipeline details linked with a job description and user account.
+ * Represents a job candidate with their personal and professional details.
  */
 @Entity
 @Table(name = "candidate")
@@ -18,14 +17,11 @@ public class Candidate extends BaseEntity {
     private String email;
     private String mobile;
     private String resumeUrl;
-
     private String currentCompany;
     private Double totalExperience;
     private Double relevantExperience;
-
     private Double currentCtc;
     private Double expectedCtc;
-
     private Integer noticePeriod;
     private String preferredLocation;
     private String source;
@@ -37,12 +33,6 @@ public class Candidate extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    // @Enumerated(EnumType.STRING)
-    // private InterviewStage stage;
-
-    // @Enumerated(EnumType.STRING)
-    // private ApplicationStatus status;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -88,10 +78,4 @@ public class Candidate extends BaseEntity {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
-
-    // public InterviewStage getStage() { return stage; }
-    // public void setStage(InterviewStage stage) { this.stage = stage; }
-
-    // public ApplicationStatus getStatus() { return status; }
-    // public void setStatus(ApplicationStatus status) { this.status = status; }
 }

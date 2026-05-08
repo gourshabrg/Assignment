@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * REST controller for managing job descriptions.
+ */
 @RestController
 @RequestMapping(AppConstants.JOB_BASE_PATH)
 public class JobDescriptionController {
@@ -30,10 +33,22 @@ public class JobDescriptionController {
 
     private final JobDescriptionService jobDescriptionService;
 
+    /**
+     * Creates a JobDescriptionController with the required service.
+     *
+     * @param jobDescriptionService the job description service
+     */
     public JobDescriptionController(JobDescriptionService jobDescriptionService) {
         this.jobDescriptionService = jobDescriptionService;
     }
 
+    /**
+     * Creates a new job description posted by the authenticated HR user.
+     *
+     * @param request the job details
+     * @param authentication the authenticated HR user
+     * @return the created job description response
+     */
     @PostMapping
     public ResponseEntity<ApiResponse<JobDescriptionResponse>> create(
             @Valid @RequestBody JobDescriptionRequest request,
@@ -46,6 +61,11 @@ public class JobDescriptionController {
                 .body(ApiResponse.success("Job description created successfully", response));
     }
 
+    /**
+     * Returns all currently active job descriptions.
+     *
+     * @return the list of active job descriptions
+     */
     @GetMapping
     public ResponseEntity<ApiResponse<List<JobDescriptionResponse>>> findActiveJobs() {
         LOGGER.info("Fetch active job descriptions request received");
@@ -54,58 +74,76 @@ public class JobDescriptionController {
         return ResponseEntity.ok(ApiResponse.success("Job descriptions fetched successfully", response));
     }
 
+    /**
+     * Updates an existing job description.
+     *
+     * @param id the job ID
+     * @param request the updated job details
+     * @param authentication the authenticated HR user
+     * @return the updated job description response
+     */
     @PutMapping("/{id}")
-public ResponseEntity<ApiResponse<JobDescriptionResponse>> update(
-        @PathVariable Long id,
-        @Valid @RequestBody JobDescriptionRequest request,
-        Authentication authentication) {
+    public ResponseEntity<ApiResponse<JobDescriptionResponse>> update(
+            @PathVariable Long id,
+            @Valid @RequestBody JobDescriptionRequest request,
+            Authentication authentication) {
 
-    JobDescriptionResponse response = jobDescriptionService.update(id, request, authentication.getName());
+        JobDescriptionResponse response = jobDescriptionService.update(id, request, authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Job updated", response));
+    }
 
-    return ResponseEntity.ok(ApiResponse.success("Job updated", response));
-}
+    /**
+     * Permanently deletes a job description.
+     *
+     * @param id the job ID
+     * @param authentication the authenticated HR user
+     * @return the deletion response
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(
+            @PathVariable Long id,
+            Authentication authentication) {
 
-@DeleteMapping("/{id}")
-public ResponseEntity<ApiResponse<Void>> delete(
-        @PathVariable Long id,
-        Authentication authentication) {
+        jobDescriptionService.delete(id, authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Job deleted", null));
+    }
 
-    jobDescriptionService.delete(id, authentication.getName());
-    
+    /**
+     * Returns a single job description by ID.
+     *
+     * @param id the job ID
+     * @return the job description response
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<JobDescriptionResponse>> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.success("Job fetched", jobDescriptionService.getById(id)));
+    }
 
-    return ResponseEntity.ok(ApiResponse.success("Job deleted", null));
-}
+    /**
+     * Returns all job descriptions for the HR management view.
+     *
+     * @return the list of all job descriptions
+     */
+    @GetMapping("/hr")
+    public ResponseEntity<ApiResponse<List<JobDescriptionResponse>>> getAllForHR() {
+        return ResponseEntity.ok(
+                ApiResponse.success("All jobs (HR view)", jobDescriptionService.findAllForHR()));
+    }
 
-@GetMapping("/{id}")
-public ResponseEntity<ApiResponse<JobDescriptionResponse>> getById(@PathVariable Long id) {
+    /**
+     * Toggles the active or inactive state of a job.
+     *
+     * @param id the job ID
+     * @param authentication the authenticated HR user
+     * @return the toggle response
+     */
+    @PutMapping("/{id}/toggle")
+    public ResponseEntity<ApiResponse<Void>> toggleJob(
+            @PathVariable Long id,
+            Authentication authentication) {
 
-
-    return ResponseEntity.ok(
-            ApiResponse.success("Job fetched", jobDescriptionService.getById(id)));
-}
-
-@GetMapping("/hr")
-public ResponseEntity<ApiResponse<List<JobDescriptionResponse>>> getAllForHR() {
-   
-
-    return ResponseEntity.ok(
-            ApiResponse.success("All jobs (HR view)", jobDescriptionService.findAllForHR()));
-            
-            
-}
-
-@PutMapping("/{id}/toggle")
-public ResponseEntity<ApiResponse<Void>> toggleJob(
-        @PathVariable Long id,
-        Authentication authentication) {
-
-    jobDescriptionService.toggleActive(id, authentication.getName());
-      
-
-    return ResponseEntity.ok(ApiResponse.success("Job status updated", null));
-
-  
-}
-
-
+        jobDescriptionService.toggleActive(id, authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Job status updated", null));
+    }
 }

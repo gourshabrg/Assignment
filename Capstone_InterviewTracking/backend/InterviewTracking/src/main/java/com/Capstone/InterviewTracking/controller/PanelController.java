@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * REST controller for panel member operations such as viewing interviews and submitting feedback.
+ */
 @RestController
 @RequestMapping(AppConstants.PANEL_BASE_PATH)
 public class PanelController {
@@ -28,6 +31,16 @@ public class PanelController {
     private final PanelRepository panelRepository;
     private final ApplicationRepository applicationRepository;
 
+    /**
+     * Creates a PanelController with all required dependencies.
+     *
+     * @param interviewService the interview service
+     * @param interviewServiceImpl the interview service implementation
+     * @param feedbackService the feedback service
+     * @param interviewRepository the interview repository
+     * @param panelRepository the panel repository
+     * @param applicationRepository the application repository
+     */
     public PanelController(InterviewService interviewService,
                            InterviewServiceImpl interviewServiceImpl,
                            FeedbackService feedbackService,
@@ -42,12 +55,25 @@ public class PanelController {
         this.applicationRepository = applicationRepository;
     }
 
+    /**
+     * Returns all interviews assigned to the authenticated panel member.
+     *
+     * @param authentication the authenticated panel user
+     * @return the list of interview responses
+     */
     @GetMapping("/interviews")
     public ResponseEntity<ApiResponse<List<InterviewResponse>>> getMyInterviews(Authentication authentication) {
         List<InterviewResponse> interviews = interviewService.getInterviewsByPanel(authentication.getName());
         return ResponseEntity.ok(ApiResponse.success("Interviews fetched", interviews));
     }
 
+    /**
+     * Returns the candidate detail for a specific interview assigned to the panel member.
+     *
+     * @param interviewId the interview ID
+     * @param authentication the authenticated panel user
+     * @return the candidate detail response
+     */
     @GetMapping("/interviews/{interviewId}/candidate")
     public ResponseEntity<ApiResponse<CandidateDetailResponse>> getCandidateForInterview(
             @PathVariable Long interviewId,
@@ -74,6 +100,14 @@ public class PanelController {
         return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
     }
 
+    /**
+     * Submits feedback for an interview from the authenticated panel member.
+     *
+     * @param interviewId the interview ID
+     * @param request the feedback details
+     * @param authentication the authenticated panel user
+     * @return the saved feedback response
+     */
     @PostMapping("/interviews/{interviewId}/feedback")
     public ResponseEntity<ApiResponse<FeedbackResponse>> submitFeedback(
             @PathVariable Long interviewId,
@@ -86,6 +120,13 @@ public class PanelController {
                 .body(ApiResponse.success("Feedback submitted successfully", response));
     }
 
+    /**
+     * Builds a CandidateDetailResponse from an interview and its associated application.
+     *
+     * @param interview the interview entity
+     * @param application the candidate's application
+     * @return the candidate detail response
+     */
     private CandidateDetailResponse buildCandidateResponse(Interview interview, Application application) {
         Candidate c = interview.getCandidate();
         JobDescription jd = application.getJob();

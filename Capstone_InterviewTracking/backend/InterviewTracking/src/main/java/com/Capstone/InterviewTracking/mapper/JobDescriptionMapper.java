@@ -6,9 +6,19 @@ import com.Capstone.InterviewTracking.entity.JobDescription;
 import com.Capstone.InterviewTracking.entity.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mapper component for converting between JobDescription entities and DTOs.
+ */
 @Component
 public class JobDescriptionMapper {
 
+    /**
+     * Converts a JobDescriptionRequest to a JobDescription entity.
+     *
+     * @param request the job description request
+     * @param createdBy the HR user creating the job
+     * @return the job description entity
+     */
     public JobDescription toEntity(JobDescriptionRequest request, User createdBy) {
         JobDescription jobDescription = new JobDescription();
         jobDescription.setTitle(request.getTitle().trim());
@@ -25,6 +35,12 @@ public class JobDescriptionMapper {
         return jobDescription;
     }
 
+    /**
+     * Converts a JobDescription entity to a JobDescriptionResponse DTO.
+     *
+     * @param jobDescription the job description entity
+     * @return the job description response
+     */
     public JobDescriptionResponse toResponse(JobDescription jobDescription) {
         JobDescriptionResponse response = new JobDescriptionResponse();
         response.setId(jobDescription.getId());

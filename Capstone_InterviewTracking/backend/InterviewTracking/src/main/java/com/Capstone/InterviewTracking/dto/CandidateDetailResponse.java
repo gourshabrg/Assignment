@@ -3,6 +3,9 @@ package com.Capstone.InterviewTracking.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Response DTO representing a candidate's full profile, application state, and interview history.
+ */
 public class CandidateDetailResponse {
 
     private Long applicationId;
@@ -31,7 +34,10 @@ public class CandidateDetailResponse {
     private String status;
     private LocalDateTime appliedAt;
 
+    /** All interview sessions scheduled for this candidate, across all rounds. */
     private List<InterviewResponse> interviews;
+
+    /** Aggregated feedback from all completed rounds. */
     private List<FeedbackResponse> feedbacks;
 
     public CandidateDetailResponse() {}

@@ -1,4 +1,5 @@
 package com.Capstone.InterviewTracking.service.impl;
+
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.Capstone.InterviewTracking.service.GoogleAuthService;
 import com.google.api.client.auth.oauth2.Credential;
@@ -14,14 +15,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 
+/**
+ * Implementation of GoogleAuthService that loads OAuth2 credentials from credentials.json.
+ */
 @Service
 public class GoogleAuthServiceImpl implements GoogleAuthService {
 
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
+    /**
+     * Returns a valid Google OAuth2 credential for the Drive API.
+     *
+     * @return the authorised credential
+     * @throws Exception if credentials cannot be loaded or authorisation fails
+     */
     @Override
     public Credential getCredentials() throws Exception {
-
         InputStream in = getClass()
                 .getClassLoader()
                 .getResourceAsStream("credentials.json");
@@ -50,7 +59,6 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
         LocalServerReceiver receiver =
                 new LocalServerReceiver.Builder().setPort(8888).build();
 
-        return new AuthorizationCodeInstalledApp(flow, receiver)
-                .authorize("user");
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 }

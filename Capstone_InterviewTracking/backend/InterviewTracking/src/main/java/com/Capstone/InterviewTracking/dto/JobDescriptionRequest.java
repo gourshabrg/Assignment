@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
+/**
+ * Request DTO for creating or updating a job description.
+ */
 public class JobDescriptionRequest {
 
     @NotBlank(message = "Job title is required")
@@ -34,75 +37,30 @@ public class JobDescriptionRequest {
     @NotNull(message = "Job type is required")
     private JobType jobType;
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public String getSkills() {
-        return skills;
-    }
+    public Double getMinSalary() { return minSalary; }
+    public void setMinSalary(Double minSalary) { this.minSalary = minSalary; }
 
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
+    public Double getMaxSalary() { return maxSalary; }
+    public void setMaxSalary(Double maxSalary) { this.maxSalary = maxSalary; }
 
-    public String getLocation() {
-        return location;
-    }
+    public Integer getMinExperience() { return minExperience; }
+    public void setMinExperience(Integer minExperience) { this.minExperience = minExperience; }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    public Integer getMaxExperience() { return maxExperience; }
+    public void setMaxExperience(Integer maxExperience) { this.maxExperience = maxExperience; }
 
-    public Double getMinSalary() {
-        return minSalary;
-    }
-
-    public void setMinSalary(Double minSalary) {
-        this.minSalary = minSalary;
-    }
-
-    public Double getMaxSalary() {
-        return maxSalary;
-    }
-
-    public void setMaxSalary(Double maxSalary) {
-        this.maxSalary = maxSalary;
-    }
-
-    public Integer getMinExperience() {
-        return minExperience;
-    }
-
-    public void setMinExperience(Integer minExperience) {
-        this.minExperience = minExperience;
-    }
-
-    public Integer getMaxExperience() {
-        return maxExperience;
-    }
-
-    public void setMaxExperience(Integer maxExperience) {
-        this.maxExperience = maxExperience;
-    }
-
-    public JobType getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(JobType jobType) {
-        this.jobType = jobType;
-    }
+    public JobType getJobType() { return jobType; }
+    public void setJobType(JobType jobType) { this.jobType = jobType; }
 }

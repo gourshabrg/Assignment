@@ -2,6 +2,9 @@ package com.Capstone.InterviewTracking.dto;
 
 import java.time.LocalDateTime;
 
+/**
+ * Summary response DTO used in the HR candidate list view.
+ */
 public class CandidateListResponse {
 
     private Long applicationId;

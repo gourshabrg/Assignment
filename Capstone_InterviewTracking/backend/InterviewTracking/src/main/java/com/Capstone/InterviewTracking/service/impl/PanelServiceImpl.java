@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Implementation of PanelService that creates panel member accounts and sends verification emails.
+ */
 @Service
 public class PanelServiceImpl implements PanelService {
 
@@ -22,6 +25,13 @@ public class PanelServiceImpl implements PanelService {
     private final UserRepository userRepository;
     private final EmailServiceImpl emailService;
 
+    /**
+     * Creates a PanelServiceImpl with the required repositories and email service.
+     *
+     * @param panelRepository the panel repository
+     * @param userRepository the user repository
+     * @param emailService the email service
+     */
     public PanelServiceImpl(PanelRepository panelRepository,
                             UserRepository userRepository,
                             EmailServiceImpl emailService) {
@@ -30,10 +40,14 @@ public class PanelServiceImpl implements PanelService {
         this.emailService = emailService;
     }
 
+    /**
+     * Creates a new panel member and their user account, then sends a verification email.
+     *
+     * @param request the panel member's details
+     */
     @Override
     @Transactional
     public void createPanel(PanelRequest request) {
-
         if (panelRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("A panel member with this email already exists");
         }

@@ -3,6 +3,9 @@ package com.Capstone.InterviewTracking.entity;
 import com.Capstone.InterviewTracking.enums.JobType;
 import jakarta.persistence.*;
 
+/**
+ * Represents a job opening created by an HR user.
+ */
 @Entity
 @Table(name = "job_description")
 public class JobDescription extends BaseEntity {
@@ -15,10 +18,8 @@ public class JobDescription extends BaseEntity {
     private String description;
     private String skills;
     private String location;
-
     private Double minSalary;
     private Double maxSalary;
-
     private Integer minExperience;
     private Integer maxExperience;
 
@@ -31,99 +32,39 @@ public class JobDescription extends BaseEntity {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getSkills() { return skills; }
+    public void setSkills(String skills) { this.skills = skills; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Double getMinSalary() { return minSalary; }
+    public void setMinSalary(Double minSalary) { this.minSalary = minSalary; }
 
-    public String getSkills() {
-        return skills;
-    }
+    public Double getMaxSalary() { return maxSalary; }
+    public void setMaxSalary(Double maxSalary) { this.maxSalary = maxSalary; }
 
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
+    public Integer getMinExperience() { return minExperience; }
+    public void setMinExperience(Integer minExperience) { this.minExperience = minExperience; }
 
-    public String getLocation() {
-        return location;
-    }
+    public Integer getMaxExperience() { return maxExperience; }
+    public void setMaxExperience(Integer maxExperience) { this.maxExperience = maxExperience; }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    public JobType getJobType() { return jobType; }
+    public void setJobType(JobType jobType) { this.jobType = jobType; }
 
-    public Double getMinSalary() {
-        return minSalary;
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
-    public void setMinSalary(Double minSalary) {
-        this.minSalary = minSalary;
-    }
-
-    public Double getMaxSalary() {
-        return maxSalary;
-    }
-
-    public void setMaxSalary(Double maxSalary) {
-        this.maxSalary = maxSalary;
-    }
-
-    public Integer getMinExperience() {
-        return minExperience;
-    }
-
-    public void setMinExperience(Integer minExperience) {
-        this.minExperience = minExperience;
-    }
-
-    public Integer getMaxExperience() {
-        return maxExperience;
-    }
-
-    public void setMaxExperience(Integer maxExperience) {
-        this.maxExperience = maxExperience;
-    }
-
-    public JobType getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(JobType jobType) {
-        this.jobType = jobType;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
 }

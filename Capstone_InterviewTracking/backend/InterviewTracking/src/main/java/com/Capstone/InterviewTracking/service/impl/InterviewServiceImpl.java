@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of InterviewService that handles interview scheduling and retrieval.
+ */
 @Service
 public class InterviewServiceImpl implements InterviewService {
 
@@ -26,6 +29,14 @@ public class InterviewServiceImpl implements InterviewService {
     private final InterviewRepository interviewRepository;
     private final EmailService emailService;
 
+    /**
+     * Creates an InterviewServiceImpl with the required dependencies.
+     *
+     * @param applicationRepository the application repository
+     * @param panelRepository the panel repository
+     * @param interviewRepository the interview repository
+     * @param emailService the email service
+     */
     public InterviewServiceImpl(ApplicationRepository applicationRepository,
                                 PanelRepository panelRepository,
                                 InterviewRepository interviewRepository,
@@ -37,13 +48,11 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     /**
-     * Schedules an interview for a candidate.
-     * <p>
-     * The requested interview round must correspond to the candidate's current hiring stage.
-     * Allowed progression: PROFILING→SCREENING, SCREENING→L1, L1→L2, L2→HR.
-     * Scheduling an interview for a round that does not match the candidate's current stage
-     * is not permitted — the candidate must complete each stage before advancing.
-     * </p>
+     * Schedules an interview for a candidate and sends notification emails.
+     *
+     * @param request the schedule request details
+     * @param hrEmail the HR user's email for HR-round notifications
+     * @return the created interview response
      */
     @Override
     public InterviewResponse scheduleInterview(InterviewScheduleRequest request, String hrEmail) {
@@ -128,6 +137,12 @@ public class InterviewServiceImpl implements InterviewService {
         return toResponse(interview, application);
     }
 
+    /**
+     * Returns all interviews assigned to the given panel member.
+     *
+     * @param panelEmail the panel member's email
+     * @return list of interview responses
+     */
     @Override
     public List<InterviewResponse> getInterviewsByPanel(String panelEmail) {
         Panel panel = panelRepository.findByEmail(panelEmail)
@@ -139,6 +154,12 @@ public class InterviewServiceImpl implements InterviewService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns all interviews for a specific candidate.
+     *
+     * @param candidateId the candidate's ID
+     * @return list of interview responses
+     */
     @Override
     public List<InterviewResponse> getInterviewsByCandidate(Long candidateId) {
         return interviewRepository.findAll()
@@ -148,10 +169,23 @@ public class InterviewServiceImpl implements InterviewService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Converts an Interview entity to an InterviewResponse DTO with no application context.
+     *
+     * @param interview the interview entity
+     * @return the interview response
+     */
     public InterviewResponse toResponse(Interview interview) {
         return toResponse(interview, null);
     }
 
+    /**
+     * Converts an Interview entity to an InterviewResponse DTO.
+     *
+     * @param interview the interview entity
+     * @param application the associated application, or null to resolve automatically
+     * @return the interview response
+     */
     public InterviewResponse toResponse(Interview interview, Application application) {
         InterviewResponse response = new InterviewResponse();
         response.setId(interview.getId());

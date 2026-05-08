@@ -1,5 +1,8 @@
 package com.Capstone.InterviewTracking.dto;
 
+/**
+ * Response DTO representing a panel member's public profile.
+ */
 public class PanelResponse {
 
     private Long id;
@@ -9,8 +12,19 @@ public class PanelResponse {
     private String organization;
     private String designation;
 
+    /** Default no-args constructor for serialisation frameworks. */
     public PanelResponse() {}
 
+    /**
+     * Creates a fully populated PanelResponse.
+     *
+     * @param id the panel member's ID
+     * @param fullName the panel member's full name
+     * @param email the panel member's email address
+     * @param phone the panel member's phone number
+     * @param organization the organization the panel member belongs to
+     * @param designation the panel member's designation
+     */
     public PanelResponse(Long id, String fullName, String email, String phone,
                          String organization, String designation) {
         this.id = id;

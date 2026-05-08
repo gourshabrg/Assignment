@@ -26,6 +26,9 @@ import java.util.Base64;
 import java.util.UUID;
 import java.util.Optional;
 
+/**
+ * Implementation of AuthService that handles registration, password setup, and login.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -35,10 +38,18 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final EmailService emailService;
 
-   private final EmailService emailService;
-
-      public AuthServiceImpl(UserRepository userRepository,
+    /**
+     * Creates an AuthServiceImpl with all required dependencies.
+     *
+     * @param userRepository the user repository
+     * @param jwtUtil the JWT utility
+     * @param passwordEncoder the password encoder
+     * @param userMapper the user mapper
+     * @param emailService the email service
+     */
+    public AuthServiceImpl(UserRepository userRepository,
                            JwtUtil jwtUtil,
                            PasswordEncoder passwordEncoder,
                            UserMapper userMapper,
@@ -50,11 +61,15 @@ public class AuthServiceImpl implements AuthService {
         this.emailService = emailService;
     }
 
+    /**
+     * Registers a new candidate and sends a verification email.
+     *
+     * @param request the signup details
+     */
     @Override
-   public void register(SignupRequest request) {
-
-       String email = request.getEmail().trim().toLowerCase();
-       String name = request.getFullName().trim();
+    public void register(SignupRequest request) {
+        String email = request.getEmail().trim().toLowerCase();
+        String name = request.getFullName().trim();
         Optional<User> existingUser = userRepository.findByEmail(email);
 
         if (existingUser.isPresent()) {
@@ -68,34 +83,34 @@ public class AuthServiceImpl implements AuthService {
             String verificationToken = UUID.randomUUID().toString();
             user.setVerificationToken(verificationToken);
             user.setTokenExpiry(LocalDateTime.now().plusMinutes(AppConstants.SET_TOKEN_EXPIRY));
-
             userRepository.save(user);
 
             LOGGER.info("User registered, verification email sent: {}", email);
-
             emailService.sendVerificationMail(email, name, verificationToken);
-
             return;
         }
 
-    User user = userMapper.toUserForSignup(email, RoleType.CANDIDATE);
+        User user = userMapper.toUserForSignup(email, RoleType.CANDIDATE);
 
-    String verificationToken = UUID.randomUUID().toString();
+        String verificationToken = UUID.randomUUID().toString();
+        user.setVerificationToken(verificationToken);
+        user.setVerified(false);
+        user.setTokenExpiry(LocalDateTime.now().plusMinutes(AppConstants.SET_TOKEN_EXPIRY));
 
-    user.setVerificationToken(verificationToken);
-    user.setVerified(false);
-    user.setTokenExpiry(LocalDateTime.now().plusMinutes(AppConstants.SET_TOKEN_EXPIRY));
+        userRepository.save(user);
 
-    userRepository.save(user);
-
-    LOGGER.info("User registered, verification email sent: {}", email);
-
-    emailService.sendVerificationMail(email, name, verificationToken);
-
+        LOGGER.info("User registered, verification email sent: {}", email);
+        emailService.sendVerificationMail(email, name, verificationToken);
     }
 
-     public void setPassword(String token, String password) {
-
+    /**
+     * Sets the user's password using the one-time verification token.
+     *
+     * @param token the token from the email link
+     * @param password the Base64-encoded new password
+     */
+    @Override
+    public void setPassword(String token, String password) {
         User user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> {
                     LOGGER.warn("Invalid verification token: {}", token);
@@ -109,16 +124,20 @@ public class AuthServiceImpl implements AuthService {
 
         String decodedPassword = new String(Base64.getDecoder().decode(password), StandardCharsets.UTF_8);
         user.setPassword(passwordEncoder.encode(decodedPassword));
-
         user.setVerified(true);
-
         user.setVerificationToken(null);
         user.setTokenExpiry(null);
 
         userRepository.save(user);
-
         LOGGER.info("User verified and password set: {}", user.getEmail());
     }
+
+    /**
+     * Authenticates a user and returns a JWT token.
+     *
+     * @param request the login credentials
+     * @return the authentication response with token and role
+     */
     @Override
     public AuthResponse login(AuthRequest request) {
         String email = request.getEmail().trim().toLowerCase();
@@ -129,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
                     return new UserNotFoundException("User not found");
                 });
 
-                  if (!user.isVerified()) {
+        if (!user.isVerified()) {
             LOGGER.warn("Login attempt before verification: {}", email);
             throw new InvalidCredentialsException("Please verify your email first");
         }
@@ -141,10 +160,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         LOGGER.info("User logged in successfully: {}", email);
-        String token = jwtUtil.generateToken(
-                user.getEmail(),
-                user.getRole().name()
-        );
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
         return new AuthResponse(token, user.getEmail(), user.getRole().name());
     }

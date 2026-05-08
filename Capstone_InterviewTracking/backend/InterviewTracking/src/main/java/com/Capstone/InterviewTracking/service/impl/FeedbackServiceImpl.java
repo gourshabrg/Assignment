@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of FeedbackService that saves and retrieves interview feedback.
+ */
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
@@ -23,6 +26,13 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final InterviewRepository interviewRepository;
     private final PanelRepository panelRepository;
 
+    /**
+     * Creates a FeedbackServiceImpl with the required repositories.
+     *
+     * @param feedbackRepository the feedback repository
+     * @param interviewRepository the interview repository
+     * @param panelRepository the panel repository
+     */
     public FeedbackServiceImpl(FeedbackRepository feedbackRepository,
                                InterviewRepository interviewRepository,
                                PanelRepository panelRepository) {
@@ -31,6 +41,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         this.panelRepository = panelRepository;
     }
 
+    /**
+     * Submits feedback from a panel member for an interview.
+     *
+     * @param interviewId the interview ID
+     * @param panelEmail the panel member's email
+     * @param request the feedback details
+     * @return the saved feedback response
+     */
     @Override
     public FeedbackResponse submitFeedback(Long interviewId, String panelEmail, FeedbackRequest request) {
         Interview interview = interviewRepository.findById(interviewId)
@@ -64,6 +82,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         return toResponse(feedback);
     }
 
+    /**
+     * Submits HR feedback for an HR-round interview.
+     *
+     * @param interviewId the interview ID
+     * @param hrEmail the HR reviewer's email
+     * @param request the feedback details
+     * @return the saved feedback response
+     */
     @Override
     public FeedbackResponse submitHRFeedback(Long interviewId, String hrEmail, FeedbackRequest request) {
         Interview interview = interviewRepository.findById(interviewId)
@@ -92,6 +118,12 @@ public class FeedbackServiceImpl implements FeedbackService {
         return toResponse(feedback);
     }
 
+    /**
+     * Returns all feedback records for a specific interview.
+     *
+     * @param interviewId the interview ID
+     * @return list of feedback responses
+     */
     @Override
     public List<FeedbackResponse> getFeedbackByInterview(Long interviewId) {
         Interview interview = interviewRepository.findById(interviewId)
@@ -103,6 +135,12 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Converts a Feedback entity to a FeedbackResponse DTO.
+     *
+     * @param feedback the feedback entity
+     * @return the feedback response
+     */
     public FeedbackResponse toResponse(Feedback feedback) {
         FeedbackResponse response = new FeedbackResponse();
         response.setId(feedback.getId());

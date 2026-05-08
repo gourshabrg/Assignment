@@ -1,8 +1,14 @@
 package com.Capstone.InterviewTracking.dto;
 
+/**
+ * Request DTO for advancing a candidate's hiring stage.
+ */
 public class StageUpdateRequest {
 
+    /** The target stage name. */
     private String stage;
+
+    /** Optional HR comments or notes about the stage transition. */
     private String comments;
 
     public String getStage() { return stage; }

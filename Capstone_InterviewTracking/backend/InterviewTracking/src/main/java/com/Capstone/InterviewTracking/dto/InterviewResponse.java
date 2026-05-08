@@ -3,6 +3,9 @@ package com.Capstone.InterviewTracking.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Response DTO representing a scheduled interview session.
+ */
 public class InterviewResponse {
 
     private Long id;

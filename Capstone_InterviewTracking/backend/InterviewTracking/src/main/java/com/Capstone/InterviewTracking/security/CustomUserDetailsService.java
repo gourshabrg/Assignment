@@ -12,18 +12,32 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Loads user authentication details from the database by email address.
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Creates a CustomUserDetailsService with the required user repository.
+     *
+     * @param userRepository the user repository
+     */
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Loads the user details for the given email address.
+     *
+     * @param email the user's email address
+     * @return the user details
+     * @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String email) {
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 

@@ -17,6 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Spring Security filter that validates the JWT token on every incoming request.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -24,10 +27,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+    /**
+     * Creates a JwtFilter with the required JWT utility.
+     *
+     * @param jwtUtil the JWT utility
+     */
     public JwtFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Validates the JWT token from the Authorization header and sets the security context.
+     *
+     * @param request the incoming HTTP request
+     * @param response the HTTP response
+     * @param filterChain the filter chain
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -37,7 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(AppConstants.AUTHORIZATION_HEADER);
 
         if (authHeader != null && authHeader.startsWith(AppConstants.BEARER_PREFIX)) {
-
             String token = authHeader.substring(AppConstants.BEARER_PREFIX.length());
 
             try {
@@ -54,7 +70,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 } else {
-
                     SecurityContextHolder.clearContext();
                 }
             } catch (JwtException | IllegalArgumentException ex) {
@@ -65,5 +80,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }
