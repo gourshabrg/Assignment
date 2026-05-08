@@ -273,9 +273,12 @@
 .filter-row {
   display: flex;
   gap: 12px;
-  margin-bottom: 16px;
   flex-wrap: wrap;
   align-items: flex-end;
+}
+
+#candidates-table-wrap {
+  margin-top: 24px;
 }
 
 .filter-group {
