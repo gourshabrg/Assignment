@@ -53,7 +53,7 @@ window.loadCandidates = async function () {
                 <td>
                   <div class="action-btns">
                     <button class="btn-sm btn-sm-info" onclick="viewDetail(${c.applicationId})" type="button">View</button>
-                    ${c.status !== "REJECTED"
+                    ${c.status !== "REJECTED" && c.status !== "SELECTED"
                       ? `<button class="btn-sm btn-sm-danger" onclick="reject(${c.applicationId})" type="button">Reject</button>`
                       : ""}
                     ${c.stage === "HR" && c.status !== "SELECTED" && c.status !== "REJECTED"
@@ -96,13 +96,19 @@ window.viewDetail = async function (applicationId) {
       <p class="hr-drawer-section-title">Update Stage</p>
       <div class="stage-track">
         ${STAGES.map((s, i) => {
-          const done = i < stageIdx;
+          const done    = i < stageIdx;
+          const current = i === stageIdx;
+          const isNext  = i === stageIdx + 1;
+          const locked  = !done && !current && !isNext;
+          const dotTitle = done    ? "Stage already completed"
+                         : current ? "Current stage"
+                         : isNext  ? `Move to ${s}`
+                         :           "Complete previous stages first";
           return `
-          <div class="stage-node ${done ? "done" : ""} ${i === stageIdx ? "active" : ""}">
-            <div class="stage-dot${done ? " stage-dot-locked" : ""}"
-              ${done
-                ? `title="Stage already completed"`
-                : `onclick="updateStage(${applicationId}, '${s}')" title="Move to ${s}" role="button" tabindex="0"`}>
+          <div class="stage-node ${done ? "done" : ""} ${current ? "active" : ""}">
+            <div class="stage-dot${done || locked ? " stage-dot-locked" : ""}"
+              title="${dotTitle}"
+              ${isNext ? `onclick="updateStage(${applicationId}, '${s}')" role="button" tabindex="0"` : ""}>
               ${done ? "✓" : i + 1}
             </div>
             <div class="stage-label">${escHtml(s)}</div>
@@ -195,9 +201,11 @@ window.loadFeedback = async function (interviewId, btn) {
 
 window.updateStage = async function (applicationId, stage) {
   const currentIdx = STAGES.indexOf(currentDetailStage);
-  const targetIdx = STAGES.indexOf(stage);
-  if (targetIdx < currentIdx) { alert("Cannot move a candidate backward in the pipeline."); return; }
-  if (targetIdx === currentIdx) return;
+  const targetIdx  = STAGES.indexOf(stage);
+  if (targetIdx !== currentIdx + 1) {
+    alert(`Stage must progress sequentially. Next stage: ${STAGES[currentIdx + 1] || "none"}`);
+    return;
+  }
   if (!confirm(`Move candidate to stage: ${stage}?`)) return;
   try {
     await updateStageApi(applicationId, { stage });
