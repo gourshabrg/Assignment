@@ -9,7 +9,11 @@ import com.Capstone.InterviewTracking.service.CandidateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -73,7 +77,7 @@ public class CandidateController {
                 preferredLocation, source, jobId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Application submitted", response));
+                .body(ApiResponse.success(AppConstants.MSG_APPLICATION_SUBMITTED, response));
     }
 
     /**
@@ -123,7 +127,7 @@ public class CandidateController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Candidate created", response));
+                .body(ApiResponse.success(AppConstants.MSG_CANDIDATE_CREATED, response));
     }
 
     /**
@@ -135,6 +139,6 @@ public class CandidateController {
     @GetMapping(AppConstants.CANDIDATE_MY_APPLICATION)
     public ResponseEntity<ApiResponse<CandidateDetailResponse>> getMyApplication(Authentication authentication) {
         CandidateDetailResponse response = service.getMyApplication(authentication.getName());
-        return ResponseEntity.ok(ApiResponse.success("Application fetched", response));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_APPLICATION_FETCHED, response));
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Utility component for creating, validating, and parsing JWT tokens.
@@ -36,7 +37,7 @@ public class JwtUtil {
      * @return the signing key
      */
     private Key getSigningKey() {
-        if (secret == null || secret.isBlank()) {
+        if (Objects.isNull(secret) || secret.isBlank()) {
             throw new IllegalStateException("JWT secret is not configured");
         }
 

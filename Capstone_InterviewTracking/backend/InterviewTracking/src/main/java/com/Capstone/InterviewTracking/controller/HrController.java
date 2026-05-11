@@ -1,8 +1,20 @@
 package com.Capstone.InterviewTracking.controller;
 
 import com.Capstone.InterviewTracking.constant.AppConstants;
-import com.Capstone.InterviewTracking.dto.*;
-import com.Capstone.InterviewTracking.entity.*;
+import com.Capstone.InterviewTracking.dto.ApiResponse;
+import com.Capstone.InterviewTracking.dto.CandidateDetailResponse;
+import com.Capstone.InterviewTracking.dto.CandidateListResponse;
+import com.Capstone.InterviewTracking.dto.FeedbackRequest;
+import com.Capstone.InterviewTracking.dto.FeedbackResponse;
+import com.Capstone.InterviewTracking.dto.InterviewResponse;
+import com.Capstone.InterviewTracking.dto.InterviewScheduleRequest;
+import com.Capstone.InterviewTracking.dto.PanelRequest;
+import com.Capstone.InterviewTracking.dto.PanelResponse;
+import com.Capstone.InterviewTracking.dto.StageUpdateRequest;
+import com.Capstone.InterviewTracking.entity.Application;
+import com.Capstone.InterviewTracking.entity.Candidate;
+import com.Capstone.InterviewTracking.entity.Interview;
+import com.Capstone.InterviewTracking.entity.JobDescription;
 import com.Capstone.InterviewTracking.enums.ApplicationStatus;
 import com.Capstone.InterviewTracking.enums.InterviewRound;
 import com.Capstone.InterviewTracking.enums.InterviewStage;
@@ -17,11 +29,18 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Arrays;
 
 /**
  * REST controller for all HR-only operations such as managing candidates, interviews, and panels.
@@ -70,7 +89,7 @@ public class HrController {
     @PostMapping("/create-panel")
     public ResponseEntity<ApiResponse<String>> createPanel(@RequestBody @Valid PanelRequest request) {
         panelService.createPanel(request);
-        return ResponseEntity.ok(ApiResponse.success("Panel created successfully. Email sent.", null));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_PANEL_CREATED, null));
     }
 
     /**
@@ -109,11 +128,11 @@ public class HrController {
                     .collect(Collectors.toList());
         }
 
-        List<CandidateListResponse> result = applications.stream()
+        List<CandidateListResponse> candidateList = applications.stream()
                 .map(this::toCandidateListResponse)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(ApiResponse.success("Candidates fetched", result));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATES_FETCHED, candidateList));
     }
 
     /**
@@ -129,8 +148,8 @@ public class HrController {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new BadRequestException("Application not found"));
 
-        CandidateDetailResponse response = buildDetailResponse(application, true);
-        return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
+        CandidateDetailResponse candidateDetailResponse = buildDetailResponse(application, true);
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATE_DETAIL_FETCHED, candidateDetailResponse));
     }
 
     /**
@@ -146,9 +165,9 @@ public class HrController {
             Authentication authentication) {
 
         String hrEmail = authentication != null ? authentication.getName() : null;
-        InterviewResponse response = interviewService.scheduleInterview(request, hrEmail);
+        InterviewResponse interviewResponse = interviewService.scheduleInterview(request, hrEmail);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Interview scheduled successfully", response));
+                .body(ApiResponse.success(AppConstants.MSG_INTERVIEW_SCHEDULED, interviewResponse));
     }
 
     /**
@@ -161,11 +180,11 @@ public class HrController {
         List<Interview> hrInterviews = interviewRepository
                 .findByRoundOrderByInterviewDateTimeDesc(InterviewRound.HR);
 
-        List<InterviewResponse> result = hrInterviews.stream()
+        List<InterviewResponse> hrInterviewResponses = hrInterviews.stream()
                 .map(i -> interviewService.toResponse(i, null))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(ApiResponse.success("HR interviews fetched", result));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_HR_INTERVIEWS_FETCHED, hrInterviewResponses));
     }
 
     /**
@@ -189,8 +208,8 @@ public class HrController {
         List<Application> apps = applicationRepository.findByCandidateOrderByCreatedAtDesc(candidate);
         if (apps.isEmpty()) throw new BadRequestException("Application not found");
 
-        CandidateDetailResponse response = buildDetailResponse(apps.get(0), false);
-        return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
+        CandidateDetailResponse candidateDetailResponse = buildDetailResponse(apps.get(0), false);
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATE_DETAIL_FETCHED, candidateDetailResponse));
     }
 
     /**
@@ -207,10 +226,10 @@ public class HrController {
             @RequestBody @Valid FeedbackRequest request,
             Authentication authentication) {
 
-        FeedbackResponse response = feedbackService.submitHRFeedback(
+        FeedbackResponse feedbackResponse = feedbackService.submitHRFeedback(
                 interviewId, authentication.getName(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("HR feedback submitted successfully", response));
+                .body(ApiResponse.success(AppConstants.MSG_HR_FEEDBACK_SUBMITTED, feedbackResponse));
     }
 
     /**
@@ -224,7 +243,7 @@ public class HrController {
             @PathVariable Long interviewId) {
 
         List<FeedbackResponse> feedbacks = feedbackService.getFeedbackByInterview(interviewId);
-        return ResponseEntity.ok(ApiResponse.success("Feedback fetched", feedbacks));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_FEEDBACK_FETCHED, feedbacks));
     }
 
     /**
@@ -293,7 +312,7 @@ public class HrController {
         application.setStatus(ApplicationStatus.REJECTED);
         applicationRepository.save(application);
 
-        return ResponseEntity.ok(ApiResponse.success("Candidate rejected", null));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATE_REJECTED, null));
     }
 
     /**
@@ -316,7 +335,7 @@ public class HrController {
         application.setStatus(ApplicationStatus.SELECTED);
         applicationRepository.save(application);
 
-        return ResponseEntity.ok(ApiResponse.success("Candidate selected", null));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATE_SELECTED, null));
     }
 
     /**
@@ -331,7 +350,7 @@ public class HrController {
                         p.getPhone(), p.getOrganization(), p.getDesignation()))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(ApiResponse.success("Panels fetched", panels));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_PANELS_FETCHED, panels));
     }
 
     /**
@@ -341,18 +360,18 @@ public class HrController {
      * @return the candidate list response
      */
     private CandidateListResponse toCandidateListResponse(Application app) {
-        CandidateListResponse r = new CandidateListResponse();
-        r.setApplicationId(app.getId());
-        r.setCandidateId(app.getCandidate().getId());
-        r.setFullName(app.getCandidate().getFullName());
-        r.setEmail(app.getCandidate().getEmail());
-        r.setMobile(app.getCandidate().getMobile());
-        r.setJobId(app.getJob().getId());
-        r.setJobTitle(app.getJob().getTitle());
-        r.setStage(app.getStage().name());
-        r.setStatus(app.getStatus().name());
-        r.setAppliedAt(app.getCreatedAt());
-        return r;
+        CandidateListResponse candidateListResponse = new CandidateListResponse();
+        candidateListResponse.setApplicationId(app.getId());
+        candidateListResponse.setCandidateId(app.getCandidate().getId());
+        candidateListResponse.setFullName(app.getCandidate().getFullName());
+        candidateListResponse.setEmail(app.getCandidate().getEmail());
+        candidateListResponse.setMobile(app.getCandidate().getMobile());
+        candidateListResponse.setJobId(app.getJob().getId());
+        candidateListResponse.setJobTitle(app.getJob().getTitle());
+        candidateListResponse.setStage(app.getStage().name());
+        candidateListResponse.setStatus(app.getStatus().name());
+        candidateListResponse.setAppliedAt(app.getCreatedAt());
+        return candidateListResponse;
     }
 
     /**
@@ -363,36 +382,36 @@ public class HrController {
      * @return the candidate detail response
      */
     private CandidateDetailResponse buildDetailResponse(Application app, boolean includeFeedback) {
-        Candidate c = app.getCandidate();
-        JobDescription jd = app.getJob();
+        Candidate candidate = app.getCandidate();
+        JobDescription jobDescription = app.getJob();
 
-        CandidateDetailResponse r = new CandidateDetailResponse();
-        r.setApplicationId(app.getId());
-        r.setCandidateId(c.getId());
-        r.setFullName(c.getFullName());
-        r.setEmail(c.getEmail());
-        r.setMobile(c.getMobile());
-        r.setCurrentCompany(c.getCurrentCompany());
-        r.setTotalExperience(c.getTotalExperience());
-        r.setRelevantExperience(c.getRelevantExperience());
-        r.setCurrentCtc(c.getCurrentCtc());
-        r.setExpectedCtc(c.getExpectedCtc());
-        r.setNoticePeriod(c.getNoticePeriod());
-        r.setPreferredLocation(c.getPreferredLocation());
-        r.setSource(c.getSource());
-        r.setResumeUrl(c.getResumeUrl());
-        r.setJobId(jd.getId());
-        r.setJobTitle(jd.getTitle());
-        r.setJobDescription(jd.getDescription());
-        r.setSkills(jd.getSkills());
-        r.setLocation(jd.getLocation());
-        r.setJobType(jd.getJobType() != null ? jd.getJobType().name() : null);
-        r.setStage(app.getStage().name());
-        r.setStatus(app.getStatus().name());
-        r.setAppliedAt(app.getCreatedAt());
+        CandidateDetailResponse candidateDetailResponse = new CandidateDetailResponse();
+        candidateDetailResponse.setApplicationId(app.getId());
+        candidateDetailResponse.setCandidateId(candidate.getId());
+        candidateDetailResponse.setFullName(candidate.getFullName());
+        candidateDetailResponse.setEmail(candidate.getEmail());
+        candidateDetailResponse.setMobile(candidate.getMobile());
+        candidateDetailResponse.setCurrentCompany(candidate.getCurrentCompany());
+        candidateDetailResponse.setTotalExperience(candidate.getTotalExperience());
+        candidateDetailResponse.setRelevantExperience(candidate.getRelevantExperience());
+        candidateDetailResponse.setCurrentCtc(candidate.getCurrentCtc());
+        candidateDetailResponse.setExpectedCtc(candidate.getExpectedCtc());
+        candidateDetailResponse.setNoticePeriod(candidate.getNoticePeriod());
+        candidateDetailResponse.setPreferredLocation(candidate.getPreferredLocation());
+        candidateDetailResponse.setSource(candidate.getSource());
+        candidateDetailResponse.setResumeUrl(candidate.getResumeUrl());
+        candidateDetailResponse.setJobId(jobDescription.getId());
+        candidateDetailResponse.setJobTitle(jobDescription.getTitle());
+        candidateDetailResponse.setJobDescription(jobDescription.getDescription());
+        candidateDetailResponse.setSkills(jobDescription.getSkills());
+        candidateDetailResponse.setLocation(jobDescription.getLocation());
+        candidateDetailResponse.setJobType(jobDescription.getJobType() != null ? jobDescription.getJobType().name() : null);
+        candidateDetailResponse.setStage(app.getStage().name());
+        candidateDetailResponse.setStatus(app.getStatus().name());
+        candidateDetailResponse.setAppliedAt(app.getCreatedAt());
 
-        List<Interview> interviews = interviewRepository.findByCandidate(c);
-        r.setInterviews(interviews.stream()
+        List<Interview> interviews = interviewRepository.findByCandidate(candidate);
+        candidateDetailResponse.setInterviews(interviews.stream()
                 .map(i -> interviewService.toResponse(i, app))
                 .collect(Collectors.toList()));
 
@@ -400,9 +419,9 @@ public class HrController {
             List<FeedbackResponse> feedbacks = interviews.stream()
                     .flatMap(i -> feedbackService.getFeedbackByInterview(i.getId()).stream())
                     .collect(Collectors.toList());
-            r.setFeedbacks(feedbacks);
+            candidateDetailResponse.setFeedbacks(feedbacks);
         }
 
-        return r;
+        return candidateDetailResponse;
     }
 }

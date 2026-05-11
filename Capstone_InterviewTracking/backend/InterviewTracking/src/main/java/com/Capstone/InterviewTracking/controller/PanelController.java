@@ -1,10 +1,21 @@
 package com.Capstone.InterviewTracking.controller;
 
 import com.Capstone.InterviewTracking.constant.AppConstants;
-import com.Capstone.InterviewTracking.dto.*;
-import com.Capstone.InterviewTracking.entity.*;
+import com.Capstone.InterviewTracking.dto.ApiResponse;
+import com.Capstone.InterviewTracking.dto.CandidateDetailResponse;
+import com.Capstone.InterviewTracking.dto.FeedbackRequest;
+import com.Capstone.InterviewTracking.dto.FeedbackResponse;
+import com.Capstone.InterviewTracking.dto.InterviewResponse;
+import com.Capstone.InterviewTracking.dto.PanelResponse;
+import com.Capstone.InterviewTracking.entity.Application;
+import com.Capstone.InterviewTracking.entity.Candidate;
+import com.Capstone.InterviewTracking.entity.Interview;
+import com.Capstone.InterviewTracking.entity.JobDescription;
+import com.Capstone.InterviewTracking.entity.Panel;
 import com.Capstone.InterviewTracking.exception.BadRequestException;
-import com.Capstone.InterviewTracking.repository.*;
+import com.Capstone.InterviewTracking.repository.ApplicationRepository;
+import com.Capstone.InterviewTracking.repository.InterviewRepository;
+import com.Capstone.InterviewTracking.repository.PanelRepository;
 import com.Capstone.InterviewTracking.service.FeedbackService;
 import com.Capstone.InterviewTracking.service.InterviewService;
 import com.Capstone.InterviewTracking.service.impl.InterviewServiceImpl;
@@ -12,7 +23,12 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +77,10 @@ public class PanelController {
      * @param authentication the authenticated panel user
      * @return the list of interview responses
      */
-    @GetMapping("/interviews")
+    @GetMapping(AppConstants.PANEL_INTERVIEWS_PATH)
     public ResponseEntity<ApiResponse<List<InterviewResponse>>> getMyInterviews(Authentication authentication) {
         List<InterviewResponse> interviews = interviewService.getInterviewsByPanel(authentication.getName());
-        return ResponseEntity.ok(ApiResponse.success("Interviews fetched", interviews));
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_INTERVIEWS_FETCHED, interviews));
     }
 
     /**
@@ -74,7 +90,7 @@ public class PanelController {
      * @param authentication the authenticated panel user
      * @return the candidate detail response
      */
-    @GetMapping("/interviews/{interviewId}/candidate")
+    @GetMapping(AppConstants.PANEL_INTERVIEW_CANDIDATE_PATH)
     public ResponseEntity<ApiResponse<CandidateDetailResponse>> getCandidateForInterview(
             @PathVariable Long interviewId,
             Authentication authentication) {
@@ -96,8 +112,8 @@ public class PanelController {
         if (apps.isEmpty()) throw new BadRequestException("Application not found");
         Application application = apps.get(0);
 
-        CandidateDetailResponse response = buildCandidateResponse(interview, application);
-        return ResponseEntity.ok(ApiResponse.success("Candidate detail fetched", response));
+        CandidateDetailResponse candidateDetailResponse = buildCandidateResponse(interview, application);
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_CANDIDATE_DETAIL_FETCHED, candidateDetailResponse));
     }
 
     /**
@@ -108,16 +124,16 @@ public class PanelController {
      * @param authentication the authenticated panel user
      * @return the saved feedback response
      */
-    @PostMapping("/interviews/{interviewId}/feedback")
+    @PostMapping(AppConstants.PANEL_INTERVIEW_FEEDBACK_PATH)
     public ResponseEntity<ApiResponse<FeedbackResponse>> submitFeedback(
             @PathVariable Long interviewId,
             @RequestBody @Valid FeedbackRequest request,
             Authentication authentication) {
 
-        FeedbackResponse response = feedbackService.submitFeedback(
+        FeedbackResponse feedbackResponse = feedbackService.submitFeedback(
                 interviewId, authentication.getName(), request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Feedback submitted successfully", response));
+                .body(ApiResponse.success(AppConstants.MSG_FEEDBACK_SUBMITTED, feedbackResponse));
     }
 
     /**
@@ -128,37 +144,37 @@ public class PanelController {
      * @return the candidate detail response
      */
     private CandidateDetailResponse buildCandidateResponse(Interview interview, Application application) {
-        Candidate c = interview.getCandidate();
-        JobDescription jd = application.getJob();
+        Candidate candidate = interview.getCandidate();
+        JobDescription jobDescription = application.getJob();
 
-        CandidateDetailResponse r = new CandidateDetailResponse();
-        r.setApplicationId(application.getId());
-        r.setCandidateId(c.getId());
-        r.setFullName(c.getFullName());
-        r.setEmail(c.getEmail());
-        r.setMobile(c.getMobile());
-        r.setCurrentCompany(c.getCurrentCompany());
-        r.setTotalExperience(c.getTotalExperience());
-        r.setRelevantExperience(c.getRelevantExperience());
-        r.setCurrentCtc(c.getCurrentCtc());
-        r.setExpectedCtc(c.getExpectedCtc());
-        r.setNoticePeriod(c.getNoticePeriod());
-        r.setPreferredLocation(c.getPreferredLocation());
-        r.setSource(c.getSource());
-        r.setResumeUrl(c.getResumeUrl());
-        r.setJobId(jd.getId());
-        r.setJobTitle(jd.getTitle());
-        r.setJobDescription(jd.getDescription());
-        r.setSkills(jd.getSkills());
-        r.setLocation(jd.getLocation());
-        r.setJobType(jd.getJobType() != null ? jd.getJobType().name() : null);
-        r.setStage(application.getStage().name());
-        r.setStatus(application.getStatus().name());
-        r.setAppliedAt(application.getCreatedAt());
-        List<Interview> allInterviews = interviewRepository.findByCandidate(c);
-        r.setInterviews(allInterviews.stream()
+        CandidateDetailResponse candidateDetailResponse = new CandidateDetailResponse();
+        candidateDetailResponse.setApplicationId(application.getId());
+        candidateDetailResponse.setCandidateId(candidate.getId());
+        candidateDetailResponse.setFullName(candidate.getFullName());
+        candidateDetailResponse.setEmail(candidate.getEmail());
+        candidateDetailResponse.setMobile(candidate.getMobile());
+        candidateDetailResponse.setCurrentCompany(candidate.getCurrentCompany());
+        candidateDetailResponse.setTotalExperience(candidate.getTotalExperience());
+        candidateDetailResponse.setRelevantExperience(candidate.getRelevantExperience());
+        candidateDetailResponse.setCurrentCtc(candidate.getCurrentCtc());
+        candidateDetailResponse.setExpectedCtc(candidate.getExpectedCtc());
+        candidateDetailResponse.setNoticePeriod(candidate.getNoticePeriod());
+        candidateDetailResponse.setPreferredLocation(candidate.getPreferredLocation());
+        candidateDetailResponse.setSource(candidate.getSource());
+        candidateDetailResponse.setResumeUrl(candidate.getResumeUrl());
+        candidateDetailResponse.setJobId(jobDescription.getId());
+        candidateDetailResponse.setJobTitle(jobDescription.getTitle());
+        candidateDetailResponse.setJobDescription(jobDescription.getDescription());
+        candidateDetailResponse.setSkills(jobDescription.getSkills());
+        candidateDetailResponse.setLocation(jobDescription.getLocation());
+        candidateDetailResponse.setJobType(jobDescription.getJobType() != null ? jobDescription.getJobType().name() : null);
+        candidateDetailResponse.setStage(application.getStage().name());
+        candidateDetailResponse.setStatus(application.getStatus().name());
+        candidateDetailResponse.setAppliedAt(application.getCreatedAt());
+        List<Interview> allInterviews = interviewRepository.findByCandidate(candidate);
+        candidateDetailResponse.setInterviews(allInterviews.stream()
                 .map(interviewServiceImpl::toResponse)
                 .collect(Collectors.toList()));
-        return r;
+        return candidateDetailResponse;
     }
 }

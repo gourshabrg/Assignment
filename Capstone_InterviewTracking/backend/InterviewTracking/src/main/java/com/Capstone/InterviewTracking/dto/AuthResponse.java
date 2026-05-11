@@ -24,9 +24,24 @@ public class AuthResponse {
         this.role = role;
     }
 
+    /**
+     * Returns the signed JWT token to be used in subsequent authenticated requests.
+     *
+     * @return the JWT token
+     */
     public String getToken() { return token; }
 
+    /**
+     * Returns the email address of the authenticated user.
+     *
+     * @return the user's email
+     */
     public String getEmail() { return email; }
 
+    /**
+     * Returns the role of the authenticated user (e.g., HR, PANEL, CANDIDATE).
+     *
+     * @return the user's role
+     */
     public String getRole() { return role; }
 }

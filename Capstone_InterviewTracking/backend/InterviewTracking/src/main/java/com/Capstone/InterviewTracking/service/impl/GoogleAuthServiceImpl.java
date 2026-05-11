@@ -1,10 +1,12 @@
 package com.Capstone.InterviewTracking.service.impl;
 
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.Capstone.InterviewTracking.constant.AppConstants;
 import com.Capstone.InterviewTracking.service.GoogleAuthService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.*;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Implementation of GoogleAuthService that loads OAuth2 credentials from credentials.json.
@@ -35,8 +38,8 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
                 .getClassLoader()
                 .getResourceAsStream("credentials.json");
 
-        if (in == null) {
-            throw new RuntimeException("credentials.json not found in resources");
+        if (Objects.isNull(in)) {
+            throw new RuntimeException(AppConstants.ERR_CREDENTIALS_NOT_FOUND);
         }
 
         GoogleClientSecrets clientSecrets =

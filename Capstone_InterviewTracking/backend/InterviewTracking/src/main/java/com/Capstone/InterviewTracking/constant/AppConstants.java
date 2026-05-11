@@ -76,7 +76,45 @@ public final class AppConstants {
     /** Verification token validity period in minutes. */
     public static final Integer SET_TOKEN_EXPIRY = 15;
 
-    //  Email Template Builders 
+    // ── Panel Sub-Paths ─────────────────────────────────────────────────────────
+
+    public static final String PANEL_INTERVIEWS_PATH           = "/interviews";
+    public static final String PANEL_INTERVIEW_CANDIDATE_PATH  = "/interviews/{interviewId}/candidate";
+    public static final String PANEL_INTERVIEW_FEEDBACK_PATH   = "/interviews/{interviewId}/feedback";
+
+    // ── Success Messages ─────────────────────────────────────────────────────────
+
+    public static final String MSG_REGISTER_SUCCESS        = "Registration successful";
+    public static final String MSG_PASSWORD_SET            = "Password set successfully";
+    public static final String MSG_LOGIN_SUCCESS           = "Login successful";
+    public static final String MSG_APPLICATION_SUBMITTED   = "Application submitted";
+    public static final String MSG_CANDIDATE_CREATED       = "Candidate created";
+    public static final String MSG_APPLICATION_FETCHED     = "Application fetched";
+    public static final String MSG_INTERVIEWS_FETCHED      = "Interviews fetched";
+    public static final String MSG_CANDIDATE_DETAIL_FETCHED = "Candidate detail fetched";
+    public static final String MSG_FEEDBACK_SUBMITTED      = "Feedback submitted successfully";
+    public static final String MSG_HR_FEEDBACK_SUBMITTED   = "HR feedback submitted successfully";
+    public static final String MSG_FEEDBACK_FETCHED        = "Feedback fetched";
+    public static final String MSG_PANEL_CREATED           = "Panel created successfully. Email sent.";
+    public static final String MSG_CANDIDATES_FETCHED      = "Candidates fetched";
+    public static final String MSG_PANELS_FETCHED          = "Panels fetched";
+    public static final String MSG_HR_INTERVIEWS_FETCHED   = "HR interviews fetched";
+    public static final String MSG_INTERVIEW_SCHEDULED     = "Interview scheduled successfully";
+    public static final String MSG_CANDIDATE_REJECTED      = "Candidate rejected";
+    public static final String MSG_CANDIDATE_SELECTED      = "Candidate selected";
+
+    // ── Validation Messages ───────────────────────────────────────────────────────
+
+    public static final String VALIDATION_EMAIL_REQUIRED   = "Email is required";
+    public static final String VALIDATION_EMAIL_INVALID    = "Enter a valid email address";
+    public static final String VALIDATION_PASSWORD_REQUIRED = "Password is required";
+    public static final String VALIDATION_PASSWORD_MIN     = "Password must contain at least 6 characters";
+
+    // ── Exception / Error Messages ────────────────────────────────────────────────
+
+    public static final String ERR_CREDENTIALS_NOT_FOUND  = "credentials.json not found in resources";
+
+    //  Email Template Builders
 
     /**
      * Builds the HTML body for the account verification email.

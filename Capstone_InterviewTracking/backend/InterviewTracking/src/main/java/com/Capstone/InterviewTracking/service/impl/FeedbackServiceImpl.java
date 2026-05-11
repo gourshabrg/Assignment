@@ -14,6 +14,7 @@ import com.Capstone.InterviewTracking.service.FeedbackService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -147,10 +148,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         response.setInterviewId(feedback.getInterview().getId());
         response.setRound(feedback.getInterview().getRound().name());
 
-        if (feedback.getPanel() != null) {
+        if (Objects.nonNull(feedback.getPanel())) {
             response.setPanelName(feedback.getPanel().getFullName());
         } else {
-            response.setPanelName(feedback.getHrReviewer() != null ? feedback.getHrReviewer() : "HR");
+            response.setPanelName(Objects.nonNull(feedback.getHrReviewer()) ? feedback.getHrReviewer() : "HR");
         }
 
         response.setComments(feedback.getComments());

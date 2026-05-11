@@ -3,12 +3,17 @@ package com.Capstone.InterviewTracking.service.impl;
 import com.Capstone.InterviewTracking.dto.InterviewResponse;
 import com.Capstone.InterviewTracking.dto.InterviewScheduleRequest;
 import com.Capstone.InterviewTracking.dto.PanelResponse;
-import com.Capstone.InterviewTracking.entity.*;
+import com.Capstone.InterviewTracking.entity.Application;
+import com.Capstone.InterviewTracking.entity.Candidate;
+import com.Capstone.InterviewTracking.entity.Interview;
+import com.Capstone.InterviewTracking.entity.Panel;
 import com.Capstone.InterviewTracking.enums.InterviewRound;
 import com.Capstone.InterviewTracking.enums.InterviewStage;
 import com.Capstone.InterviewTracking.enums.InterviewStatus;
 import com.Capstone.InterviewTracking.exception.BadRequestException;
-import com.Capstone.InterviewTracking.repository.*;
+import com.Capstone.InterviewTracking.repository.ApplicationRepository;
+import com.Capstone.InterviewTracking.repository.InterviewRepository;
+import com.Capstone.InterviewTracking.repository.PanelRepository;
 import com.Capstone.InterviewTracking.service.EmailService;
 import com.Capstone.InterviewTracking.service.InterviewService;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -125,7 +131,7 @@ public class InterviewServiceImpl implements InterviewService {
                 interviewerLabel
         );
 
-        if (isHrRound && hrEmail != null) {
+        if (isHrRound && Objects.nonNull(hrEmail)) {
             emailService.sendHRInterviewScheduledMail(
                     hrEmail,
                     candidate.getFullName(),
@@ -201,14 +207,14 @@ public class InterviewServiceImpl implements InterviewService {
         response.setPanels(panelResponses);
 
         Candidate candidate = interview.getCandidate();
-        if (candidate != null) {
+        if (Objects.nonNull(candidate)) {
             response.setCandidateName(candidate.getFullName());
             response.setCandidateEmail(candidate.getEmail());
         }
 
-        if (application != null) {
+        if (Objects.nonNull(application)) {
             response.setApplicationId(application.getId());
-        } else if (candidate != null) {
+        } else if (Objects.nonNull(candidate)) {
             applicationRepository.findByCandidateOrderByCreatedAtDesc(candidate)
                     .stream().findFirst()
                     .ifPresent(app -> response.setApplicationId(app.getId()));

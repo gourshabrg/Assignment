@@ -1,10 +1,22 @@
 package com.Capstone.InterviewTracking.service.impl;
 
-import com.Capstone.InterviewTracking.dto.*;
-import com.Capstone.InterviewTracking.entity.*;
+import com.Capstone.InterviewTracking.dto.ApplicationResponse;
+import com.Capstone.InterviewTracking.dto.CandidateDetailResponse;
+import com.Capstone.InterviewTracking.dto.InterviewResponse;
+import com.Capstone.InterviewTracking.dto.PanelResponse;
+import com.Capstone.InterviewTracking.dto.SignupRequest;
+import com.Capstone.InterviewTracking.entity.Application;
+import com.Capstone.InterviewTracking.entity.Candidate;
+import com.Capstone.InterviewTracking.entity.Interview;
+import com.Capstone.InterviewTracking.entity.JobDescription;
+import com.Capstone.InterviewTracking.entity.User;
 import com.Capstone.InterviewTracking.enums.ApplicationStatus;
 import com.Capstone.InterviewTracking.enums.InterviewStage;
-import com.Capstone.InterviewTracking.repository.*;
+import com.Capstone.InterviewTracking.repository.ApplicationRepository;
+import com.Capstone.InterviewTracking.repository.CandidateRepository;
+import com.Capstone.InterviewTracking.repository.InterviewRepository;
+import com.Capstone.InterviewTracking.repository.JobDescriptionRepository;
+import com.Capstone.InterviewTracking.repository.UserRepository;
 import com.Capstone.InterviewTracking.service.AuthService;
 import com.Capstone.InterviewTracking.service.CandidateService;
 import com.Capstone.InterviewTracking.service.DriveService;
@@ -75,35 +87,35 @@ public class CandidateServiceImpl implements CandidateService {
 
         JobDescription jd = application.getJob();
 
-        CandidateDetailResponse r = new CandidateDetailResponse();
-        r.setApplicationId(application.getId());
-        r.setCandidateId(candidate.getId());
-        r.setFullName(candidate.getFullName());
-        r.setEmail(candidate.getEmail());
-        r.setMobile(candidate.getMobile());
-        r.setCurrentCompany(candidate.getCurrentCompany());
-        r.setTotalExperience(candidate.getTotalExperience());
-        r.setRelevantExperience(candidate.getRelevantExperience());
-        r.setCurrentCtc(candidate.getCurrentCtc());
-        r.setExpectedCtc(candidate.getExpectedCtc());
-        r.setNoticePeriod(candidate.getNoticePeriod());
-        r.setPreferredLocation(candidate.getPreferredLocation());
-        r.setSource(candidate.getSource());
-        r.setResumeUrl(candidate.getResumeUrl());
-        r.setJobId(jd.getId());
-        r.setJobTitle(jd.getTitle());
-        r.setJobDescription(jd.getDescription());
-        r.setSkills(jd.getSkills());
-        r.setLocation(jd.getLocation());
-        r.setJobType(jd.getJobType() != null ? jd.getJobType().name() : null);
-        r.setStage(application.getStage().name());
-        r.setStatus(application.getStatus().name());
-        r.setAppliedAt(application.getCreatedAt());
+        CandidateDetailResponse candidateDetailResponse = new CandidateDetailResponse();
+        candidateDetailResponse.setApplicationId(application.getId());
+        candidateDetailResponse.setCandidateId(candidate.getId());
+        candidateDetailResponse.setFullName(candidate.getFullName());
+        candidateDetailResponse.setEmail(candidate.getEmail());
+        candidateDetailResponse.setMobile(candidate.getMobile());
+        candidateDetailResponse.setCurrentCompany(candidate.getCurrentCompany());
+        candidateDetailResponse.setTotalExperience(candidate.getTotalExperience());
+        candidateDetailResponse.setRelevantExperience(candidate.getRelevantExperience());
+        candidateDetailResponse.setCurrentCtc(candidate.getCurrentCtc());
+        candidateDetailResponse.setExpectedCtc(candidate.getExpectedCtc());
+        candidateDetailResponse.setNoticePeriod(candidate.getNoticePeriod());
+        candidateDetailResponse.setPreferredLocation(candidate.getPreferredLocation());
+        candidateDetailResponse.setSource(candidate.getSource());
+        candidateDetailResponse.setResumeUrl(candidate.getResumeUrl());
+        candidateDetailResponse.setJobId(jd.getId());
+        candidateDetailResponse.setJobTitle(jd.getTitle());
+        candidateDetailResponse.setJobDescription(jd.getDescription());
+        candidateDetailResponse.setSkills(jd.getSkills());
+        candidateDetailResponse.setLocation(jd.getLocation());
+        candidateDetailResponse.setJobType(jd.getJobType() != null ? jd.getJobType().name() : null);
+        candidateDetailResponse.setStage(application.getStage().name());
+        candidateDetailResponse.setStatus(application.getStatus().name());
+        candidateDetailResponse.setAppliedAt(application.getCreatedAt());
 
         List<Interview> interviews = interviewRepository.findByCandidate(candidate);
-        r.setInterviews(interviews.stream().map(this::mapInterview).collect(Collectors.toList()));
+        candidateDetailResponse.setInterviews(interviews.stream().map(this::mapInterview).collect(Collectors.toList()));
 
-        return r;
+        return candidateDetailResponse;
     }
 
     /**
@@ -113,18 +125,18 @@ public class CandidateServiceImpl implements CandidateService {
      * @return the interview response
      */
     private InterviewResponse mapInterview(Interview interview) {
-        InterviewResponse r = new InterviewResponse();
-        r.setId(interview.getId());
-        r.setRound(interview.getRound().name());
-        r.setInterviewDateTime(interview.getInterviewDateTime());
-        r.setFocusArea(interview.getFocusArea());
-        r.setStatus(interview.getStatus().name());
+        InterviewResponse interviewResponse = new InterviewResponse();
+        interviewResponse.setId(interview.getId());
+        interviewResponse.setRound(interview.getRound().name());
+        interviewResponse.setInterviewDateTime(interview.getInterviewDateTime());
+        interviewResponse.setFocusArea(interview.getFocusArea());
+        interviewResponse.setStatus(interview.getStatus().name());
         List<PanelResponse> panels = interview.getPanels().stream()
                 .map(p -> new PanelResponse(p.getId(), p.getFullName(), p.getEmail(),
                         p.getPhone(), p.getOrganization(), p.getDesignation()))
                 .collect(Collectors.toList());
-        r.setPanels(panels);
-        return r;
+        interviewResponse.setPanels(panels);
+        return interviewResponse;
     }
 
     /**

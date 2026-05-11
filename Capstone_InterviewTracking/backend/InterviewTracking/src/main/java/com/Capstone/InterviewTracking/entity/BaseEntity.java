@@ -1,6 +1,8 @@
 package com.Capstone.InterviewTracking.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 /**

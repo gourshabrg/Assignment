@@ -48,9 +48,10 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody SignupRequest request) {
         LOGGER.info("Register request received for email: {}", request.getEmail());
         authService.register(request);
+        LOGGER.info("Register request completed for email: {}", request.getEmail());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Registration successful", null));
+                .body(ApiResponse.success(AppConstants.MSG_REGISTER_SUCCESS, null));
     }
 
     /**
@@ -65,11 +66,11 @@ public class AuthController {
         String password = body.get("password");
 
         LOGGER.info("Set password request received for token: {}", token);
-
         authService.setPassword(token, password);
+        LOGGER.info("Set password request completed for token: {}", token);
 
         return ResponseEntity.ok(
-                ApiResponse.success("Password set successfully", null)
+                ApiResponse.success(AppConstants.MSG_PASSWORD_SET, null)
         );
     }
 
@@ -83,6 +84,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody AuthRequest request) {
         LOGGER.info("Login request received for email: {}", request.getEmail());
         AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+        LOGGER.info("Login request completed for email: {}", request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(AppConstants.MSG_LOGIN_SUCCESS, response));
     }
 }

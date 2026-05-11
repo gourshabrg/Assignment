@@ -1,5 +1,6 @@
 package com.Capstone.InterviewTracking.dto;
 
+import com.Capstone.InterviewTracking.constant.AppConstants;
 import com.Capstone.InterviewTracking.enums.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,12 +11,12 @@ import jakarta.validation.constraints.Size;
  */
 public class AuthRequest {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Enter a valid email address")
+    @NotBlank(message = AppConstants.VALIDATION_EMAIL_REQUIRED)
+    @Email(message = AppConstants.VALIDATION_EMAIL_INVALID)
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must contain at least 6 characters")
+    @NotBlank(message = AppConstants.VALIDATION_PASSWORD_REQUIRED)
+    @Size(min = 6, message = AppConstants.VALIDATION_PASSWORD_MIN)
     private String password;
 
     /** Optional role override; defaults to CANDIDATE if not provided. */
