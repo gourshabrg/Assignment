@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Interviews – HR Portal</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/dashboard.css">
+  <link rel="stylesheet" href="../../styles/hr/dashboard.css">
+  <link rel="stylesheet" href="../../styles/panel/dashboard.css">
+</head>
+<body class="hr-body">
+
+  <div class="hr-overlay" id="hr-overlay" onclick="closeSidebar()"></div>
+
+  <div class="hr-layout">
+
+    <aside class="hr-sidebar" id="hr-sidebar" aria-label="HR navigation">
+      <header class="hr-brand">
+        <div class="brand-mark hr-brand-mark" aria-hidden="true">IT</div>
+        <div>
+          <p class="hr-brand-name">Interview Tracking</p>
+          <p class="hr-brand-sub">HR Portal</p>
+        </div>
+      </header>
+      <nav class="hr-nav" aria-label="Main navigation">
+        <a class="hr-nav-item" href="../index.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <a class="hr-nav-item" href="dashboard.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Candidates
+        </a>
+        <a class="hr-nav-item" href="schedule.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Schedule Interview
+        </a>
+        <a class="hr-nav-item" href="panels.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Panels
+        </a>
+        <a class="hr-nav-item" href="jobs.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Jobs
+        </a>
+        <a class="hr-nav-item active" href="hr-interviews.html" aria-current="page">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          HR Interviews
+        </a>
+      </nav>
+      <footer class="hr-sidebar-footer">
+        <div class="hr-user-card">
+          <div class="hr-user-avatar" id="hr-avatar" aria-hidden="true"></div>
+          <div class="hr-user-info">
+            <p class="hr-user-name" id="hr-user-name"></p>
+            <p class="hr-user-email" id="hr-user-email"></p>
+          </div>
+        </div>
+        <button class="hr-logout-btn" onclick="logout()" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </footer>
+    </aside>
+
+    <main class="hr-main">
+      <div class="hr-topbar" role="banner">
+        <button class="hr-menu-btn" onclick="toggleSidebar()" type="button" aria-label="Open navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="hr-topbar-title">HR Interviews</span>
+      </div>
+
+      <section class="hr-section" aria-labelledby="hr-interviews-heading">
+        <div class="hr-section-header">
+          <h1 id="hr-interviews-heading">HR Interviews</h1>
+        </div>
+        <div id="hr-interviews-grid" class="pd-interview-grid" role="region" aria-live="polite">
+          <p class="hr-loading">Loading interviews…</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="pd-modal-overlay" id="hr-modal-overlay" onclick="closeInterviewModal()" role="presentation"></div>
+  <div class="pd-modal" id="hr-modal" role="dialog" aria-modal="true" aria-labelledby="hr-modal-title">
+    <header class="pd-modal-header">
+      <h2 id="hr-modal-title" style="margin:0;font-size:18px;font-weight:700;color:var(--text-dark);">HR Interview</h2>
+      <button class="pd-modal-close" onclick="closeInterviewModal()" type="button" aria-label="Close interview modal">&#x2715;</button>
+    </header>
+
+    <div class="pd-modal-tabs" role="tablist">
+      <button class="pd-tab-btn active" id="tab-btn-candidate" role="tab" aria-selected="true" aria-controls="modal-tab-candidate" onclick="switchModalTab('candidate')">Candidate Info</button>
+      <button class="pd-tab-btn" id="tab-btn-feedback" role="tab" aria-selected="false" aria-controls="modal-tab-feedback" onclick="switchModalTab('feedback')">Submit Feedback</button>
+    </div>
+
+    <div class="pd-modal-body">
+
+      <div id="modal-tab-candidate" class="pd-tab-panel active" role="tabpanel" aria-labelledby="tab-btn-candidate">
+        <div id="candidate-detail-body">
+          <p class="hr-loading">Loading…</p>
+        </div>
+      </div>
+
+      <div id="modal-tab-feedback" class="pd-tab-panel" role="tabpanel" aria-labelledby="tab-btn-feedback">
+        <form id="feedback-form" autocomplete="off" novalidate>
+          <input type="hidden" id="fb-interview-id">
+
+          <div class="form-group">
+            <label>Rating <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <div class="star-rating" id="star-rating" role="radiogroup" aria-label="Rating (1 to 5 stars)">
+              <span class="star" data-value="1" role="radio" aria-label="1 star" tabindex="0">&#9733;</span>
+              <span class="star" data-value="2" role="radio" aria-label="2 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="3" role="radio" aria-label="3 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="4" role="radio" aria-label="4 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="5" role="radio" aria-label="5 stars" tabindex="0">&#9733;</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-status">Recommendation <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <select id="fb-status" required>
+              <option value="">-- Select Recommendation --</option>
+              <option value="SELECTED">Selected (Proceed / Offer)</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-areas">Areas Covered <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <textarea id="fb-areas" required placeholder="Topics discussed in the HR round…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-comments">Overall Comments <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <textarea id="fb-comments" required placeholder="Overall assessment of the candidate…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-strengths">Strengths</label>
+            <textarea id="fb-strengths" placeholder="Key strengths observed…" style="min-height:80px;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-weaknesses">Areas for Improvement</label>
+            <textarea id="fb-weaknesses" placeholder="Areas for improvement…" style="min-height:80px;"></textarea>
+          </div>
+
+          <p id="fb-error" class="error-msg" role="alert"></p>
+          <p id="fb-success" class="success-msg" role="status"></p>
+          <button type="submit" id="fb-btn" style="width:100%;">Submit Feedback</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../scripts/main/hr/hr-interviews.js"></script>
+</body>
+</html>

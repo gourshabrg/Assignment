@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Profile — Panel</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/dashboard.css">
+  <link rel="stylesheet" href="../../styles/panel/profiling.css">
+</head>
+
+<body>
+
+  <nav class="dashboard-nav" aria-label="Panel navigation">
+    <a href="dashboard.html" class="nav-brand" aria-label="Interview Tracking — Panel, back to dashboard">
+      <div class="brand-mark" aria-hidden="true">IT</div>
+      <span>Interview Tracking — Panel</span>
+    </a>
+    <div class="nav-user">
+      <span id="nav-email"></span>
+      <a href="dashboard.html" class="btn-secondary"
+         style="padding:6px 14px;font-size:13px;min-height:unset;margin-top:0;border-radius:20px;">Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <main class="dashboard-body" aria-label="Candidate profile">
+
+    <div id="loading" class="loading-text" role="status">Loading candidate profile...</div>
+
+    <div id="profile-content" style="display:none;">
+
+      <section class="profile-header-card section-card" aria-labelledby="profile-name">
+        <div class="profile-header-main">
+          <div class="profile-avatar" id="profile-avatar" aria-hidden="true">?</div>
+          <div>
+            <h1 id="profile-name" style="margin-bottom:4px;font-size:22px;"></h1>
+            <p id="profile-job" style="color:var(--primary);font-weight:700;margin-bottom:6px;"></p>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <span class="badge" id="profile-status-badge"></span>
+              <span style="font-size:13px;color:var(--text-muted);">Stage: <strong id="profile-stage"></strong></span>
+              <a id="profile-resume-btn" href="#" target="_blank" rel="noopener" class="btn-secondary"
+                 style="padding:4px 14px;font-size:12px;min-height:unset;margin-top:0;display:none;border-radius:20px;"
+                 aria-label="View candidate resume">View Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <section style="margin-top:20px;" aria-label="Hiring pipeline">
+          <p style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:10px;">Hiring Pipeline</p>
+          <div class="stage-track" id="stage-track" role="list" aria-label="Hiring stages"></div>
+        </section>
+      </section>
+
+      <div class="profile-grid">
+
+        <div>
+
+          <section class="section-card" aria-labelledby="cd-details-heading">
+            <h2 id="cd-details-heading">Candidate Details</h2>
+            <dl class="info-grid">
+              <div class="info-item"><dt>Email</dt><dd id="p-email"></dd></div>
+              <div class="info-item"><dt>Mobile</dt><dd id="p-mobile"></dd></div>
+              <div class="info-item"><dt>Current Company</dt><dd id="p-company"></dd></div>
+              <div class="info-item"><dt>Preferred Location</dt><dd id="p-location"></dd></div>
+              <div class="info-item"><dt>Total Experience</dt><dd id="p-total-exp"></dd></div>
+              <div class="info-item"><dt>Minimum Experience</dt><dd id="p-rel-exp"></dd></div>
+              <div class="info-item"><dt>Current CTC</dt><dd id="p-current-ctc"></dd></div>
+              <div class="info-item"><dt>Expected CTC</dt><dd id="p-expected-ctc"></dd></div>
+              <div class="info-item"><dt>Notice Period</dt><dd id="p-notice"></dd></div>
+              <div class="info-item"><dt>Source</dt><dd id="p-source"></dd></div>
+              <div class="info-item"><dt>Applied On</dt><dd id="p-applied"></dd></div>
+            </dl>
+          </section>
+
+          <section class="section-card" aria-labelledby="job-details-heading">
+            <h2 id="job-details-heading">Job Details</h2>
+            <dl class="info-grid">
+              <div class="info-item"><dt>Job Title</dt><dd id="p-job-title"></dd></div>
+              <div class="info-item"><dt>Location</dt><dd id="p-job-location"></dd></div>
+              <div class="info-item"><dt>Job Type</dt><dd id="p-job-type"></dd></div>
+              <div class="info-item"><dt>Skills Required</dt><dd id="p-skills"></dd></div>
+            </dl>
+            <div class="info-item" style="margin-top:10px;">
+              <dt style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;
+                         letter-spacing:.6px;display:block;margin-bottom:3px;">Job Description</dt>
+              <dd id="p-job-desc" style="white-space:pre-line;font-size:13px;color:var(--text-muted);margin:0;"></dd>
+            </div>
+          </section>
+        </div>
+
+        <div>
+
+          <section class="section-card" id="this-interview-card" aria-labelledby="this-iv-heading">
+            <h2 id="this-iv-heading">Your Interview Assignment</h2>
+            <div id="this-interview-body"></div>
+          </section>
+
+          <section class="section-card" aria-labelledby="iv-history-heading">
+            <h2 id="iv-history-heading">Interview History</h2>
+            <div id="interview-history"></div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="error-state" class="no-data" style="display:none;padding:60px;" role="alert">
+      <p id="error-msg">Failed to load candidate profile.</p>
+      <a href="dashboard.html" class="btn-secondary" style="padding:8px 18px;font-size:13px;border-radius:20px;">Back to Dashboard</a>
+    </div>
+
+  </main>
+
+  <script type="module" src="../../scripts/main/panel-profiling.js"></script>
+</body>
+
+</html>

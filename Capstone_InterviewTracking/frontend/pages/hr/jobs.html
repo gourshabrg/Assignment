@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs – HR Portal</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/dashboard.css">
+  <link rel="stylesheet" href="../../styles/hr/dashboard.css">
+</head>
+<body class="hr-body">
+
+  <div class="hr-overlay" id="hr-overlay" onclick="closeSidebar()"></div>
+
+  <div class="hr-layout">
+
+    <aside class="hr-sidebar" id="hr-sidebar" aria-label="HR navigation">
+      <header class="hr-brand">
+        <div class="brand-mark hr-brand-mark" aria-hidden="true">IT</div>
+        <div>
+          <p class="hr-brand-name">Interview Tracking</p>
+          <p class="hr-brand-sub">HR Portal</p>
+        </div>
+      </header>
+      <nav class="hr-nav" aria-label="Main navigation">
+        <a class="hr-nav-item" href="../index.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <a class="hr-nav-item" href="dashboard.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Candidates
+        </a>
+        <a class="hr-nav-item" href="schedule.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Schedule Interview
+        </a>
+        <a class="hr-nav-item" href="panels.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Panels
+        </a>
+        <a class="hr-nav-item active" href="jobs.html" aria-current="page">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          Jobs
+        </a>
+        <a class="hr-nav-item" href="hr-interviews.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          HR Interviews
+        </a>
+      </nav>
+      <footer class="hr-sidebar-footer">
+        <div class="hr-user-card">
+          <div class="hr-user-avatar" id="hr-avatar" aria-hidden="true"></div>
+          <div class="hr-user-info">
+            <p class="hr-user-name" id="hr-user-name"></p>
+            <p class="hr-user-email" id="hr-user-email"></p>
+          </div>
+        </div>
+        <button class="hr-logout-btn" onclick="logout()" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </footer>
+    </aside>
+
+    <main class="hr-main">
+      <div class="hr-topbar" role="banner">
+        <button class="hr-menu-btn" onclick="toggleSidebar()" type="button" aria-label="Open navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="hr-topbar-title">Jobs</span>
+      </div>
+
+      <section class="hr-section" aria-labelledby="jobs-heading">
+        <div class="hr-section-header">
+          <h1 id="jobs-heading">Jobs</h1>
+          <button class="btn" style="min-height:unset;padding:9px 18px;font-size:13px;" onclick="openJDModal(null)" type="button">+ Create JD</button>
+        </div>
+        <div id="jobs-grid" role="region" aria-live="polite">
+          <p class="hr-loading">Loading…</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="hr-modal-overlay" id="jd-overlay" onclick="closeJDModal()" role="presentation"></div>
+  <div class="hr-modal" id="jd-modal" role="dialog" aria-modal="true" aria-labelledby="jd-modal-title">
+    <header class="hr-modal-header">
+      <h2 id="jd-modal-title">Create Job</h2>
+      <button class="hr-drawer-close" onclick="closeJDModal()" type="button" aria-label="Close job modal">✕</button>
+    </header>
+    <div class="hr-modal-body">
+      <form id="jd-form" novalidate>
+        <div class="form-group">
+          <label for="jd-title">Job Title *</label>
+          <input type="text" id="jd-title" required placeholder="e.g. Senior Java Developer">
+        </div>
+        <div class="form-group">
+          <label for="jd-description">Description *</label>
+          <textarea id="jd-description" required placeholder="Describe the role and responsibilities…" rows="3" style="width:100%;resize:vertical;padding:10px 12px;border:1px solid var(--border-normal);border-radius:6px;font-size:14px;font-family:inherit;"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="jd-skills">Skills *</label>
+          <input type="text" id="jd-skills" required placeholder="e.g. Java, Spring Boot, SQL">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jd-location">Location *</label>
+            <input type="text" id="jd-location" required placeholder="e.g. Bangalore">
+          </div>
+          <div class="form-group">
+            <label for="jd-jobtype">Job Type *</label>
+            <select id="jd-jobtype" required>
+              <option value="">Select type</option>
+              <option value="FULL_TIME">Full Time</option>
+              <option value="CONTRACT">Contract</option>
+              <option value="REMOTE">Remote</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jd-min-salary">Min Salary (LPA) *</label>
+            <input type="number" id="jd-min-salary" min="0" step="0.5" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="jd-max-salary">Max Salary (LPA) *</label>
+            <input type="number" id="jd-max-salary" min="0" step="0.5" placeholder="0" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="jd-min-exp">Min Experience (yrs) *</label>
+            <input type="number" id="jd-min-exp" min="0" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="jd-max-exp">Max Experience (yrs) *</label>
+            <input type="number" id="jd-max-exp" min="0" placeholder="0" required>
+          </div>
+        </div>
+        <p id="jd-error" class="error-msg" role="alert"></p>
+        <p id="jd-success" class="success-msg" role="status"></p>
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn" id="jd-btn">Create Job</button>
+          <button type="button" class="btn-secondary" onclick="closeJDModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../../scripts/main/hr/jobs.js"></script>
+</body>
+</html>

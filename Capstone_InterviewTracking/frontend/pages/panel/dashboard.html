@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Interviews – Panel Dashboard</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/dashboard.css">
+  <link rel="stylesheet" href="../../styles/panel/dashboard.css">
+</head>
+<body class="pd-body">
+
+  <div class="pd-overlay" id="pd-overlay" onclick="closeSidebar()"></div>
+
+  <div class="pd-layout">
+
+    <aside class="pd-sidebar" id="pd-sidebar" aria-label="Panel navigation">
+      <header class="pd-brand">
+        <div class="brand-mark" aria-hidden="true">IT</div>
+        <div>
+          <p class="pd-brand-name">Interview Tracking</p>
+          <p class="pd-brand-sub">Panel Member</p>
+        </div>
+      </header>
+
+      <nav class="pd-nav" aria-label="Main navigation">
+        <a class="pd-nav-item" href="../index.html">
+          <svg class="pd-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          Home
+        </a>
+        <a class="pd-nav-item active" href="dashboard.html" aria-current="page">
+          <svg class="pd-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+          My Interviews
+        </a>
+      </nav>
+
+      <footer class="pd-sidebar-footer">
+        <div class="pd-user-card">
+          <div class="pd-user-avatar" id="pd-avatar" aria-hidden="true">P</div>
+          <div class="pd-user-info">
+            <p class="pd-user-name">Panel Member</p>
+            <p class="pd-user-email" id="pd-user-email"></p>
+          </div>
+        </div>
+        <button class="pd-logout-btn" onclick="panelLogout()" type="button" aria-label="Sign out">
+          <svg class="pd-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Logout
+        </button>
+      </footer>
+    </aside>
+
+    <main class="pd-main">
+
+      <div class="pd-topbar" role="banner">
+        <button class="pd-menu-btn" onclick="openSidebar()" type="button" aria-label="Open navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <span class="pd-topbar-title">My Interviews</span>
+      </div>
+
+      <section class="pd-section" aria-labelledby="interviews-heading">
+        <div class="pd-section-header">
+          <h1 id="interviews-heading">My Interviews</h1>
+        </div>
+        <div id="interviews-grid" class="pd-interview-grid" role="region" aria-live="polite">
+          <p class="loading-text">Loading interviews...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="pd-modal-overlay" id="pd-modal-overlay" onclick="closeInterviewModal()" role="presentation"></div>
+  <div class="pd-modal" id="pd-modal" role="dialog" aria-modal="true" aria-labelledby="pd-modal-title">
+    <header class="pd-modal-header">
+      <h2 id="pd-modal-title" style="margin:0;font-size:18px;font-weight:700;color:var(--text-dark);">Interview Details</h2>
+      <button class="pd-modal-close" onclick="closeInterviewModal()" type="button" aria-label="Close interview modal">&#x2715;</button>
+    </header>
+
+    <div class="pd-modal-tabs" role="tablist">
+      <button class="pd-tab-btn active" id="tab-btn-candidate" role="tab" aria-selected="true" aria-controls="modal-tab-candidate" onclick="switchModalTab('candidate')">Candidate Info</button>
+      <button class="pd-tab-btn" id="tab-btn-feedback" role="tab" aria-selected="false" aria-controls="modal-tab-feedback" onclick="switchModalTab('feedback')">Submit Feedback</button>
+    </div>
+
+    <div class="pd-modal-body">
+
+      <div id="modal-tab-candidate" class="pd-tab-panel active" role="tabpanel" aria-labelledby="tab-btn-candidate">
+        <div id="candidate-detail-body">
+          <p class="loading-text">Loading...</p>
+        </div>
+      </div>
+
+      <div id="modal-tab-feedback" class="pd-tab-panel" role="tabpanel" aria-labelledby="tab-btn-feedback">
+        <form id="feedback-form" autocomplete="off" novalidate>
+          <input type="hidden" id="fb-interview-id">
+
+          <div class="form-group">
+            <label>Rating <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <div class="star-rating" id="star-rating" role="radiogroup" aria-label="Rating (1 to 5 stars)">
+              <span class="star" data-value="1" role="radio" aria-label="1 star" tabindex="0">&#9733;</span>
+              <span class="star" data-value="2" role="radio" aria-label="2 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="3" role="radio" aria-label="3 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="4" role="radio" aria-label="4 stars" tabindex="0">&#9733;</span>
+              <span class="star" data-value="5" role="radio" aria-label="5 stars" tabindex="0">&#9733;</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-status">Recommendation <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <select id="fb-status" required>
+              <option value="">-- Select Recommendation --</option>
+              <option value="SELECTED">Selected (Proceed to Next Round)</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-areas">Areas Covered <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <textarea id="fb-areas" required placeholder="Topics and areas covered during the interview..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-comments">Overall Comments <span style="color:var(--status-error)" aria-hidden="true">*</span></label>
+            <textarea id="fb-comments" required placeholder="Overall assessment of the candidate..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-strengths">Strengths</label>
+            <textarea id="fb-strengths" placeholder="Key strengths observed..." style="min-height:80px;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="fb-weaknesses">Areas for Improvement</label>
+            <textarea id="fb-weaknesses" placeholder="Areas for improvement..." style="min-height:80px;"></textarea>
+          </div>
+
+          <p id="fb-error" class="error-msg" role="alert"></p>
+          <p id="fb-success" class="success-msg" role="status"></p>
+          <button type="submit" id="fb-btn" style="width:100%;">Submit Feedback</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../scripts/main/panel-dashboard.js"></script>
+</body>
+</html>

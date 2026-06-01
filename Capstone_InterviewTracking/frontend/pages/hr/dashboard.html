@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidates – HR Portal</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/dashboard.css">
+  <link rel="stylesheet" href="../../styles/hr/dashboard.css">
+</head>
+
+<body class="hr-body">
+
+  <div class="hr-overlay" id="hr-overlay" onclick="closeSidebar()"></div>
+
+  <div class="hr-layout">
+
+    <aside class="hr-sidebar" id="hr-sidebar" aria-label="HR navigation">
+      <header class="hr-brand">
+        <div class="brand-mark hr-brand-mark" aria-hidden="true">IT</div>
+        <div>
+          <p class="hr-brand-name">Interview Tracking</p>
+          <p class="hr-brand-sub">HR Portal</p>
+        </div>
+      </header>
+
+      <nav class="hr-nav" aria-label="Main navigation">
+        <a class="hr-nav-item" href="../index.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Home
+        </a>
+        <a class="hr-nav-item active" href="dashboard.html" aria-current="page">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Candidates
+        </a>
+        <a class="hr-nav-item" href="schedule.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Schedule Interview
+        </a>
+        <a class="hr-nav-item" href="panels.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Panels
+        </a>
+        <a class="hr-nav-item" href="jobs.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+          </svg>
+          Jobs
+        </a>
+        <a class="hr-nav-item" href="hr-interviews.html">
+          <svg class="hr-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          HR Interviews
+        </a>
+      </nav>
+
+      <footer class="hr-sidebar-footer">
+        <div class="hr-user-card">
+          <div class="hr-user-avatar" id="hr-avatar" aria-hidden="true"></div>
+          <div class="hr-user-info">
+            <p class="hr-user-name" id="hr-user-name"></p>
+            <p class="hr-user-email" id="hr-user-email"></p>
+          </div>
+        </div>
+        <button class="hr-logout-btn" onclick="logout()" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </button>
+      </footer>
+    </aside>
+
+    <main class="hr-main">
+
+      <div class="hr-topbar" role="banner">
+        <button class="hr-menu-btn" onclick="toggleSidebar()" type="button" aria-label="Open navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <span class="hr-topbar-title">Candidates</span>
+      </div>
+
+      <section class="hr-section" aria-labelledby="candidates-heading">
+        <div class="hr-section-header">
+          <h1 id="candidates-heading">Candidates</h1>
+          <button class="btn" style="min-height:unset;padding:9px 18px;font-size:13px;" onclick="openOnboardModal()"
+            type="button">+ Onboard Candidate</button>
+        </div>
+
+        <div class="hr-card">
+          <fieldset class="filter-row" style="border:none;padding:0;margin:0;">
+            <legend class="sr-only">Filter candidates</legend>
+            <div class="filter-group">
+              <label for="filter-stage">Stage</label>
+              <select id="filter-stage" onchange="loadCandidates()">
+                <option value="">All Stages</option>
+                <option>PROFILING</option>
+                <option>SCREENING</option>
+                <option>L1</option>
+                <option>L2</option>
+                <option>HR</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-status">Status</label>
+              <select id="filter-status" onchange="loadCandidates()">
+                <option value="">All Statuses</option>
+                <option>APPLIED</option>
+                <option>SELECTED</option>
+                <option>REJECTED</option>
+              </select>
+            </div>
+            <button class="btn"
+              style="padding:8px 16px;font-size:13px;min-height:unset;margin-top:0;align-self:flex-end;"
+              onclick="loadCandidates()" type="button">Refresh</button>
+          </fieldset>
+          <div id="candidates-table-wrap" role="region" aria-live="polite">
+            <p class="hr-loading">Loading candidates…</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="hr-drawer-overlay" id="drawer-overlay" onclick="closeDrawer()" aria-hidden="true"></div>
+  <aside class="hr-drawer" id="candidate-drawer" aria-label="Candidate detail" role="complementary">
+    <header class="hr-drawer-header">
+      <div>
+        <h2 id="drawer-name" class="hr-drawer-title"></h2>
+        <div id="drawer-badges" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;"></div>
+      </div>
+      <button class="hr-drawer-close" onclick="closeDrawer()" type="button"
+        aria-label="Close candidate detail">✕</button>
+    </header>
+    <div class="hr-drawer-body" id="drawer-body" role="region" aria-live="polite">
+      <p class="hr-loading">Loading…</p>
+    </div>
+  </aside>
+
+  <div class="hr-modal-overlay" id="onboard-overlay" onclick="closeOnboardModal()" role="presentation"></div>
+  <div class="hr-modal" id="onboard-modal" role="dialog" aria-modal="true" aria-labelledby="onboard-modal-title">
+    <header class="hr-modal-header">
+      <h2 id="onboard-modal-title">Onboard Candidate</h2>
+      <button class="hr-drawer-close" onclick="closeOnboardModal()" type="button"
+        aria-label="Close onboard modal">✕</button>
+    </header>
+    <div class="hr-modal-body">
+      <form id="onboard-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-name">Full Name *</label>
+            <input type="text" id="ob-name" required placeholder="Full name" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="ob-email">Email *</label>
+            <input type="email" id="ob-email" required placeholder="candidate@email.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-mobile">Mobile *</label>
+            <input type="tel" id="ob-mobile" required placeholder="10-digit number" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="ob-dob">Date of Birth *</label>
+            <input type="date" id="ob-dob" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ob-resume">Resume (PDF, max 5 MB) *</label>
+          <input type="file" id="ob-resume" accept=".pdf,application/pdf" required>
+          <p id="ob-resume-error" class="error-msg" style="margin-top:4px;" role="alert"></p>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-job">Job *</label>
+            <select id="ob-job" required>
+              <option value="">Select job…</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ob-company">Current Company *</label>
+            <input type="text" id="ob-company" placeholder="Company name" autocomplete="organization" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-total-exp">Total Experience (yrs) *</label>
+            <input type="number" id="ob-total-exp" min="0" step="0.5" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="ob-rel-exp">Minimum Experience (yrs)</label>
+            <input type="number" id="ob-rel-exp" min="0" step="0.5" placeholder="—" readonly
+              style="background:var(--bg-main);cursor:not-allowed;">
+            <small style="color:var(--text-muted);font-size:11px;">Auto-filled from the selected job's minimum
+              experience</small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-current-ctc">Current CTC (LPA) *</label>
+            <input type="number" id="ob-current-ctc" min="0" step="0.5" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="ob-expected-ctc">Expected CTC (LPA) *</label>
+            <input type="number" id="ob-expected-ctc" min="0" step="0.5" placeholder="0" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ob-notice">Notice Period (days) *</label>
+            <input type="number" id="ob-notice" min="0" placeholder="0" required>
+          </div>
+          <div class="form-group">
+            <label for="ob-location">Preferred Location</label>
+            <input type="text" id="ob-location" placeholder="e.g. Bangalore">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ob-source">Source</label>
+          <input type="text" id="ob-source" placeholder="e.g. LinkedIn, Referral">
+        </div>
+        <p id="ob-error" class="error-msg" role="alert"></p>
+        <p id="ob-success" class="success-msg" role="status"></p>
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn" id="ob-btn">Onboard</button>
+          <button type="button" class="btn-secondary" onclick="closeOnboardModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../../scripts/main/hr/candidates.js"></script>
+</body>
+
+</html>

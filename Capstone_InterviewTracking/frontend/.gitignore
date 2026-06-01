@@ -1,0 +1,9 @@
+# Local frontend environment config
+scripts/config/config.js
+
+# Editor and OS files
+.idea/
+.vscode/
+*.log
+Thumbs.db
+.DS_Store

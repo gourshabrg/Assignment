@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply — Interview Tracking</title>
+  <link rel="stylesheet" href="../../styles/style.css">
+  <link rel="stylesheet" href="../../styles/candidate/apply.css">
+</head>
+<body>
+
+  <div class="submit-overlay" id="submit-overlay">
+    <div class="overlay-content">
+      <div class="spinner"></div>
+      <p>Submitting your application...</p>
+    </div>
+  </div>
+
+  <nav class="apply-nav">
+    <div class="nav-brand">
+      <div class="brand-mark">IT</div>
+      <span>Interview Tracking</span>
+    </div>
+  </nav>
+
+  <div class="job-banner">
+    <div class="job-banner-inner">
+      <div class="brand-mark job-banner-logo">IT</div>
+      <div>
+        <div class="job-banner-title" id="banner-job-title">Loading...</div>
+        <div class="job-banner-meta" id="banner-job-meta">Interview Tracking</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="apply-body">
+    <div class="apply-card">
+      <h2>Application Form</h2>
+
+      <form id="apply-form" novalidate>
+
+        <div class="section-title first-section">Upload CV / Resume <span class="required">*</span></div>
+        <p class="section-hint">Submit your resume in pdf</p>
+
+        <div class="resume-upload" id="resume-upload-wrap">
+          <input type="file" id="resume" accept=".pdf" class="resume-input">
+          <label for="resume" class="resume-label" id="resume-label">
+            <div class="resume-icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="12" x2="12" y2="18"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <div class="resume-upload-text">
+              <span class="resume-upload-main">Click to upload PDF resume</span>
+              <span class="resume-upload-sub">Only PDF accepted &middot; Max 5 MB</span>
+            </div>
+          </label>
+          <div class="resume-file-preview" id="resume-preview">
+            <div class="resume-file-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="resume-file-info">
+              <span class="resume-file-name" id="resume-file-name"></span>
+              <span class="resume-file-size" id="resume-file-size"></span>
+            </div>
+            <button type="button" class="resume-file-remove" id="resume-clear" title="Remove file">&times;</button>
+          </div>
+        </div>
+
+        <div class="section-title">Basic Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" required placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email <span class="required">*</span></label>
+            <input type="email" id="email" required readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="mobile">Mobile <span class="required">*</span></label>
+            <input type="tel" id="mobile" required placeholder="10-digit number">
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth <span class="required">*</span></label>
+            <input type="date" id="dob" required max="">
+          </div>
+        </div>
+
+        <div class="section-title">Professional Details</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="currentCompany">Current Company <span class="required">*</span></label>
+            <input type="text" id="currentCompany" required placeholder="Company name">
+          </div>
+          <div class="form-group">
+            <label for="source">Source <span class="required">*</span></label>
+            <input type="text" id="source" required placeholder="e.g. LinkedIn, Referral">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="totalExperience">Total Experience (yrs) <span class="required">*</span></label>
+            <input type="number" id="totalExperience" min="0" step="0.5" required placeholder="e.g. 3.5">
+          </div>
+          <div class="form-group">
+            <label for="relevantExperience">Min Experience Required</label>
+            <input type="number" id="relevantExperience" min="0" step="0.5" readonly>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="currentCtc">Current CTC (LPA) <span class="required">*</span></label>
+            <input type="number" id="currentCtc" min="0" step="0.1" required placeholder="e.g. 8">
+          </div>
+          <div class="form-group">
+            <label for="expectedCtc">Expected CTC (LPA) <span class="required">*</span></label>
+            <input type="number" id="expectedCtc" min="0" step="0.1" required placeholder="e.g. 12">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="noticePeriod">Notice Period (days) <span class="required">*</span></label>
+            <input type="number" id="noticePeriod" min="0" required placeholder="e.g. 30">
+          </div>
+          <div class="form-group">
+            <label for="preferredLocation">Preferred Location</label>
+            <input type="text" id="preferredLocation" placeholder="e.g. Bangalore">
+          </div>
+        </div>
+
+        <p id="error-msg" class="error-msg"></p>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="apply-footer">
+    <button type="button" class="btn-secondary back-btn" id="back-btn">Back</button>
+    <button type="submit" form="apply-form" class="btn apply-btn" id="submit-btn">Apply</button>
+  </div>
+
+  <script type="module" src="../../scripts/main/candidate-apply.js"></script>
+</body>
+</html>
