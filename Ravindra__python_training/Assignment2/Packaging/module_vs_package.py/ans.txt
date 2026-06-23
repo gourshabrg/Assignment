@@ -1,0 +1,23 @@
+| Feature    | Module                        | Package                            |
+| ---------- | ----------------------------- | ---------------------------------- |
+| Definition | Single `.py` file             | Directory containing modules       |
+| Purpose    | Organize related code         | Organize multiple modules          |
+| Contains   | Functions, Classes, Variables | Modules and Sub-packages           |
+| Example    | `math.py`                     | `numpy`                            |
+| Import     | `import calculator`           | `from utilities import calculator` |
+
+
+ex -
+
+project/
+
+├── main.py
+│
+└── employee/
+    ├── __init__.py
+    ├── details.py
+    └── salary.py
+
+    Why __init__.py?
+    Traditionally, Python identifies a directory as a package if it contains:
+    __init__.py
