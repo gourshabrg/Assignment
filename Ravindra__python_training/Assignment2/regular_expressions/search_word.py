@@ -1,16 +1,17 @@
-# Write a regular expression to validate a 10-digit mobile number.
+# Use re.search() to check whether a word exists in a sentence.
 
 import re
 
-def validate_mobile(number):
+def search_word(sentence, word):
 
-    pattern = r"^[0-9]{10}$"
+    result = re.search(word, sentence)
 
-    if re.match(pattern, number):
-        print("Valid Mobile Number")
+    if result:
+        print("Word Found")
     else:
-        print("Invalid Mobile Number")
+        print("Word Not Found")
 
-number = input("Enter mobile number: ")
 
-validate_mobile(number)
+sentence = "Python is easy to learn"
+
+search_word(sentence, "easy")
