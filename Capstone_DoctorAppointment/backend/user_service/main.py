@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="User Service",
+    title="Doctor Appointment Booking System",
     lifespan=lifespan
 )
 
