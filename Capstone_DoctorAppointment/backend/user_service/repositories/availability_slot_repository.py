@@ -34,6 +34,21 @@ class AvailabilitySlotRepository:
             AvailabilitySlot.doctor_id == doctor_id
         ).to_list()
 
+    async def get_available_by_doctor(
+        self,
+        doctor_id: str,
+        from_date: date
+    ) -> list[AvailabilitySlot]:
+
+        return await AvailabilitySlot.find(
+            AvailabilitySlot.doctor_id == doctor_id,
+            AvailabilitySlot.is_booked == False,  # noqa: E712
+            AvailabilitySlot.slot_date >= from_date
+        ).sort(
+            "slot_date",
+            "start_time"
+        ).to_list()
+
     async def get_overlapping_slot(
         self,
         doctor_id: str,

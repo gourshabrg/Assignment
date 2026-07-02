@@ -37,3 +37,7 @@ PAST_SLOT_DATE = (
 SLOT_OVERLAP = (
     "Slot overlaps with an existing availability slot."
 )
+
+DOCTORS_FETCHED = "Doctors fetched successfully."
+
+DOCTOR_DETAILS_FETCHED = "Doctor details fetched successfully."
