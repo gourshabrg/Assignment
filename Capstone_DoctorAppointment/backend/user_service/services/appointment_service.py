@@ -72,9 +72,16 @@ class AppointmentService:
                 )
                 raise PastSlotDateException()
 
-            slot.is_booked = True
-            slot.updated_at = datetime.utcnow()
-            await self.slot_repository.update(slot=slot)
+            booked = await self.slot_repository.book_if_available(
+                slot_id=str(slot.id)
+            )
+
+            if not booked:
+                logger.warning(
+                    f"Booking failed: slot taken by a concurrent "
+                    f"request slot_id={slot.id}"
+                )
+                raise SlotUnavailableException()
 
             appointment = Appointment(
                 patient_id=str(current_user.id),
