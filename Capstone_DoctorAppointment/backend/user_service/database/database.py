@@ -2,8 +2,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
 from shared.config.settings import settings
+from shared.logger.logger import get_logger
+
 from user_service.models.user_model import User
 from user_service.models.doctor_profile_model import DoctorProfile
+from user_service.models.availability_slot_model import AvailabilitySlot
+
+logger = get_logger(__name__)
 
 
 class MongoDatabase:
@@ -26,11 +31,12 @@ class MongoDatabase:
             database=cls.database,
             document_models=[
                 User,
-                DoctorProfile
+                DoctorProfile,
+                AvailabilitySlot
             ]
         )
 
-        print("MongoDB Connected Successfully")
+        logger.info("MongoDB connected successfully")
 
     @classmethod
     async def close(cls):
@@ -38,6 +44,4 @@ class MongoDatabase:
         if cls.client:
             cls.client.close()
 
-        print("MongoDB Connection Closed")
-
-   
+        logger.info("MongoDB connection closed")

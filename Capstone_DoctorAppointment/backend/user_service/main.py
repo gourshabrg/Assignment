@@ -2,7 +2,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from user_service.database.database import MongoDatabase
-from user_service.routers import auth_router, doctor_router
+from user_service.routers import (
+    auth_router,
+    doctor_router,
+    availability_router
+)
 from user_service.startup.seed_admin import AdminSeeder
 
 
@@ -25,3 +29,4 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(doctor_router)
+app.include_router(availability_router)
