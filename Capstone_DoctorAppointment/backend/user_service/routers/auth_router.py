@@ -12,6 +12,14 @@ from user_service.schemas.request.login_request import (
     LoginRequest
 )
 
+from user_service.schemas.request.change_password_request import (
+    ChangePasswordRequest
+)
+
+from user_service.schemas.request.reset_password_request import (
+    ResetPasswordRequest
+)
+
 from user_service.services.auth_service import AuthService
 
 from fastapi import Depends
@@ -80,3 +88,48 @@ async def me(
 ):
 
     return current_user
+
+
+@router.post(
+    "/logout",
+    status_code=status.HTTP_200_OK
+)
+async def logout(
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+
+    return await auth_service.logout(
+        user=current_user
+    )
+
+
+@router.post(
+    "/change-password",
+    status_code=status.HTTP_200_OK
+)
+async def change_password(
+    request: ChangePasswordRequest,
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+
+    return await auth_service.change_password(
+        user=current_user,
+        request=request
+    )
+
+
+@router.post(
+    "/reset-password",
+    status_code=status.HTTP_200_OK
+)
+async def reset_password(
+    request: ResetPasswordRequest
+):
+
+    return await auth_service.reset_password(
+        request=request
+    )

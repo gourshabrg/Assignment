@@ -15,3 +15,13 @@ TOKEN_EXPIRED = "Session expired. Please login again."
 LOGIN_SUCCESS = "Login successful."
 
 LOGOUT_SUCCESS = "Logout successful."
+
+SAME_PASSWORD = (
+    "New password must be different from the old password."
+)
+
+INCORRECT_OLD_PASSWORD = "Old password is incorrect."
+
+PASSWORD_CHANGED_SUCCESS = "Password changed successfully."
+
+PASSWORD_RESET_SUCCESS = "Password reset successfully."
