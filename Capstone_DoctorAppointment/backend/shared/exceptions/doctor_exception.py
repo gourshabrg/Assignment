@@ -1,5 +1,3 @@
-from fastapi import HTTPException
-
 from shared.constants import (
     DOCTOR_PROFILE_ALREADY_EXISTS,
     DOCTOR_PROFILE_NOT_FOUND,
@@ -7,20 +5,14 @@ from shared.constants import (
     HTTP_NOT_FOUND
 )
 
-
-class DoctorProfileAlreadyExistsException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_CONFLICT,
-            detail=DOCTOR_PROFILE_ALREADY_EXISTS
-        )
+from shared.exceptions.base_exception import BaseAPIException
 
 
-class DoctorProfileNotFoundException(HTTPException):
+class DoctorProfileAlreadyExistsException(BaseAPIException):
+    status_code = HTTP_CONFLICT
+    message = DOCTOR_PROFILE_ALREADY_EXISTS
 
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_NOT_FOUND,
-            detail=DOCTOR_PROFILE_NOT_FOUND
-        )
+
+class DoctorProfileNotFoundException(BaseAPIException):
+    status_code = HTTP_NOT_FOUND
+    message = DOCTOR_PROFILE_NOT_FOUND

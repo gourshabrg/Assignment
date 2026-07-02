@@ -1,5 +1,3 @@
-from fastapi import HTTPException
-
 from shared.constants import (
     HTTP_BAD_REQUEST,
     HTTP_UNAUTHORIZED,
@@ -10,47 +8,29 @@ from shared.constants import (
     INCORRECT_OLD_PASSWORD
 )
 
-
-class InvalidCredentialsException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_UNAUTHORIZED,
-            detail=INVALID_CREDENTIALS
-        )
+from shared.exceptions.base_exception import BaseAPIException
 
 
-class InvalidPasswordException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_BAD_REQUEST,
-            detail=INVALID_PASSWORD
-        )
+class InvalidCredentialsException(BaseAPIException):
+    status_code = HTTP_UNAUTHORIZED
+    message = INVALID_CREDENTIALS
 
 
-class InvalidTokenException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_UNAUTHORIZED,
-            detail=INVALID_TOKEN
-        )
+class InvalidPasswordException(BaseAPIException):
+    status_code = HTTP_BAD_REQUEST
+    message = INVALID_PASSWORD
 
 
-class SamePasswordException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_BAD_REQUEST,
-            detail=SAME_PASSWORD
-        )
+class InvalidTokenException(BaseAPIException):
+    status_code = HTTP_UNAUTHORIZED
+    message = INVALID_TOKEN
 
 
-class IncorrectOldPasswordException(HTTPException):
+class SamePasswordException(BaseAPIException):
+    status_code = HTTP_BAD_REQUEST
+    message = SAME_PASSWORD
 
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_BAD_REQUEST,
-            detail=INCORRECT_OLD_PASSWORD
-        )
+
+class IncorrectOldPasswordException(BaseAPIException):
+    status_code = HTTP_BAD_REQUEST
+    message = INCORRECT_OLD_PASSWORD

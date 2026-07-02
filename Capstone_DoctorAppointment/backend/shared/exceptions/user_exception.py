@@ -1,5 +1,3 @@
-from fastapi import HTTPException
-
 from shared.constants import (
     HTTP_CONFLICT,
     HTTP_FORBIDDEN,
@@ -9,29 +7,19 @@ from shared.constants import (
     USER_NOT_FOUND
 )
 
-
-class UserAlreadyExistsException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_CONFLICT,
-            detail=USER_ALREADY_EXISTS
-        )
+from shared.exceptions.base_exception import BaseAPIException
 
 
-class UserNotFoundException(HTTPException):
-
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_NOT_FOUND,
-            detail=USER_NOT_FOUND
-        )
+class UserAlreadyExistsException(BaseAPIException):
+    status_code = HTTP_CONFLICT
+    message = USER_ALREADY_EXISTS
 
 
-class UserInactiveException(HTTPException):
+class UserNotFoundException(BaseAPIException):
+    status_code = HTTP_NOT_FOUND
+    message = USER_NOT_FOUND
 
-    def __init__(self):
-        super().__init__(
-            status_code=HTTP_FORBIDDEN,
-            detail=USER_INACTIVE
-        )
+
+class UserInactiveException(BaseAPIException):
+    status_code = HTTP_FORBIDDEN
+    message = USER_INACTIVE

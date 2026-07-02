@@ -1,20 +1,11 @@
-from fastapi import HTTPException
-
 from shared.constants import (
     HTTP_FORBIDDEN,
     FORBIDDEN
 )
 
+from shared.exceptions.base_exception import BaseAPIException
 
-class AccessDeniedException(
-    HTTPException
-):
 
-    def __init__(self):
-
-        super().__init__(
-
-            status_code=HTTP_FORBIDDEN,
-
-            detail=FORBIDDEN
-        )
+class AccessDeniedException(BaseAPIException):
+    status_code = HTTP_FORBIDDEN
+    message = FORBIDDEN
