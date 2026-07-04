@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import HTTPException
 
@@ -15,22 +15,41 @@ from user_service.repositories.availability_slot_repository import (
 from user_service.schemas.request.book_appointment_request import (
     BookAppointmentRequest
 )
+from user_service.schemas.request.update_appointment_status_request import (
+    UpdateAppointmentStatusRequest
+)
 from user_service.schemas.response.api_response import ApiResponse
 from user_service.schemas.response.appointment_response import (
     AppointmentResponse
 )
 
+from shared.enums.appointment_status_enum import AppointmentStatus
+
 from shared.exceptions import (
     SlotNotFoundException,
     SlotUnavailableException,
-    PastSlotDateException
+    PastSlotDateException,
+    AppointmentNotFoundException,
+    AppointmentNotCancellableException,
+    CancellationWindowExpiredException,
+    InvalidStatusUpdateException,
+    StatusUpdateTooEarlyException,
+    AppointmentNotUpdatableException,
+    AccessDeniedException
 )
 
-from shared.constants import APPOINTMENT_BOOKED
+from shared.constants import (
+    APPOINTMENT_BOOKED,
+    APPOINTMENTS_FETCHED,
+    APPOINTMENT_CANCELLED,
+    APPOINTMENT_STATUS_UPDATED
+)
 
 from shared.logger.logger import get_logger
 
 logger = get_logger(__name__)
+
+CANCELLATION_WINDOW = timedelta(hours=2)
 
 
 class AppointmentService:
@@ -38,6 +57,23 @@ class AppointmentService:
     def __init__(self):
         self.appointment_repository = AppointmentRepository()
         self.slot_repository = AvailabilitySlotRepository()
+
+    def _build_response(
+        self,
+        appointment: Appointment
+    ) -> AppointmentResponse:
+
+        return AppointmentResponse(
+            id=str(appointment.id),
+            patient_id=appointment.patient_id,
+            doctor_id=appointment.doctor_id,
+            slot_id=appointment.slot_id,
+            appointment_date=appointment.appointment_date,
+            start_time=appointment.start_time,
+            end_time=appointment.end_time,
+            status=appointment.status,
+            created_at=appointment.created_at
+        )
 
     async def book_appointment(
         self,
@@ -101,22 +137,10 @@ class AppointmentService:
                 f"patient_id={current_user.id} slot_id={slot.id}"
             )
 
-            response = AppointmentResponse(
-                id=str(saved_appointment.id),
-                patient_id=saved_appointment.patient_id,
-                doctor_id=saved_appointment.doctor_id,
-                slot_id=saved_appointment.slot_id,
-                appointment_date=saved_appointment.appointment_date,
-                start_time=saved_appointment.start_time,
-                end_time=saved_appointment.end_time,
-                status=saved_appointment.status,
-                created_at=saved_appointment.created_at
-            )
-
             return ApiResponse(
                 success=True,
                 message=APPOINTMENT_BOOKED,
-                data=response
+                data=self._build_response(saved_appointment)
             )
 
         except HTTPException:
@@ -124,4 +148,207 @@ class AppointmentService:
 
         except Exception as error:
             logger.error(f"Unexpected error booking appointment: {error}")
+            raise
+
+    async def get_my_appointments(
+        self,
+        current_user: User
+    ) -> ApiResponse[list[AppointmentResponse]]:
+
+        try:
+
+            appointments = await self.appointment_repository.get_by_patient(
+                patient_id=str(current_user.id)
+            )
+
+            return ApiResponse(
+                success=True,
+                message=APPOINTMENTS_FETCHED,
+                data=[
+                    self._build_response(appointment)
+                    for appointment in appointments
+                ]
+            )
+
+        except Exception as error:
+            logger.error(f"Unexpected error fetching appointments: {error}")
+            raise
+
+    async def get_doctor_appointments(
+        self,
+        current_user: User
+    ) -> ApiResponse[list[AppointmentResponse]]:
+
+        try:
+
+            appointments = await self.appointment_repository.get_by_doctor(
+                doctor_id=str(current_user.id)
+            )
+
+            return ApiResponse(
+                success=True,
+                message=APPOINTMENTS_FETCHED,
+                data=[
+                    self._build_response(appointment)
+                    for appointment in appointments
+                ]
+            )
+
+        except Exception as error:
+            logger.error(f"Unexpected error fetching appointments: {error}")
+            raise
+
+    async def cancel_appointment(
+        self,
+        current_user: User,
+        appointment_id: str
+    ) -> ApiResponse[AppointmentResponse]:
+
+        try:
+
+            appointment = await self.appointment_repository.get_by_id(
+                appointment_id=appointment_id
+            )
+
+            if not appointment:
+                logger.warning(
+                    f"Cancel failed: appointment not found "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AppointmentNotFoundException()
+
+            if appointment.patient_id != str(current_user.id):
+                logger.warning(
+                    f"Cancel failed: patient_id={current_user.id} "
+                    f"does not own appointment_id={appointment_id}"
+                )
+                raise AccessDeniedException()
+
+            if appointment.status != AppointmentStatus.BOOKED:
+                logger.warning(
+                    f"Cancel failed: status={appointment.status} "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AppointmentNotCancellableException()
+
+            appointment_start = datetime.combine(
+                appointment.appointment_date,
+                appointment.start_time
+            )
+
+            if appointment_start - datetime.utcnow() < CANCELLATION_WINDOW:
+                logger.warning(
+                    f"Cancel failed: within cancellation window "
+                    f"appointment_id={appointment_id}"
+                )
+                raise CancellationWindowExpiredException()
+
+            appointment.status = AppointmentStatus.CANCELLED
+            appointment.updated_at = datetime.utcnow()
+
+            updated_appointment = await self.appointment_repository.update(
+                appointment=appointment
+            )
+
+            slot = await self.slot_repository.get_by_id(
+                slot_id=appointment.slot_id
+            )
+
+            if slot:
+                slot.is_booked = False
+                slot.updated_at = datetime.utcnow()
+                await self.slot_repository.update(slot=slot)
+
+            logger.info(f"Appointment cancelled: appointment_id={appointment_id}")
+
+            return ApiResponse(
+                success=True,
+                message=APPOINTMENT_CANCELLED,
+                data=self._build_response(updated_appointment)
+            )
+
+        except HTTPException:
+            raise
+
+        except Exception as error:
+            logger.error(f"Unexpected error cancelling appointment: {error}")
+            raise
+
+    async def update_status(
+        self,
+        current_user: User,
+        appointment_id: str,
+        request: UpdateAppointmentStatusRequest
+    ) -> ApiResponse[AppointmentResponse]:
+
+        try:
+
+            if request.status not in (
+                AppointmentStatus.COMPLETED,
+                AppointmentStatus.NO_SHOW
+            ):
+                raise InvalidStatusUpdateException()
+
+            appointment = await self.appointment_repository.get_by_id(
+                appointment_id=appointment_id
+            )
+
+            if not appointment:
+                logger.warning(
+                    f"Status update failed: appointment not found "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AppointmentNotFoundException()
+
+            if appointment.doctor_id != str(current_user.id):
+                logger.warning(
+                    f"Status update failed: doctor_id={current_user.id} "
+                    f"does not own appointment_id={appointment_id}"
+                )
+                raise AccessDeniedException()
+
+            if appointment.status != AppointmentStatus.BOOKED:
+                logger.warning(
+                    f"Status update failed: status={appointment.status} "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AppointmentNotUpdatableException()
+
+            appointment_end = datetime.combine(
+                appointment.appointment_date,
+                appointment.end_time
+            )
+
+            if datetime.utcnow() < appointment_end:
+                logger.warning(
+                    f"Status update failed: too early "
+                    f"appointment_id={appointment_id}"
+                )
+                raise StatusUpdateTooEarlyException()
+
+            appointment.status = request.status
+            appointment.updated_at = datetime.utcnow()
+
+            updated_appointment = await self.appointment_repository.update(
+                appointment=appointment
+            )
+
+            logger.info(
+                f"Appointment status updated: appointment_id={appointment_id} "
+                f"status={request.status}"
+            )
+
+            return ApiResponse(
+                success=True,
+                message=APPOINTMENT_STATUS_UPDATED,
+                data=self._build_response(updated_appointment)
+            )
+
+        except HTTPException:
+            raise
+
+        except Exception as error:
+            logger.error(
+                f"Unexpected error updating appointment status: {error}"
+            )
             raise
