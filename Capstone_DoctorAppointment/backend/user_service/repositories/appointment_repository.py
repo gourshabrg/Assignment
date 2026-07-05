@@ -2,6 +2,8 @@ from typing import Optional
 
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
+from shared.enums.appointment_status_enum import AppointmentStatus
+
 from user_service.models.appointment_model import Appointment
 
 
@@ -57,3 +59,16 @@ class AppointmentRepository:
         await appointment.save(session=session)
 
         return appointment
+
+    async def count_all(self) -> int:
+
+        return await Appointment.find().count()
+
+    async def count_by_status(
+        self,
+        status: AppointmentStatus
+    ) -> int:
+
+        return await Appointment.find(
+            Appointment.status == status
+        ).count()

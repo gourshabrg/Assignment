@@ -5,6 +5,8 @@ from beanie.operators import In, RegEx
 
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
+from shared.enums.role_enum import UserRole
+
 from user_service.models.user_model import User
 
 
@@ -31,7 +33,7 @@ class UserRepository:
 
         conditions = [
             In(User.id, object_ids),
-            User.is_active == True  # noqa: E712
+            User.is_active == True  
         ]
 
         if name:
@@ -40,6 +42,24 @@ class UserRepository:
             )
 
         return await User.find(*conditions).to_list()
+
+    async def get_by_role(
+        self,
+        role: UserRole
+    ) -> list[User]:
+
+        return await User.find(
+            User.role == role
+        ).to_list()
+
+    async def count_by_role(
+        self,
+        role: UserRole
+    ) -> int:
+
+        return await User.find(
+            User.role == role
+        ).count()
 
     async def create(
         self,

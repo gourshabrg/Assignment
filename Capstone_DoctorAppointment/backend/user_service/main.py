@@ -7,7 +7,8 @@ from user_service.routers import (
     doctor_router,
     availability_router,
     appointment_router,
-    payment_router
+    payment_router,
+    admin_router
 )
 from user_service.startup.seed_admin import AdminSeeder
 
@@ -34,3 +35,4 @@ app.include_router(doctor_router)
 app.include_router(availability_router)
 app.include_router(appointment_router)
 app.include_router(payment_router)
+app.include_router(admin_router)
