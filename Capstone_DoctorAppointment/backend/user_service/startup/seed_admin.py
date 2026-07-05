@@ -7,6 +7,9 @@ from user_service.utils.password import PasswordManager
 from shared.enums.role_enum import UserRole
 
 from shared.config.settings import settings
+from shared.logger.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class AdminSeeder:
@@ -21,7 +24,7 @@ class AdminSeeder:
         )
 
         if existing_admin:
-            print("Admin already exists.")
+            logger.info("Admin already exists")
             return
 
         hashed_password = PasswordManager.hash_password(
@@ -41,4 +44,4 @@ class AdminSeeder:
             user=admin
         )
 
-        print("Default Admin Created Successfully.")
+        logger.info("Default admin created successfully")

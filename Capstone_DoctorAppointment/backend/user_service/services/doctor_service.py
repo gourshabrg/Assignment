@@ -41,6 +41,7 @@ from shared.constants import (
 )
 
 from shared.logger.logger import get_logger
+from shared.utils.time_utils import str_to_time
 
 logger = get_logger(__name__)
 
@@ -284,8 +285,8 @@ class DoctorService:
                         id=str(slot.id),
                         doctor_id=slot.doctor_id,
                         slot_date=slot.slot_date,
-                        start_time=slot.start_time,
-                        end_time=slot.end_time,
+                        start_time=str_to_time(slot.start_time),
+                        end_time=str_to_time(slot.end_time),
                         is_booked=slot.is_booked,
                         created_at=slot.created_at,
                         updated_at=slot.updated_at

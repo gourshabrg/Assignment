@@ -78,16 +78,19 @@ async def login(
         request=request
     )
 
-@router.get("/me")
+@router.get(
+    "/me",
+    status_code=status.HTTP_200_OK
+)
 async def me(
-
     current_user: User = Depends(
         get_current_user
     )
-
 ):
 
-    return current_user
+    return await auth_service.get_profile(
+        user=current_user
+    )
 
 
 @router.post(

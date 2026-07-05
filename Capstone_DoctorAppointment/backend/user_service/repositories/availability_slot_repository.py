@@ -7,6 +7,8 @@ from motor.motor_asyncio import AsyncIOMotorClientSession
 
 from user_service.models.availability_slot_model import AvailabilitySlot
 
+from shared.utils.time_utils import time_to_str
+
 
 class AvailabilitySlotRepository:
 
@@ -64,8 +66,16 @@ class AvailabilitySlotRepository:
             AvailabilitySlot.slot_date == slot_date
         ).to_list()
 
+        # Times are stored as zero-padded "HH:MM:SS" strings, so string
+        # comparison here gives the same ordering as comparing time objects.
+        start_time_str = time_to_str(start_time)
+        end_time_str = time_to_str(end_time)
+
         for slot in slots:
-            if start_time < slot.end_time and slot.start_time < end_time:
+            if (
+                start_time_str < slot.end_time
+                and slot.start_time < end_time_str
+            ):
                 return slot
 
         return None

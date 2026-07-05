@@ -46,6 +46,7 @@ from shared.constants import (
 )
 
 from shared.logger.logger import get_logger
+from shared.utils.time_utils import str_to_time
 
 logger = get_logger(__name__)
 
@@ -69,8 +70,8 @@ class AppointmentService:
             doctor_id=appointment.doctor_id,
             slot_id=appointment.slot_id,
             appointment_date=appointment.appointment_date,
-            start_time=appointment.start_time,
-            end_time=appointment.end_time,
+            start_time=str_to_time(appointment.start_time),
+            end_time=str_to_time(appointment.end_time),
             status=appointment.status,
             created_at=appointment.created_at
         )
@@ -233,7 +234,7 @@ class AppointmentService:
 
             appointment_start = datetime.combine(
                 appointment.appointment_date,
-                appointment.start_time
+                str_to_time(appointment.start_time)
             )
 
             if appointment_start - datetime.utcnow() < CANCELLATION_WINDOW:
@@ -316,7 +317,7 @@ class AppointmentService:
 
             appointment_end = datetime.combine(
                 appointment.appointment_date,
-                appointment.end_time
+                str_to_time(appointment.end_time)
             )
 
             if datetime.utcnow() < appointment_end:

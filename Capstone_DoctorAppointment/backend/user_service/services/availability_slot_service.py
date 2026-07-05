@@ -36,6 +36,7 @@ from shared.constants import (
 )
 
 from shared.logger.logger import get_logger
+from shared.utils.time_utils import time_to_str, str_to_time
 
 logger = get_logger(__name__)
 
@@ -54,8 +55,8 @@ class AvailabilitySlotService:
             id=str(slot.id),
             doctor_id=slot.doctor_id,
             slot_date=slot.slot_date,
-            start_time=slot.start_time,
-            end_time=slot.end_time,
+            start_time=str_to_time(slot.start_time),
+            end_time=str_to_time(slot.end_time),
             is_booked=slot.is_booked,
             created_at=slot.created_at,
             updated_at=slot.updated_at
@@ -107,8 +108,8 @@ class AvailabilitySlotService:
             slot = AvailabilitySlot(
                 doctor_id=str(current_user.id),
                 slot_date=request.slot_date,
-                start_time=request.start_time,
-                end_time=request.end_time
+                start_time=time_to_str(request.start_time),
+                end_time=time_to_str(request.end_time)
             )
 
             saved_slot = await self.slot_repository.create(slot=slot)
@@ -221,8 +222,8 @@ class AvailabilitySlotService:
                 raise SlotOverlapException()
 
             slot.slot_date = request.slot_date
-            slot.start_time = request.start_time
-            slot.end_time = request.end_time
+            slot.start_time = time_to_str(request.start_time)
+            slot.end_time = time_to_str(request.end_time)
             slot.updated_at = datetime.utcnow()
 
             updated_slot = await self.slot_repository.update(slot=slot)

@@ -48,7 +48,8 @@ from shared.constants import (
     LOGIN_SUCCESS,
     LOGOUT_SUCCESS,
     PASSWORD_CHANGED_SUCCESS,
-    PASSWORD_RESET_SUCCESS
+    PASSWORD_RESET_SUCCESS,
+    PROFILE_FETCHED
 )
 
 from shared.logger.logger import get_logger
@@ -274,6 +275,27 @@ class AuthService:
         except Exception as error:
             logger.error(f"Unexpected error during login: {error}")
             raise
+
+    async def get_profile(
+        self,
+        user: User
+    ) -> ApiResponse[UserResponse]:
+
+        response = UserResponse(
+            id=str(user.id),
+            full_name=user.full_name,
+            email=user.email,
+            phone=user.phone,
+            role=user.role,
+            is_active=user.is_active,
+            created_at=user.created_at
+        )
+
+        return ApiResponse(
+            success=True,
+            message=PROFILE_FETCHED,
+            data=response
+        )
 
     async def logout(
         self,

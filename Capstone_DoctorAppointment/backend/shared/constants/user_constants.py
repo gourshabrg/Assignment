@@ -9,3 +9,5 @@ PATIENT_REGISTER_SUCCESS = "Patient registered successfully."
 DOCTOR_REGISTER_SUCCESS = "Doctor registered successfully."
 
 PROFILE_UPDATED = "Profile updated successfully."
+
+PROFILE_FETCHED = "Profile fetched successfully."

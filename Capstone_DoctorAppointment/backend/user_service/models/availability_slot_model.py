@@ -1,18 +1,21 @@
-from datetime import date, datetime, time
+from datetime import date, datetime
 
 from beanie import Document
 from pydantic import Field
 
 
 class AvailabilitySlot(Document):
+    """start_time/end_time are stored as ISO strings (HH:MM:SS) since
+    MongoDB/BSON has no native time type -- see shared/utils/time_utils.py.
+    """
 
     doctor_id: str
 
     slot_date: date
 
-    start_time: time
+    start_time: str
 
-    end_time: time
+    end_time: str
 
     is_booked: bool = False
 
