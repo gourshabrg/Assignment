@@ -8,6 +8,7 @@ from user_service.models.user_model import User
 from user_service.models.doctor_profile_model import DoctorProfile
 from user_service.models.availability_slot_model import AvailabilitySlot
 from user_service.models.appointment_model import Appointment
+from user_service.models.payment_model import Payment
 
 logger = get_logger(__name__)
 
@@ -34,7 +35,8 @@ class MongoDatabase:
                 User,
                 DoctorProfile,
                 AvailabilitySlot,
-                Appointment
+                Appointment,
+                Payment
             ]
         )
 
