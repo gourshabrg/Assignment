@@ -129,11 +129,7 @@ class AuthService:
         self,
         request: DoctorRegisterRequest
     ) -> ApiResponse[UserResponse]:
-        """Creates a new DOCTOR account plus its DoctorProfile.
-
-        The account starts inactive (is_active=False) until an admin
-        approves it -- doctors can't log in until then.
-        """
+        """Creates a new DOCTOR account plus its DoctorProfile."""
 
         try:
 
