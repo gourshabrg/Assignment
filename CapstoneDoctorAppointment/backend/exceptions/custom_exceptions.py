@@ -2,7 +2,12 @@ from fastapi import HTTPException, status
 
 from constants import (
     INVALID_PASSWORD,
-    USER_ALREADY_EXISTS
+    USER_ALREADY_EXISTS,
+    USER_NOT_FOUND,
+    INVALID_CREDENTIALS,
+    INVALID_TOKEN,
+    SAME_PASSWORD,
+    INCORRECT_OLD_PASSWORD
 )
 
 
@@ -28,3 +33,28 @@ class InvalidPasswordException(BaseAPIException):
 class UserAlreadyExistsException(BaseAPIException):
     status_code = status.HTTP_409_CONFLICT
     message = USER_ALREADY_EXISTS
+
+
+class UserNotFoundException(BaseAPIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    message = USER_NOT_FOUND
+
+
+class InvalidCredentialsException(BaseAPIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    message = INVALID_CREDENTIALS
+
+
+class InvalidTokenException(BaseAPIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    message = INVALID_TOKEN
+
+
+class SamePasswordException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = SAME_PASSWORD
+
+
+class IncorrectOldPasswordException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = INCORRECT_OLD_PASSWORD

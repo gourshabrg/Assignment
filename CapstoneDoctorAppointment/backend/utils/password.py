@@ -38,3 +38,15 @@ class PasswordManager:
         )
 
         return hashed_password.decode("utf-8")
+
+    @staticmethod
+    def verify_password(
+        plain_password: str,
+        hashed_password: str
+    ) -> bool:
+        """True if the plain-text password matches the bcrypt hash."""
+
+        return bcrypt.checkpw(
+            plain_password.encode("utf-8"),
+            hashed_password.encode("utf-8")
+        )

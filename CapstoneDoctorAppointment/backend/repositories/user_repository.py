@@ -26,3 +26,20 @@ class UserRepository:
         await user.insert(session=session)
 
         return user
+
+    async def get_by_id(
+        self,
+        user_id: str
+    ) -> Optional[User]:
+
+        return await User.get(user_id)
+
+    async def update(
+        self,
+        user: User,
+        session: AsyncIOMotorClientSession | None = None
+    ) -> User:
+
+        await user.save(session=session)
+
+        return user
