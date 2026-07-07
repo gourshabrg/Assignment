@@ -24,7 +24,7 @@ class Appointment(Document):
 
     end_time: str
 
-    status: AppointmentStatus = AppointmentStatus.BOOKED
+    status: AppointmentStatus = AppointmentStatus.PENDING_PAYMENT
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
