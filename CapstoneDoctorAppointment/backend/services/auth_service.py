@@ -129,7 +129,11 @@ class AuthService:
         self,
         request: DoctorRegisterRequest
     ) -> ApiResponse[UserResponse]:
-        """Creates a new DOCTOR account plus its DoctorProfile."""
+        """Creates a new DOCTOR account plus its DoctorProfile.
+
+        The account starts inactive (is_active=False) until an admin
+        approves it -- doctors can't log in until then.
+        """
 
         try:
 
@@ -163,7 +167,7 @@ class AuthService:
                 password=hashed_password,
                 phone=request.phone,
                 role=UserRole.DOCTOR,
-                is_active=True
+                is_active=False
             )
 
             saved_user = await self.user_repository.create(

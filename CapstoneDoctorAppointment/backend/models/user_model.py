@@ -3,6 +3,7 @@ from pydantic import EmailStr, Field
 from datetime import datetime, date
 
 from enums.role_enum import UserRole
+from enums.gender_enum import Gender
 
 
 class User(Document):
@@ -18,7 +19,7 @@ class User(Document):
 
     phone: str = Field(min_length=10, max_length=10)
 
-    gender: str | None = None
+    gender: Gender | None = None
 
     dob: date | None = None
 

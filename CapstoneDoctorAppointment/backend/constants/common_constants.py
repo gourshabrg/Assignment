@@ -4,4 +4,4 @@ USER_ALREADY_EXISTS = "User already exists."
 
 PATIENT_REGISTER_SUCCESS = "Patient registered successfully."
 
-DOCTOR_REGISTER_SUCCESS = "Doctor registered successfully."
+DOCTOR_REGISTER_SUCCESS = "Doctor registered successfully. Your account is pending admin approval."

@@ -1,6 +1,9 @@
 from datetime import date
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+from enums.gender_enum import Gender
+from utils.validators import validate_phone, validate_email_domain
 
 
 class PatientRegisterRequest(BaseModel):
@@ -23,6 +26,9 @@ class PatientRegisterRequest(BaseModel):
         max_length=10
     )
 
-    gender: str
+    gender: Gender
 
     dob: date
+
+    _validate_phone = field_validator("phone")(validate_phone)
+    _validate_email_domain = field_validator("email")(validate_email_domain)

@@ -3,6 +3,8 @@ from datetime import datetime
 from beanie import Document
 from pydantic import Field
 
+from enums.specialization_enum import Specialization
+
 
 class DoctorProfile(Document):
     """MongoDB 'doctor_profiles' collection -- the doctor-specific
@@ -16,10 +18,7 @@ class DoctorProfile(Document):
         max_length=100
     )
 
-    specialization: str = Field(
-        min_length=2,
-        max_length=100
-    )
+    specialization: Specialization
 
     experience: int = Field(
         ge=0

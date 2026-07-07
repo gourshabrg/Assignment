@@ -1,4 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+from enums.specialization_enum import Specialization
+from utils.validators import validate_phone, validate_email_domain
 
 
 class DoctorRegisterRequest(BaseModel):
@@ -23,7 +26,7 @@ class DoctorRegisterRequest(BaseModel):
 
     qualification: str
 
-    specialization: str
+    specialization: Specialization
 
     experience: int = Field(
         ge=0
@@ -36,3 +39,6 @@ class DoctorRegisterRequest(BaseModel):
     )
 
     clinic_address: str
+
+    _validate_phone = field_validator("phone")(validate_phone)
+    _validate_email_domain = field_validator("email")(validate_email_domain)
