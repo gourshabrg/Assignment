@@ -6,6 +6,7 @@ from logger.logger import get_logger
 
 from models.user_model import User
 from models.doctor_profile_model import DoctorProfile
+from models.availability_slot_model import AvailabilitySlot
 
 logger = get_logger(__name__)
 
@@ -32,7 +33,8 @@ class MongoDatabase:
             database=cls.database,
             document_models=[
                 User,
-                DoctorProfile
+                DoctorProfile,
+                AvailabilitySlot
             ]
         )
 

@@ -11,7 +11,12 @@ from constants import (
     ACCOUNT_PENDING_APPROVAL,
     ACCESS_DENIED,
     DOCTOR_PROFILE_NOT_FOUND,
-    NO_FIELDS_TO_UPDATE
+    NO_FIELDS_TO_UPDATE,
+    SLOT_NOT_FOUND,
+    SLOT_ALREADY_BOOKED,
+    INVALID_SLOT_TIME,
+    PAST_SLOT_DATE,
+    SLOT_OVERLAP
 )
 
 
@@ -82,3 +87,28 @@ class DoctorProfileNotFoundException(BaseAPIException):
 class NoFieldsToUpdateException(BaseAPIException):
     status_code = status.HTTP_400_BAD_REQUEST
     message = NO_FIELDS_TO_UPDATE
+
+
+class SlotNotFoundException(BaseAPIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    message = SLOT_NOT_FOUND
+
+
+class SlotAlreadyBookedException(BaseAPIException):
+    status_code = status.HTTP_409_CONFLICT
+    message = SLOT_ALREADY_BOOKED
+
+
+class InvalidSlotTimeException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = INVALID_SLOT_TIME
+
+
+class PastSlotDateException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = PAST_SLOT_DATE
+
+
+class SlotOverlapException(BaseAPIException):
+    status_code = status.HTTP_409_CONFLICT
+    message = SLOT_OVERLAP
