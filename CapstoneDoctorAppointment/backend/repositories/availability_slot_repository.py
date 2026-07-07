@@ -1,5 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
+
+from beanie import PydanticObjectId
 
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
@@ -96,3 +98,26 @@ class AvailabilitySlotRepository:
     ):
 
         await slot.delete(session=session)
+
+    async def book_if_available(self, slot_id: str) -> bool:
+        """Atomically flips is_booked False->True.
+
+        The filter on is_booked=False makes this a single-document
+        compare-and-swap: MongoDB guarantees a single document update
+        is atomic, so if two requests race to book the same slot,
+        only one can ever match this filter and succeed -- no
+        multi-document transaction (and no replica set) needed.
+        Returns True if this call was the one that booked it.
+        """
+
+        result = await AvailabilitySlot.find_one(
+            AvailabilitySlot.id == PydanticObjectId(slot_id),
+            AvailabilitySlot.is_booked == False  # noqa: E712
+        ).update(
+            {"$set": {
+                "is_booked": True,
+                "updated_at": datetime.utcnow()
+            }}
+        )
+
+        return result.modified_count == 1
