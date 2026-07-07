@@ -66,7 +66,7 @@ class PaymentService:
                 )
                 raise AccessDeniedException()
 
-            if appointment.status != AppointmentStatus.BOOKED:
+            if appointment.status != AppointmentStatus.PENDING_PAYMENT:
                 logger.warning(
                     f"Payment failed: status={appointment.status} "
                     f"appointment_id={appointment_id}"
@@ -105,6 +105,11 @@ class PaymentService:
 
             saved_payment = await self.payment_repository.create(
                 payment=payment
+            )
+
+            appointment.status = AppointmentStatus.BOOKED
+            await self.appointment_repository.update(
+                appointment=appointment
             )
 
             logger.info(
