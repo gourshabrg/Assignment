@@ -23,7 +23,9 @@ from constants import (
     CANCELLATION_WINDOW_EXPIRED,
     INVALID_STATUS_UPDATE,
     STATUS_UPDATE_TOO_EARLY,
-    APPOINTMENT_NOT_UPDATABLE
+    APPOINTMENT_NOT_UPDATABLE,
+    PAYMENT_ALREADY_EXISTS,
+    PAYMENT_NOT_ALLOWED
 )
 
 
@@ -154,3 +156,13 @@ class StatusUpdateTooEarlyException(BaseAPIException):
 class AppointmentNotUpdatableException(BaseAPIException):
     status_code = status.HTTP_400_BAD_REQUEST
     message = APPOINTMENT_NOT_UPDATABLE
+
+
+class PaymentAlreadyExistsException(BaseAPIException):
+    status_code = status.HTTP_409_CONFLICT
+    message = PAYMENT_ALREADY_EXISTS
+
+
+class PaymentNotAllowedException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = PAYMENT_NOT_ALLOWED
