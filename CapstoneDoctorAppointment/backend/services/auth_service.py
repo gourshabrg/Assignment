@@ -37,7 +37,8 @@ from exceptions import (
     UserNotFoundException,
     InvalidCredentialsException,
     SamePasswordException,
-    IncorrectOldPasswordException
+    IncorrectOldPasswordException,
+    AccountPendingApprovalException
 )
 
 from constants import (
@@ -247,6 +248,13 @@ class AuthService:
                     f"Login failed: invalid credentials ({request.email})"
                 )
                 raise InvalidCredentialsException()
+
+            if not user.is_active:
+                logger.warning(
+                    f"Login failed: account pending approval "
+                    f"(user_id={user.id})"
+                )
+                raise AccountPendingApprovalException()
 
             access_token = JWTManager.create_access_token(
                 user_id=str(user.id),

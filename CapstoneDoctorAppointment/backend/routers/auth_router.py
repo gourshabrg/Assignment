@@ -72,10 +72,10 @@ async def login(
 
 
 @router.get(
-    "/me",
+    "/profile",
     status_code=status.HTTP_200_OK
 )
-async def me(
+async def profile(
     current_user: User = Depends(
         get_current_user
     )
