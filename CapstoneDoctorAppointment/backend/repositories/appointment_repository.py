@@ -3,6 +3,7 @@ from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
 from models.appointment_model import Appointment
+from enums.appointment_status_enum import AppointmentStatus
 
 
 class AppointmentRepository:
@@ -58,3 +59,19 @@ class AppointmentRepository:
         await appointment.save(session=session)
 
         return appointment
+
+    async def count_all(self) -> int:
+
+        return await Appointment.find().count()
+
+    async def count_by_status(self, status: AppointmentStatus) -> int:
+
+        return await Appointment.find(
+            Appointment.status == status
+        ).count()
+
+    async def get_recent(self, limit: int = 20) -> list[Appointment]:
+
+        return await Appointment.find().sort(
+            "-created_at"
+        ).limit(limit).to_list()
