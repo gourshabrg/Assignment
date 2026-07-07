@@ -259,7 +259,10 @@ class AppointmentService:
                 )
                 raise AccessDeniedException()
 
-            if appointment.status != AppointmentStatus.BOOKED:
+            if appointment.status not in (
+                AppointmentStatus.PENDING_PAYMENT,
+                AppointmentStatus.BOOKED
+            ):
                 logger.warning(
                     f"Cancel failed: status={appointment.status} "
                     f"appointment_id={appointment_id}"
