@@ -5,3 +5,7 @@ DOCTOR_PROFILE_FETCHED = "Doctor profile fetched successfully."
 DOCTOR_PROFILE_UPDATED = "Doctor profile updated successfully."
 
 NO_FIELDS_TO_UPDATE = "No valid fields provided to update."
+
+DOCTORS_FETCHED = "Doctors fetched successfully."
+
+DOCTOR_DETAILS_FETCHED = "Doctor details fetched successfully."
