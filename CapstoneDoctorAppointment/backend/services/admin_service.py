@@ -57,7 +57,7 @@ class AdminService:
                     specialization=profile.specialization,
                     qualification=profile.qualification,
                     consultation_fee=profile.consultation_fee,
-                    is_active=doctor.is_active
+                    is_verified=doctor.is_active
                 )
             )
 

@@ -17,4 +17,4 @@ class AdminDoctorResponse(BaseModel):
 
     consultation_fee: float
 
-    is_active: bool
+    is_verified: bool
