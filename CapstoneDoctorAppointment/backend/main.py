@@ -10,8 +10,6 @@ from routers import (
     appointment_router
 )
 
-app.include_router(auth_router)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
