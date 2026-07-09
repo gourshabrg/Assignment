@@ -1,8 +1,28 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
+from database.database import MongoDatabase
+from routers import auth_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Connects to MongoDB on startup, closes it on shutdown."""
+
+    await MongoDatabase.connect()
+
+    yield
+
+    await MongoDatabase.close()
+
+
 app = FastAPI(
-    title="Doctor Appointment Booking System"
+    title="Doctor Appointment Booking System",
+    lifespan=lifespan
 )
+
+app.include_router(auth_router)
 
 
 @app.get("/")
