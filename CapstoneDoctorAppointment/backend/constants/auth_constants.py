@@ -27,5 +27,3 @@ PASSWORD_CHANGED_SUCCESS = "Password changed successfully."
 PASSWORD_RESET_SUCCESS = "Password reset successfully."
 
 ACCOUNT_PENDING_APPROVAL = "Your account is pending admin approval."
-
-ACCESS_DENIED = "Access denied."

@@ -7,10 +7,7 @@ from security.current_user import get_current_user
 
 
 class RoleChecker:
-    """A FastAPI dependency that only lets through users whose role is
-    in the allowed list. Use the pre-built instances below rather than
-    creating new ones per route.
-    """
+    """FastAPI dependency that restricts a route to specific roles."""
 
     def __init__(self, allowed_roles: list[UserRole]):
         self.allowed_roles = allowed_roles
