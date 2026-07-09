@@ -7,9 +7,7 @@ from enums.gender_enum import Gender
 
 
 class User(Document):
-    """MongoDB 'users' collection -- patients, doctors and admins all
-    share this document, distinguished by the role field.
-    """
+    """MongoDB 'users' collection, shared by all roles."""
 
     full_name: str = Field(min_length=2, max_length=100)
 

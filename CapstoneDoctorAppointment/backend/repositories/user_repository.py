@@ -6,9 +6,7 @@ from models.user_model import User
 
 
 class UserRepository:
-    """Direct MongoDB access for the User document. No business rules
-    here -- that belongs in the service layer.
-    """
+    """Direct MongoDB access for the User document."""
 
     async def get_by_email(
         self,

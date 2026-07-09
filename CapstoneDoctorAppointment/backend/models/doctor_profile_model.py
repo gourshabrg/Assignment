@@ -7,9 +7,7 @@ from enums.specialization_enum import Specialization
 
 
 class DoctorProfile(Document):
-    """MongoDB 'doctor_profiles' collection -- the doctor-specific
-    details that don't belong on the shared User document.
-    """
+    """MongoDB 'doctor_profiles' collection."""
 
     user_id: str
 

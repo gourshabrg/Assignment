@@ -6,7 +6,6 @@ from enums.role_enum import UserRole
 
 
 class UserResponse(BaseModel):
-    """Public-facing user fields -- deliberately excludes the password."""
 
     id: str
 

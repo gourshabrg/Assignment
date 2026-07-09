@@ -1,1 +1,1 @@
-from .common_constants import *
+from .auth_constants import *
