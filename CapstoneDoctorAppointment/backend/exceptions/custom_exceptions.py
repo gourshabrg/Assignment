@@ -2,12 +2,7 @@ from fastapi import HTTPException, status
 
 
 class BaseAPIException(HTTPException):
-    """Base class for all custom API errors.
-
-    Subclasses set status_code and message as class attributes instead
-    of repeating an __init__. All project exception classes live in
-    this single file.
-    """
+    """Base class for all custom API errors."""
 
     status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
 
