@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 from fastapi import HTTPException
 
-from enums.role_enum import UserRole
 from enums.appointment_status_enum import AppointmentStatus
 from models.user_model import User
 from models.appointment_model import Appointment
@@ -16,6 +15,9 @@ from schemas.request.book_appointment_request import (
 )
 from schemas.request.update_appointment_status_request import (
     UpdateAppointmentStatusRequest
+)
+from schemas.request.cancel_appointment_request import (
+    CancelAppointmentRequest
 )
 from schemas.response.api_response import ApiResponse
 from schemas.response.appointment_response import AppointmentResponse
@@ -35,6 +37,7 @@ from constants import (
     APPOINTMENT_BOOKED,
     APPOINTMENTS_FETCHED,
     APPOINTMENT_CANCELLED,
+    CANCELLATION_REQUESTED,
     APPOINTMENT_STATUS_UPDATED
 )
 from logger.logger import get_logger
@@ -88,6 +91,7 @@ class AppointmentService:
             start_time=str_to_time(appointment.start_time),
             end_time=str_to_time(appointment.end_time),
             status=appointment.status,
+            cancellation_reason=appointment.cancellation_reason,
             created_at=appointment.created_at
         )
 
@@ -229,11 +233,7 @@ class AppointmentService:
         current_user: User,
         appointment_id: str
     ) -> ApiResponse[AppointmentResponse]:
-        """Cancels an appointment. Either the patient or the doctor on
-        the appointment can cancel it. Patients must cancel at least 2
-        hours before the scheduled time; doctors can cancel any time
-        before it (e.g. sudden unavailability).
-        """
+        """Patient cancels their own appointment."""
 
         try:
 
@@ -248,13 +248,9 @@ class AppointmentService:
                 )
                 raise AppointmentNotFoundException()
 
-            user_id = str(current_user.id)
-            is_patient_owner = appointment.patient_id == user_id
-            is_doctor_owner = appointment.doctor_id == user_id
-
-            if not is_patient_owner and not is_doctor_owner:
+            if appointment.patient_id != str(current_user.id):
                 logger.warning(
-                    f"Cancel failed: user_id={user_id} does not own "
+                    f"Cancel failed: user_id={current_user.id} does not own "
                     f"appointment_id={appointment_id}"
                 )
                 raise AccessDeniedException()
@@ -269,20 +265,17 @@ class AppointmentService:
                 )
                 raise AppointmentNotCancellableException()
 
-            if is_patient_owner and current_user.role == UserRole.PATIENT:
-                appointment_start = datetime.combine(
-                    appointment.appointment_date,
-                    str_to_time(appointment.start_time)
-                )
+            appointment_start = datetime.combine(
+                appointment.appointment_date,
+                str_to_time(appointment.start_time)
+            )
 
-                if appointment_start - datetime.utcnow() < (
-                    CANCELLATION_WINDOW
-                ):
-                    logger.warning(
-                        f"Cancel failed: within cancellation window "
-                        f"appointment_id={appointment_id}"
-                    )
-                    raise CancellationWindowExpiredException()
+            if appointment_start - datetime.utcnow() < CANCELLATION_WINDOW:
+                logger.warning(
+                    f"Cancel failed: within cancellation window "
+                    f"appointment_id={appointment_id}"
+                )
+                raise CancellationWindowExpiredException()
 
             appointment.status = AppointmentStatus.CANCELLED
             appointment.updated_at = datetime.utcnow()
@@ -291,18 +284,11 @@ class AppointmentService:
                 appointment=appointment
             )
 
-            slot = await self.slot_repository.get_by_id(
-                slot_id=appointment.slot_id
-            )
-
-            if slot:
-                slot.is_booked = False
-                slot.updated_at = datetime.utcnow()
-                await self.slot_repository.update(slot=slot)
+            await self._free_slot(slot_id=appointment.slot_id)
 
             logger.info(
                 f"Appointment cancelled: appointment_id={appointment_id} "
-                f"cancelled_by=user_id={user_id}"
+                f"cancelled_by=patient_id={current_user.id}"
             )
 
             return ApiResponse(
@@ -318,21 +304,96 @@ class AppointmentService:
             logger.error(f"Unexpected error cancelling appointment: {error}")
             raise
 
+    async def _free_slot(self, slot_id: str) -> None:
+        """Marks the slot bookable again after a cancellation."""
+
+        slot = await self.slot_repository.get_by_id(slot_id=slot_id)
+
+        if slot:
+            slot.is_booked = False
+            slot.updated_at = datetime.utcnow()
+            await self.slot_repository.update(slot=slot)
+
+    async def request_cancellation(
+        self,
+        current_user: User,
+        appointment_id: str,
+        request: CancelAppointmentRequest
+    ) -> ApiResponse[AppointmentResponse]:
+        """Doctor requests cancellation with a reason for admin approval."""
+
+        try:
+
+            appointment = await self.appointment_repository.get_by_id(
+                appointment_id=appointment_id
+            )
+
+            if not appointment:
+                logger.warning(
+                    f"Cancellation request failed: appointment not found "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AppointmentNotFoundException()
+
+            if appointment.doctor_id != str(current_user.id):
+                logger.warning(
+                    f"Cancellation request failed: doctor_id="
+                    f"{current_user.id} does not own "
+                    f"appointment_id={appointment_id}"
+                )
+                raise AccessDeniedException()
+
+            if appointment.status not in (
+                AppointmentStatus.PENDING_PAYMENT,
+                AppointmentStatus.BOOKED
+            ):
+                logger.warning(
+                    f"Cancellation request failed: status="
+                    f"{appointment.status} appointment_id={appointment_id}"
+                )
+                raise AppointmentNotCancellableException()
+
+            appointment.status = AppointmentStatus.CANCELLATION_REQUESTED
+            appointment.cancellation_reason = request.reason
+            appointment.updated_at = datetime.utcnow()
+
+            updated_appointment = await self.appointment_repository.update(
+                appointment=appointment
+            )
+
+            logger.info(
+                f"Cancellation requested: appointment_id={appointment_id} "
+                f"doctor_id={current_user.id}"
+            )
+
+            return ApiResponse(
+                success=True,
+                message=CANCELLATION_REQUESTED,
+                data=self._build_response(updated_appointment)
+            )
+
+        except HTTPException:
+            raise
+
+        except Exception as error:
+            logger.error(
+                f"Unexpected error requesting cancellation: {error}"
+            )
+            raise
+
     async def update_status(
         self,
         current_user: User,
         appointment_id: str,
         request: UpdateAppointmentStatusRequest
     ) -> ApiResponse[AppointmentResponse]:
-        """Doctor marks their own appointment COMPLETED or NO_SHOW,
-        only after its scheduled time has passed.
-        """
+        """Doctor marks their appointment COMPLETED or NOT_ATTENDED."""
 
         try:
 
             if request.status not in (
                 AppointmentStatus.COMPLETED,
-                AppointmentStatus.NO_SHOW
+                AppointmentStatus.NOT_ATTENDED
             ):
                 raise InvalidStatusUpdateException()
 

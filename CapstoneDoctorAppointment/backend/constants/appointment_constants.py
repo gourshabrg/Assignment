@@ -8,13 +8,15 @@ APPOINTMENTS_FETCHED = "Appointments fetched successfully."
 
 APPOINTMENT_CANCELLED = "Appointment cancelled successfully."
 
+CANCELLATION_REQUESTED = "Cancellation requested. Pending admin approval."
+
 APPOINTMENT_NOT_CANCELLABLE = "Only pending or booked appointments can be cancelled."
 
 CANCELLATION_WINDOW_EXPIRED = "Appointments can only be cancelled up to 2 hours before the scheduled time."
 
 APPOINTMENT_STATUS_UPDATED = "Appointment status updated successfully."
 
-INVALID_STATUS_UPDATE = "Status can only be updated to COMPLETED or NO_SHOW."
+INVALID_STATUS_UPDATE = "Status can only be updated to COMPLETED or NOT_ATTENDED."
 
 STATUS_UPDATE_TOO_EARLY = "Appointment status can only be updated after the scheduled time has passed."
 

@@ -7,8 +7,10 @@ from schemas.request.book_appointment_request import (
 from schemas.request.update_appointment_status_request import (
     UpdateAppointmentStatusRequest
 )
+from schemas.request.cancel_appointment_request import (
+    CancelAppointmentRequest
+)
 from services.appointment_service import AppointmentService
-from security.current_user import get_current_user
 from security.role_checker import doctor_required, patient_required
 
 
@@ -39,7 +41,7 @@ async def book_appointment(
 
 
 @router.get(
-    "/me",
+    "/patient",
     status_code=status.HTTP_200_OK
 )
 async def get_my_appointments(
@@ -55,7 +57,7 @@ async def get_my_appointments(
 
 
 @router.get(
-    "/doctor/me",
+    "/doctor",
     status_code=status.HTTP_200_OK
 )
 async def get_doctor_appointments(
@@ -77,16 +79,34 @@ async def get_doctor_appointments(
 async def cancel_appointment(
     appointment_id: str,
     current_user: User = Depends(
-        get_current_user
+        patient_required
     )
 ):
-    """Either the patient or the doctor on the appointment can
-    cancel it.
-    """
+    """Patient cancels their own appointment."""
 
     return await appointment_service.cancel_appointment(
         current_user=current_user,
         appointment_id=appointment_id
+    )
+
+
+@router.post(
+    "/{appointment_id}/request-cancellation",
+    status_code=status.HTTP_200_OK
+)
+async def request_cancellation(
+    appointment_id: str,
+    request: CancelAppointmentRequest,
+    current_user: User = Depends(
+        doctor_required
+    )
+):
+    """Doctor requests cancellation with a reason, pending admin approval."""
+
+    return await appointment_service.request_cancellation(
+        current_user=current_user,
+        appointment_id=appointment_id,
+        request=request
     )
 
 
@@ -101,7 +121,7 @@ async def update_appointment_status(
         doctor_required
     )
 ):
-    """Doctor marks their own appointment COMPLETED or NO_SHOW."""
+    """Doctor marks their own appointment COMPLETED or NOT_ATTENDED."""
 
     return await appointment_service.update_status(
         current_user=current_user,
