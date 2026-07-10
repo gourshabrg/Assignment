@@ -92,9 +92,7 @@ class DoctorService:
         current_user: User,
         request: DoctorProfileUpdateRequest
     ) -> ApiResponse[DoctorProfileResponse]:
-        """Partially updates the logged-in doctor's profile -- only
-        the fields actually sent in the request are changed.
-        """
+        """Updates the logged-in doctor's profile."""
 
         try:
 

@@ -45,9 +45,7 @@ async def update_my_profile(
         doctor_required
     )
 ):
-    """Doctor updates qualification, consultation fee, and/or
-    clinic address on their own profile.
-    """
+    """Doctor updates their own profile."""
 
     return await doctor_service.update_my_profile(
         current_user=current_user,
