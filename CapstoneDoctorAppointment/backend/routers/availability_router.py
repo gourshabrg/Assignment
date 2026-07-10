@@ -39,7 +39,7 @@ async def create_slot(
 
 
 @router.get(
-    "/slots/me",
+    "/myslots",
     status_code=status.HTTP_200_OK
 )
 async def get_my_slots(

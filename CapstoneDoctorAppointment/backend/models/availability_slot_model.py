@@ -5,11 +5,7 @@ from pydantic import Field
 
 
 class AvailabilitySlot(Document):
-    """MongoDB 'availability_slots' collection -- one bookable time
-    block for one doctor. start_time/end_time are stored as ISO
-    strings (HH:MM:SS) since MongoDB/BSON has no native time type --
-    see utils/time_utils.py.
-    """
+    """MongoDB 'availability_slots' collection."""
 
     doctor_id: str
 

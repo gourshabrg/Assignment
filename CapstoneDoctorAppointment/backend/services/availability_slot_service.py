@@ -157,9 +157,7 @@ class AvailabilitySlotService:
         current_user: User,
         slot_id: str
     ) -> AvailabilitySlot:
-        """Fetches a slot, ensuring it exists and belongs to the
-        current doctor.
-        """
+        """Fetches a slot owned by the current doctor."""
 
         slot = await self.slot_repository.get_by_id(slot_id=slot_id)
 

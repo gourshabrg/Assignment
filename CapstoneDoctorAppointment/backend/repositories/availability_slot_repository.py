@@ -44,11 +44,7 @@ class AvailabilitySlotRepository:
         start_time,
         end_time
     ) -> Optional[AvailabilitySlot]:
-        """Finds a slot for this doctor/date whose time range overlaps
-        the given range. Times are stored as zero-padded "HH:MM:SS"
-        strings, so string comparison gives the same ordering as
-        comparing time objects.
-        """
+        """Finds an existing slot overlapping the given time range."""
 
         slots = await AvailabilitySlot.find(
             AvailabilitySlot.doctor_id == doctor_id,

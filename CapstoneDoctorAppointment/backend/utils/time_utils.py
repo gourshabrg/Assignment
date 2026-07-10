@@ -2,10 +2,7 @@ from datetime import time
 
 
 def time_to_str(value: time) -> str:
-    """MongoDB/BSON has no native time type, so Beanie documents store
-    times as ISO strings (HH:MM:SS). Zero-padding keeps string
-    comparisons/sorting equivalent to comparing time objects directly.
-    """
+    """Converts a time to an ISO string (HH:MM:SS)."""
 
     return value.isoformat()
 
