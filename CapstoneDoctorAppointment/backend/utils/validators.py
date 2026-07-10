@@ -11,9 +11,7 @@ ALLOWED_EMAIL_DOMAINS = (
 
 
 def validate_phone(value: str) -> str:
-    """Raises ValueError unless value is a 10-digit mobile number
-    starting with 6-9. Used as a Pydantic field validator.
-    """
+    """Validates a 10-digit mobile number starting with 6-9."""
 
     if not PHONE_PATTERN.match(value):
         raise ValueError(
@@ -24,9 +22,7 @@ def validate_phone(value: str) -> str:
 
 
 def validate_email_domain(value: str) -> str:
-    """Raises ValueError unless the email's domain is one of the
-    allowed providers. Used as a Pydantic field validator.
-    """
+    """Validates the email's domain is an allowed provider."""
 
     domain = value.split("@")[-1].lower()
 

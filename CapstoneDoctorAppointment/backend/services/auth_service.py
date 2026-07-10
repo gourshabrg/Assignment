@@ -57,9 +57,7 @@ logger = get_logger(__name__)
 
 
 class AuthService:
-    """Registration business logic: validation, password hashing,
-    and building the saved records.
-    """
+    """Authentication and account business logic."""
 
     def __init__(self):
         self.user_repository = UserRepository()
@@ -293,9 +291,7 @@ class AuthService:
         self,
         user: User
     ) -> ApiResponse[None]:
-        """JWTs are stateless, so logout is just a client-side token
-        discard -- this endpoint exists for the frontend to call.
-        """
+        """Logs the user out."""
 
         logger.info(f"Logout successful: user_id={user.id}")
 
@@ -372,10 +368,7 @@ class AuthService:
         self,
         request: ResetPasswordRequest
     ) -> ApiResponse[None]:
-        """Resets a user's password by email (no OTP/email step, since
-        the SRS has no email service -- same 'mock' philosophy as
-        payments elsewhere in this project).
-        """
+        """Resets a user's password by email."""
 
         try:
 
