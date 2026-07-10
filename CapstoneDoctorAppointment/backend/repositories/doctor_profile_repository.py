@@ -47,9 +47,7 @@ class DoctorProfileRepository:
         min_experience: int | None = None,
         max_fee: float | None = None
     ) -> list[DoctorProfile]:
-        """Filters doctor profiles by any combination of the given
-        criteria. All filters are optional and combinable.
-        """
+        """Filters doctor profiles by the given optional criteria."""
 
         conditions = []
 

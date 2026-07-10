@@ -170,9 +170,7 @@ class DoctorService:
         min_experience: int | None = None,
         max_fee: float | None = None
     ) -> ApiResponse[list[DoctorSearchResponse]]:
-        """Patient-facing search across active doctors. All filters
-        are optional and combinable.
-        """
+        """Searches active doctors by optional filters."""
 
         try:
 
@@ -238,9 +236,7 @@ class DoctorService:
         self,
         doctor_id: str
     ) -> ApiResponse[DoctorDetailResponse]:
-        """Patient-facing doctor detail view, including their future
-        unbooked availability slots.
-        """
+        """Returns a doctor's details and available slots."""
 
         try:
 

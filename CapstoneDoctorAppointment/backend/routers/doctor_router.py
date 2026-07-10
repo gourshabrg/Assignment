@@ -70,9 +70,7 @@ async def search_doctors(
         get_current_user
     )
 ):
-    """Any logged-in user searches active doctors. All filters are
-    optional and combinable.
-    """
+    """Searches active doctors by optional filters."""
 
     return await doctor_service.search_doctors(
         name=name,
@@ -93,11 +91,7 @@ async def get_doctor_details(
         get_current_user
     )
 ):
-    """View a doctor's public profile plus their available slots.
-
-    Registered after /search so the literal path isn't swallowed by
-    this route's {doctor_id} path parameter.
-    """
+    """Views a doctor's public profile and available slots."""
 
     return await doctor_service.get_doctor_by_id(
         doctor_id=doctor_id

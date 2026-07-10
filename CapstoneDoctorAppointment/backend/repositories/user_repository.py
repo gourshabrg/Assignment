@@ -42,10 +42,7 @@ class UserRepository:
         user_ids: list[str],
         name: str | None = None
     ) -> list[User]:
-        """Fetches active doctors by id, optionally filtered by a
-        case-insensitive name match. Used by doctor search/detail --
-        deactivated doctors never show up here.
-        """
+        """Fetches active doctors by id, optionally filtered by name."""
 
         object_ids = [
             PydanticObjectId(user_id) for user_id in user_ids
