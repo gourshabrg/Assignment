@@ -3,9 +3,7 @@ from beanie import Document
 from pydantic import Field
 
 class Payment(Document):
-    """MongoDB 'payments' collection. Always SUCCESS since there's no
-    real payment gateway -- SRS calls for a simulated payment only.
-    """
+    """MongoDB 'payments' collection."""
 
     appointment_id: str
 

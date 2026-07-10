@@ -21,8 +21,7 @@ logger = get_logger(__name__)
 
 
 class PaymentService:
-    """Business logic for a patient paying for a booked appointment.
-    """
+    """Business logic for appointment payments."""
 
     def __init__(self):
         self.appointment_repository = AppointmentRepository()
