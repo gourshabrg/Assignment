@@ -10,6 +10,14 @@ APPOINTMENT_CANCELLED = "Appointment cancelled successfully."
 
 CANCELLATION_REQUESTED = "Cancellation requested. Pending admin approval."
 
+CANCELLATION_REQUESTS_FETCHED = "Cancellation requests fetched successfully."
+
+CANCELLATION_APPROVED = "Cancellation approved. Appointment cancelled."
+
+CANCELLATION_REJECTED = "Cancellation request rejected."
+
+NO_PENDING_CANCELLATION = "This appointment has no pending cancellation request."
+
 APPOINTMENT_NOT_CANCELLABLE = "Only pending or booked appointments can be cancelled."
 
 CANCELLATION_WINDOW_EXPIRED = "Appointments can only be cancelled up to 2 hours before the scheduled time."

@@ -31,6 +31,7 @@ from exceptions import (
     InvalidStatusUpdateException,
     StatusUpdateTooEarlyException,
     AppointmentNotUpdatableException,
+    NoPendingCancellationException,
     AccessDeniedException
 )
 from constants import (
@@ -38,6 +39,9 @@ from constants import (
     APPOINTMENTS_FETCHED,
     APPOINTMENT_CANCELLED,
     CANCELLATION_REQUESTED,
+    CANCELLATION_REQUESTS_FETCHED,
+    CANCELLATION_APPROVED,
+    CANCELLATION_REJECTED,
     APPOINTMENT_STATUS_UPDATED
 )
 from logger.logger import get_logger
@@ -395,6 +399,129 @@ class AppointmentService:
         except Exception as error:
             logger.error(
                 f"Unexpected error requesting cancellation: {error}"
+            )
+            raise
+
+    async def list_cancellation_requests(
+        self
+    ) -> ApiResponse[list[AppointmentResponse]]:
+        """Admin lists appointments pending cancellation approval."""
+
+        try:
+
+            appointments = await self.appointment_repository.get_by_status(
+                status=AppointmentStatus.CANCELLATION_REQUESTED
+            )
+
+            return ApiResponse(
+                success=True,
+                message=CANCELLATION_REQUESTS_FETCHED,
+                data=[
+                    self._build_response(appointment)
+                    for appointment in appointments
+                ]
+            )
+
+        except Exception as error:
+            logger.error(
+                f"Unexpected error fetching cancellation requests: {error}"
+            )
+            raise
+
+    async def _get_pending_cancellation(
+        self,
+        appointment_id: str
+    ) -> Appointment:
+        """Fetches an appointment that has a pending cancellation."""
+
+        appointment = await self.appointment_repository.get_by_id(
+            appointment_id=appointment_id
+        )
+
+        if not appointment:
+            raise AppointmentNotFoundException()
+
+        if appointment.status != AppointmentStatus.CANCELLATION_REQUESTED:
+            raise NoPendingCancellationException()
+
+        return appointment
+
+    async def approve_cancellation(
+        self,
+        appointment_id: str
+    ) -> ApiResponse[AppointmentResponse]:
+        """Admin approves a cancellation request, freeing the slot."""
+
+        try:
+
+            appointment = await self._get_pending_cancellation(
+                appointment_id=appointment_id
+            )
+
+            appointment.status = AppointmentStatus.CANCELLED
+            appointment.updated_at = datetime.utcnow()
+
+            updated_appointment = await self.appointment_repository.update(
+                appointment=appointment
+            )
+
+            await self._free_slot(slot_id=appointment.slot_id)
+
+            logger.info(
+                f"Cancellation approved: appointment_id={appointment_id}"
+            )
+
+            return ApiResponse(
+                success=True,
+                message=CANCELLATION_APPROVED,
+                data=self._build_response(updated_appointment)
+            )
+
+        except HTTPException:
+            raise
+
+        except Exception as error:
+            logger.error(
+                f"Unexpected error approving cancellation: {error}"
+            )
+            raise
+
+    async def reject_cancellation(
+        self,
+        appointment_id: str
+    ) -> ApiResponse[AppointmentResponse]:
+        """Admin rejects a cancellation request, keeping it booked."""
+
+        try:
+
+            appointment = await self._get_pending_cancellation(
+                appointment_id=appointment_id
+            )
+
+            appointment.status = AppointmentStatus.BOOKED
+            appointment.cancellation_reason = None
+            appointment.updated_at = datetime.utcnow()
+
+            updated_appointment = await self.appointment_repository.update(
+                appointment=appointment
+            )
+
+            logger.info(
+                f"Cancellation rejected: appointment_id={appointment_id}"
+            )
+
+            return ApiResponse(
+                success=True,
+                message=CANCELLATION_REJECTED,
+                data=self._build_response(updated_appointment)
+            )
+
+        except HTTPException:
+            raise
+
+        except Exception as error:
+            logger.error(
+                f"Unexpected error rejecting cancellation: {error}"
             )
             raise
 

@@ -23,10 +23,7 @@ logger = get_logger(__name__)
 
 
 class AdminService:
-    """Business logic for admin managing doctors and viewing platform
-    stats. Every method here requires the ADMIN role, checked at the
-    router level.
-    """
+    """Business logic for admin managing doctors and platform stats."""
 
     def __init__(self):
         self.user_repository = UserRepository()
@@ -92,9 +89,7 @@ class AdminService:
         return await self.user_repository.update(user=doctor)
 
     async def verify_doctor(self, doctor_id: str) -> ApiResponse[None]:
-        """Approves a pending doctor, letting them log in and appear
-        in patient search.
-        """
+        """Approves a pending doctor."""
 
         await self._set_doctor_active_state(
             doctor_id=doctor_id,
@@ -106,9 +101,7 @@ class AdminService:
         return ApiResponse(success=True, message=DOCTOR_VERIFIED, data=None)
 
     async def reject_doctor(self, doctor_id: str) -> ApiResponse[None]:
-        """Deactivates a doctor -- blocks login and hides them from
-        patient search.
-        """
+        """Deactivates a doctor."""
 
         await self._set_doctor_active_state(
             doctor_id=doctor_id,
@@ -120,9 +113,7 @@ class AdminService:
         return ApiResponse(success=True, message=DOCTOR_REJECTED, data=None)
 
     async def get_dashboard(self) -> ApiResponse[DashboardResponse]:
-        """Platform stats plus the doctor list and recent appointments,
-        each with real names, not just counts.
-        """
+        """Returns platform stats, the doctor list, and recent appointments."""
 
         total_doctors = await self.user_repository.count_by_role(
             role=UserRole.DOCTOR

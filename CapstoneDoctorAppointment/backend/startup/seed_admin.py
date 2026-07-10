@@ -8,9 +8,7 @@ from logger.logger import get_logger
 logger = get_logger(__name__)
 
 class AdminSeeder:
-    """Creates the one admin account from .env values on startup,
-    if it doesn't already exist.
-    """
+    """Seeds the admin account from .env values on startup."""
 
     @staticmethod
     async def seed_admin():

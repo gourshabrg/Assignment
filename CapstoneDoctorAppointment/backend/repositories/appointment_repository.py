@@ -70,6 +70,17 @@ class AppointmentRepository:
             Appointment.status == status
         ).count()
 
+    async def get_by_status(
+        self,
+        status: AppointmentStatus
+    ) -> list[Appointment]:
+
+        return await Appointment.find(
+            Appointment.status == status
+        ).sort(
+            "-updated_at"
+        ).to_list()
+
     async def get_recent(self, limit: int = 20) -> list[Appointment]:
 
         return await Appointment.find().sort(
