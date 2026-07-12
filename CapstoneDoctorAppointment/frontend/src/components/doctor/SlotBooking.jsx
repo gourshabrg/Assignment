@@ -141,7 +141,7 @@ const SlotBooking = ({ slots, selectedSlotId, onSelectSlot }) => {
               }`}
               onClick={() => onSelectSlot(slot.id)}
             >
-              {formatTime(slot.start_time)}
+              {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
             </button>
           ))}
         </div>
