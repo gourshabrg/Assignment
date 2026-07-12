@@ -210,7 +210,7 @@
   font-weight: 600;
 }
 
-.period-tabs {
+.tab-strip {
   display: flex;
   background: var(--color-primary-light);
   border-radius: var(--radius-md);
@@ -218,7 +218,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
-.period-tab {
+.tab-item {
   flex: 1;
   border: none;
   background: none;
@@ -244,12 +244,12 @@
 }
 
 /* Shared hover/selected treatment for the tab and time pickers. */
-.period-tab,
+.tab-item,
 .time-chip {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.period-tab:hover:not(.selected) {
+.tab-item:hover:not(.selected) {
   background: #ffffff;
   color: var(--color-primary-dark);
 }
@@ -259,7 +259,7 @@
 }
 
 .date-card.selected .date-badge,
-.period-tab.selected,
+.tab-item.selected,
 .time-chip.selected {
   background: var(--color-primary);
   color: #ffffff;

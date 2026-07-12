@@ -1,31 +1,15 @@
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { CalendarIcon } from "../common/Icons";
-import { APPOINTMENT_STATUS } from "../../utils/constants";
-import {
-  formatDate,
-  formatTime,
-  formatStatus,
-  formatDoctorName,
-  getInitials
-} from "../../utils/format";
+import { formatDate, formatTime, formatStatus, getInitials } from "../../utils/format";
 
-const AppointmentCard = ({ appointment, onCancel, cancelling }) => {
-  const { status } = appointment;
-  const isPendingPayment = status === APPOINTMENT_STATUS.PENDING_PAYMENT;
-  const canCancel =
-    status === APPOINTMENT_STATUS.BOOKED || isPendingPayment;
-
+// Shared by the patient and doctor views: `name` is whichever party the
+// viewer cares about, `actions` are the buttons for that view.
+const AppointmentCard = ({ appointment, name, actions }) => {
   return (
     <article className="appointment-card">
-      <div className="doctor-avatar">
-        {getInitials(appointment.doctor_name ?? "Doctor")}
-      </div>
+      <div className="doctor-avatar">{getInitials(name)}</div>
 
       <div className="appointment-info">
-        <h3 className="doctor-name">
-          {formatDoctorName(appointment.doctor_name)}
-        </h3>
+        <h3 className="doctor-name">{name}</h3>
 
         <p className="doctor-line">
           <CalendarIcon />
@@ -44,26 +28,12 @@ const AppointmentCard = ({ appointment, onCancel, cancelling }) => {
       </div>
 
       <div className="appointment-actions">
-        <span className={`status-badge status-${status.toLowerCase()}`}>
-          {formatStatus(status)}
+        <span
+          className={`status-badge status-${appointment.status.toLowerCase()}`}
+        >
+          {formatStatus(appointment.status)}
         </span>
-
-        {isPendingPayment && (
-          <Button as={Link} to={`/payment/${appointment.id}`} size="sm">
-            Pay Now
-          </Button>
-        )}
-
-        {canCancel && (
-          <Button
-            variant="outline-danger"
-            size="sm"
-            onClick={() => onCancel(appointment.id)}
-            disabled={cancelling}
-          >
-            {cancelling ? "Cancelling..." : "Cancel"}
-          </Button>
-        )}
+        {actions}
       </div>
     </article>
   );

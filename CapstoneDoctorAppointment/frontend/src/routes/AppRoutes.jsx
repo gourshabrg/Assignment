@@ -8,7 +8,11 @@ import DoctorSearchPage from "../pages/patient/DoctorSearchPage";
 import DoctorDetailsPage from "../pages/patient/DoctorDetailsPage";
 import PaymentPage from "../pages/patient/PaymentPage";
 import MyAppointmentsPage from "../pages/patient/MyAppointmentsPage";
+import DoctorDashboardPage from "../pages/doctor/DoctorDashboardPage";
+import ManageAvailabilityPage from "../pages/doctor/ManageAvailabilityPage";
+import DoctorAppointmentsPage from "../pages/doctor/DoctorAppointmentsPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import { ROLES } from "../utils/constants";
 
 const AppRoutes = () => {
   return (
@@ -37,7 +41,7 @@ const AppRoutes = () => {
       <Route
         path="/payment/:appointmentId"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={[ROLES.PATIENT]}>
             <PaymentPage />
           </ProtectedRoute>
         }
@@ -45,8 +49,33 @@ const AppRoutes = () => {
       <Route
         path="/my-appointments"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={[ROLES.PATIENT]}>
             <MyAppointmentsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
+            <DoctorDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/availability"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
+            <ManageAvailabilityPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/appointments"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
+            <DoctorAppointmentsPage />
           </ProtectedRoute>
         }
       />

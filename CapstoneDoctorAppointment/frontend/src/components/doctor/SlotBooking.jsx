@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import Tabs from "../common/Tabs";
 import { formatTime } from "../../utils/format";
 
 const PERIODS = ["Morning", "Afternoon", "Evening"];
@@ -113,18 +114,11 @@ const SlotBooking = ({ slots, selectedSlotId, onSelectSlot }) => {
 
       <h2 className="section-heading">Select Time</h2>
 
-      <div className="period-tabs">
-        {PERIODS.map((item) => (
-          <button
-            type="button"
-            key={item}
-            className={`period-tab ${item === period ? "selected" : ""}`}
-            onClick={() => setPeriod(item)}
-          >
-            {item}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        items={PERIODS.map((item) => ({ key: item, label: item }))}
+        activeKey={period}
+        onChange={setPeriod}
+      />
 
       {periodSlots.length === 0 ? (
         <p className="text-muted-custom mb-0">

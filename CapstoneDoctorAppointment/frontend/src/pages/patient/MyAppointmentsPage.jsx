@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import PageHeader from "../../components/layout/PageHeader";
 import Loader from "../../components/common/Loader";
+import Tabs from "../../components/common/Tabs";
 import AppointmentCard from "../../components/appointment/AppointmentCard";
+import { APPOINTMENT_STATUS } from "../../utils/constants";
+import { formatDoctorName } from "../../utils/format";
 import {
   getMyAppointments,
   cancelAppointment
@@ -64,20 +69,12 @@ const MyAppointmentsPage = () => {
       />
 
       <div className="page-content">
-        <div className="period-tabs appointment-tabs">
-          {APPOINTMENT_TABS.map((item) => (
-            <button
-              type="button"
-              key={item.key}
-              className={`period-tab ${
-                item.key === activeTab ? "selected" : ""
-              }`}
-              onClick={() => setActiveTab(item.key)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          items={APPOINTMENT_TABS}
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          className="appointment-tabs"
+        />
 
         {loading && <Loader />}
 
@@ -88,14 +85,44 @@ const MyAppointmentsPage = () => {
         )}
 
         {!loading &&
-          visible.map((appointment) => (
-            <AppointmentCard
-              key={appointment.id}
-              appointment={appointment}
-              onCancel={handleCancel}
-              cancelling={cancellingId === appointment.id}
-            />
-          ))}
+          visible.map((appointment) => {
+            const isPending =
+              appointment.status === APPOINTMENT_STATUS.PENDING_PAYMENT;
+            const canCancel =
+              isPending || appointment.status === APPOINTMENT_STATUS.BOOKED;
+            const busy = cancellingId === appointment.id;
+
+            return (
+              <AppointmentCard
+                key={appointment.id}
+                appointment={appointment}
+                name={formatDoctorName(appointment.doctor_name)}
+                actions={
+                  <>
+                    {isPending && (
+                      <Button
+                        as={Link}
+                        to={`/payment/${appointment.id}`}
+                        size="sm"
+                      >
+                        Pay Now
+                      </Button>
+                    )}
+                    {canCancel && (
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => handleCancel(appointment.id)}
+                        disabled={busy}
+                      >
+                        {busy ? "Cancelling..." : "Cancel"}
+                      </Button>
+                    )}
+                  </>
+                }
+              />
+            );
+          })}
       </div>
     </>
   );
