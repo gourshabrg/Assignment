@@ -22,6 +22,8 @@
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
+  --header-height: 64px;
+
   --font-family-base: "Segoe UI", system-ui, -apple-system, sans-serif;
 
   --bs-primary: var(--color-primary);

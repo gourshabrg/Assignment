@@ -2,11 +2,12 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
+import { getRoleLandingPath } from "../../utils/roleRoutes";
 
 const AppNavbar = () => {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -39,9 +40,18 @@ const AppNavbar = () => {
             )}
 
             {user && (
-              <Nav.Link onClick={handleLogout} role="button">
-                Logout
-              </Nav.Link>
+              <>
+                <Nav.Link
+                  as={Link}
+                  to={getRoleLandingPath(user.role)}
+                  eventKey={getRoleLandingPath(user.role)}
+                >
+                  Dashboard
+                </Nav.Link>
+                <Nav.Link onClick={handleLogout} role="button">
+                  Logout
+                </Nav.Link>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>
