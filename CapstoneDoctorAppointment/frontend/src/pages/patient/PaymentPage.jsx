@@ -19,7 +19,7 @@ const PaymentPage = () => {
       const response = await payForAppointment(appointmentId);
 
       toast.success(response.data.message);
-      navigate("/doctors");
+      navigate("/my-appointments");
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Payment failed."));
     } finally {

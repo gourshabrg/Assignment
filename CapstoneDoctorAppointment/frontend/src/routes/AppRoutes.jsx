@@ -7,6 +7,7 @@ import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
 import DoctorSearchPage from "../pages/patient/DoctorSearchPage";
 import DoctorDetailsPage from "../pages/patient/DoctorDetailsPage";
 import PaymentPage from "../pages/patient/PaymentPage";
+import MyAppointmentsPage from "../pages/patient/MyAppointmentsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 
 const AppRoutes = () => {
@@ -38,6 +39,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <PaymentPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-appointments"
+        element={
+          <ProtectedRoute>
+            <MyAppointmentsPage />
           </ProtectedRoute>
         }
       />

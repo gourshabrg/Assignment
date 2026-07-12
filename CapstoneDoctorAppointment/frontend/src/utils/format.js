@@ -32,6 +32,12 @@ export const formatDoctorName = (fullName = "") => {
   return /^dr\.?\s/i.test(name) ? name : `Dr ${name}`;
 };
 
+export const formatStatus = (status) =>
+  status
+    .split("_")
+    .map((word) => word[0] + word.slice(1).toLowerCase())
+    .join(" ");
+
 export const getInitials = (fullName) =>
   fullName
     .split(" ")
