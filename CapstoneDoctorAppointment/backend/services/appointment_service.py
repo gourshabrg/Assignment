@@ -72,6 +72,18 @@ class AppointmentService:
 
         return names
 
+    async def _build_response_with_names(
+        self,
+        appointment: Appointment
+    ) -> AppointmentResponse:
+        """Builds one response, resolving both party names."""
+
+        names = await self._get_user_names(
+            user_ids={appointment.patient_id, appointment.doctor_id}
+        )
+
+        return self._build_response(appointment, names)
+
     def _build_response(
         self,
         appointment: Appointment,
@@ -158,17 +170,10 @@ class AppointmentService:
                 f"patient_id={current_user.id} slot_id={slot.id}"
             )
 
-            names = await self._get_user_names(
-                user_ids={
-                    saved_appointment.patient_id,
-                    saved_appointment.doctor_id
-                }
-            )
-
             return ApiResponse(
                 success=True,
                 message=APPOINTMENT_BOOKED,
-                data=self._build_response(saved_appointment, names)
+                data=await self._build_response_with_names(saved_appointment)
             )
 
         except HTTPException:
@@ -190,11 +195,17 @@ class AppointmentService:
                 patient_id=str(current_user.id)
             )
 
+            names = await self._get_user_names(
+                user_ids={
+                    appointment.doctor_id for appointment in appointments
+                }
+            )
+
             return ApiResponse(
                 success=True,
                 message=APPOINTMENTS_FETCHED,
                 data=[
-                    self._build_response(appointment)
+                    self._build_response(appointment, names)
                     for appointment in appointments
                 ]
             )
@@ -215,11 +226,17 @@ class AppointmentService:
                 doctor_id=str(current_user.id)
             )
 
+            names = await self._get_user_names(
+                user_ids={
+                    appointment.patient_id for appointment in appointments
+                }
+            )
+
             return ApiResponse(
                 success=True,
                 message=APPOINTMENTS_FETCHED,
                 data=[
-                    self._build_response(appointment)
+                    self._build_response(appointment, names)
                     for appointment in appointments
                 ]
             )
@@ -294,7 +311,7 @@ class AppointmentService:
             return ApiResponse(
                 success=True,
                 message=APPOINTMENT_CANCELLED,
-                data=self._build_response(updated_appointment)
+                data=await self._build_response_with_names(updated_appointment)
             )
 
         except HTTPException:
@@ -369,7 +386,7 @@ class AppointmentService:
             return ApiResponse(
                 success=True,
                 message=CANCELLATION_REQUESTED,
-                data=self._build_response(updated_appointment)
+                data=await self._build_response_with_names(updated_appointment)
             )
 
         except HTTPException:
@@ -449,7 +466,7 @@ class AppointmentService:
             return ApiResponse(
                 success=True,
                 message=APPOINTMENT_STATUS_UPDATED,
-                data=self._build_response(updated_appointment)
+                data=await self._build_response_with_names(updated_appointment)
             )
 
         except HTTPException:
