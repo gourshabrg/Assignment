@@ -413,11 +413,19 @@ class AppointmentService:
                 status=AppointmentStatus.CANCELLATION_REQUESTED
             )
 
+            user_ids = set()
+
+            for appointment in appointments:
+                user_ids.add(appointment.patient_id)
+                user_ids.add(appointment.doctor_id)
+
+            names = await self._get_user_names(user_ids=user_ids)
+
             return ApiResponse(
                 success=True,
                 message=CANCELLATION_REQUESTS_FETCHED,
                 data=[
-                    self._build_response(appointment)
+                    self._build_response(appointment, names)
                     for appointment in appointments
                 ]
             )
@@ -474,7 +482,7 @@ class AppointmentService:
             return ApiResponse(
                 success=True,
                 message=CANCELLATION_APPROVED,
-                data=self._build_response(updated_appointment)
+                data=await self._build_response_with_names(updated_appointment)
             )
 
         except HTTPException:
@@ -513,7 +521,7 @@ class AppointmentService:
             return ApiResponse(
                 success=True,
                 message=CANCELLATION_REJECTED,
-                data=self._build_response(updated_appointment)
+                data=await self._build_response_with_names(updated_appointment)
             )
 
         except HTTPException:
