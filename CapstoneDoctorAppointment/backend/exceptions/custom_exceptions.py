@@ -24,6 +24,7 @@ from constants import (
     INVALID_STATUS_UPDATE,
     STATUS_UPDATE_TOO_EARLY,
     APPOINTMENT_NOT_UPDATABLE,
+    NO_PENDING_CANCELLATION,
     PAYMENT_ALREADY_EXISTS,
     PAYMENT_NOT_ALLOWED
 )
@@ -156,6 +157,11 @@ class StatusUpdateTooEarlyException(BaseAPIException):
 class AppointmentNotUpdatableException(BaseAPIException):
     status_code = status.HTTP_400_BAD_REQUEST
     message = APPOINTMENT_NOT_UPDATABLE
+
+
+class NoPendingCancellationException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = NO_PENDING_CANCELLATION
 
 
 class PaymentAlreadyExistsException(BaseAPIException):

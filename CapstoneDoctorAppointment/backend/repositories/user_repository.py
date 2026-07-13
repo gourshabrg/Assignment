@@ -6,6 +6,7 @@ from beanie.operators import In, RegEx
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
 from models.user_model import User
+from enums.role_enum import UserRole
 
 
 class UserRepository:
@@ -50,7 +51,7 @@ class UserRepository:
 
         conditions = [
             In(User.id, object_ids),
-            User.is_active == True  # noqa: E712
+            User.is_active == True
         ]
 
         if name:
@@ -69,3 +70,23 @@ class UserRepository:
         await user.save(session=session)
 
         return user
+
+    async def get_by_role(self, role: UserRole) -> list[User]:
+
+        return await User.find(User.role == role).to_list()
+
+    async def count_by_role(self, role: UserRole) -> int:
+
+        return await User.find(User.role == role).count()
+
+    async def get_by_ids(self, user_ids: list[str]) -> list[User]:
+        """Fetches users by id with no role/active filtering -- used
+        for name lookups (e.g. showing patient/doctor names on the
+        admin dashboard).
+        """
+
+        object_ids = [
+            PydanticObjectId(user_id) for user_id in user_ids
+        ]
+
+        return await User.find(In(User.id, object_ids)).to_list()
