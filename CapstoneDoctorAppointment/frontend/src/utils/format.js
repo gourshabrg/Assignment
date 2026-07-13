@@ -24,6 +24,14 @@ export const formatDate = (value) =>
 
 export const formatFee = (value) => `₹${Number(value).toFixed(2)}`;
 
+// Some names are already stored with a "Dr" prefix, so only add one when
+// it is missing.
+export const formatDoctorName = (fullName = "") => {
+  const name = fullName.trim();
+
+  return /^dr\.?\s/i.test(name) ? name : `Dr ${name}`;
+};
+
 export const getInitials = (fullName) =>
   fullName
     .split(" ")

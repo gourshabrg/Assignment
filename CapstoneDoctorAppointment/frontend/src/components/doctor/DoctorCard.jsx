@@ -4,6 +4,7 @@ import { LocationIcon, BriefcaseIcon } from "../common/Icons";
 import {
   formatSpecialization,
   formatFee,
+  formatDoctorName,
   getInitials
 } from "../../utils/format";
 
@@ -18,7 +19,7 @@ const DoctorCard = ({ doctor }) => {
       </div>
 
       <div className="doctor-info">
-        <h3 className="doctor-name">Dr {doctor.full_name}</h3>
+        <h3 className="doctor-name">{formatDoctorName(doctor.full_name)}</h3>
         <p className="doctor-specialization">
           {formatSpecialization(doctor.specialization)}
         </p>

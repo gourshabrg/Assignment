@@ -11,6 +11,7 @@ import { bookAppointment } from "../../api/appointmentApi";
 import {
   formatSpecialization,
   formatFee,
+  formatDoctorName,
   getInitials
 } from "../../utils/format";
 import { getApiErrorMessage } from "../../utils/apiError";
@@ -106,7 +107,9 @@ const DoctorDetailsPage = () => {
             </Col>
 
             <Col>
-              <h2 className="detail-name">Dr {doctor.full_name}</h2>
+              <h2 className="detail-name">
+                {formatDoctorName(doctor.full_name)}
+              </h2>
               <p className="doctor-specialization">
                 {formatSpecialization(doctor.specialization)}
               </p>
