@@ -9,7 +9,9 @@ from constants import (
     SAME_PASSWORD,
     INCORRECT_OLD_PASSWORD,
     ACCOUNT_PENDING_APPROVAL,
-    ACCESS_DENIED
+    ACCESS_DENIED,
+    DOCTOR_PROFILE_NOT_FOUND,
+    NO_FIELDS_TO_UPDATE
 )
 
 
@@ -70,3 +72,13 @@ class AccountPendingApprovalException(BaseAPIException):
 class AccessDeniedException(BaseAPIException):
     status_code = status.HTTP_403_FORBIDDEN
     message = ACCESS_DENIED
+
+
+class DoctorProfileNotFoundException(BaseAPIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    message = DOCTOR_PROFILE_NOT_FOUND
+
+
+class NoFieldsToUpdateException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    message = NO_FIELDS_TO_UPDATE
