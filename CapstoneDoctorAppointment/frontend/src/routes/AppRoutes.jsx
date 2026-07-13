@@ -11,6 +11,9 @@ import MyAppointmentsPage from "../pages/patient/MyAppointmentsPage";
 import DoctorDashboardPage from "../pages/doctor/DoctorDashboardPage";
 import ManageAvailabilityPage from "../pages/doctor/ManageAvailabilityPage";
 import DoctorAppointmentsPage from "../pages/doctor/DoctorAppointmentsPage";
+import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import AdminDoctorsPage from "../pages/admin/AdminDoctorsPage";
+import AdminCancellationsPage from "../pages/admin/AdminCancellationsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import { ROLES } from "../utils/constants";
 
@@ -76,6 +79,31 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
             <DoctorAppointmentsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/doctors"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminDoctorsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cancellations"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+            <AdminCancellationsPage />
           </ProtectedRoute>
         }
       />

@@ -130,6 +130,38 @@ export const LocationIcon = (props) => (
   </svg>
 );
 
+export const MailIcon = (props) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" {...props}>
+    <rect
+      x="3"
+      y="5"
+      width="18"
+      height="14"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    />
+    <path
+      d="M3.5 6.5l8.5 6 8.5-6"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const PhoneIcon = (props) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" {...props}>
+    <path
+      d="M6.6 3h3l1.5 4-2 1.3a12 12 0 005.6 5.6l1.3-2 4 1.5v3a2 2 0 01-2.2 2A17 17 0 014.6 5.2 2 2 0 016.6 3z"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const BriefcaseIcon = (props) => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" {...props}>
     <rect

@@ -28,11 +28,7 @@ const AppointmentCard = ({ appointment, name, actions }) => {
       </div>
 
       <div className="appointment-actions">
-        <span
-          className={`status-badge status-${appointment.status.toLowerCase()}`}
-        >
-          {formatStatus(appointment.status)}
-        </span>
+        <StatusBadge status={appointment.status} />
         {actions}
       </div>
     </article>
