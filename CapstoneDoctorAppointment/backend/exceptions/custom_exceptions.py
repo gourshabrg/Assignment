@@ -8,7 +8,8 @@ from constants import (
     INVALID_TOKEN,
     SAME_PASSWORD,
     INCORRECT_OLD_PASSWORD,
-    ACCOUNT_PENDING_APPROVAL
+    ACCOUNT_PENDING_APPROVAL,
+    ACCESS_DENIED
 )
 
 
@@ -64,3 +65,8 @@ class IncorrectOldPasswordException(BaseAPIException):
 class AccountPendingApprovalException(BaseAPIException):
     status_code = status.HTTP_403_FORBIDDEN
     message = ACCOUNT_PENDING_APPROVAL
+
+
+class AccessDeniedException(BaseAPIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    message = ACCESS_DENIED
