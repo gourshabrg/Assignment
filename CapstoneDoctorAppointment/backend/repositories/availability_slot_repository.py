@@ -1,5 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
+
+from beanie import PydanticObjectId
 
 from motor.motor_asyncio import AsyncIOMotorClientSession
 
@@ -96,3 +98,18 @@ class AvailabilitySlotRepository:
     ):
 
         await slot.delete(session=session)
+
+    async def book_if_available(self, slot_id: str) -> bool:
+        """Atomically books the slot; True if this call booked it."""
+
+        result = await AvailabilitySlot.find_one(
+            AvailabilitySlot.id == PydanticObjectId(slot_id),
+            AvailabilitySlot.is_booked == False  # noqa: E712
+        ).update(
+            {"$set": {
+                "is_booked": True,
+                "updated_at": datetime.utcnow()
+            }}
+        )
+
+        return result.modified_count == 1
