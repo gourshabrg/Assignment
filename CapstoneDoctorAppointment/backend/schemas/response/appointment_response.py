@@ -27,4 +27,6 @@ class AppointmentResponse(BaseModel):
 
     status: AppointmentStatus
 
+    cancellation_reason: str | None = None
+
     created_at: datetime

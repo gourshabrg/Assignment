@@ -23,6 +23,8 @@ class Appointment(Document):
 
     status: AppointmentStatus = AppointmentStatus.PENDING_PAYMENT
 
+    cancellation_reason: str | None = None
+
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     updated_at: datetime = Field(default_factory=datetime.utcnow)

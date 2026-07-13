@@ -24,3 +24,37 @@ class AppointmentRepository:
     ) -> Optional[Appointment]:
 
         return await Appointment.get(appointment_id)
+
+    async def get_by_patient(
+        self,
+        patient_id: str
+    ) -> list[Appointment]:
+
+        return await Appointment.find(
+            Appointment.patient_id == patient_id
+        ).sort(
+            "-appointment_date",
+            "-start_time"
+        ).to_list()
+
+    async def get_by_doctor(
+        self,
+        doctor_id: str
+    ) -> list[Appointment]:
+
+        return await Appointment.find(
+            Appointment.doctor_id == doctor_id
+        ).sort(
+            "-appointment_date",
+            "-start_time"
+        ).to_list()
+
+    async def update(
+        self,
+        appointment: Appointment,
+        session: AsyncIOMotorClientSession | None = None
+    ) -> Appointment:
+
+        await appointment.save(session=session)
+
+        return appointment
