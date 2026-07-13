@@ -7,7 +7,8 @@ from routers import (
     auth_router,
     doctor_router,
     availability_router,
-    appointment_router
+    appointment_router,
+    payment_router
 )
 
 
@@ -31,6 +32,7 @@ app.include_router(auth_router)
 app.include_router(doctor_router)
 app.include_router(availability_router)
 app.include_router(appointment_router)
+app.include_router(payment_router)
 
 
 @app.get("/")
