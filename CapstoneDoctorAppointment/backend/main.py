@@ -3,7 +3,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from database.database import MongoDatabase
-from routers import auth_router, doctor_router, availability_router
+from routers import (
+    auth_router,
+    doctor_router,
+    availability_router,
+    appointment_router
+)
 
 
 @asynccontextmanager
@@ -25,6 +30,7 @@ app = FastAPI(
 app.include_router(auth_router)
 app.include_router(doctor_router)
 app.include_router(availability_router)
+app.include_router(appointment_router)
 
 
 @app.get("/")

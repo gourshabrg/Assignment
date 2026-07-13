@@ -16,7 +16,8 @@ from constants import (
     SLOT_ALREADY_BOOKED,
     INVALID_SLOT_TIME,
     PAST_SLOT_DATE,
-    SLOT_OVERLAP
+    SLOT_OVERLAP,
+    SLOT_UNAVAILABLE
 )
 
 
@@ -112,3 +113,8 @@ class PastSlotDateException(BaseAPIException):
 class SlotOverlapException(BaseAPIException):
     status_code = status.HTTP_409_CONFLICT
     message = SLOT_OVERLAP
+
+
+class SlotUnavailableException(BaseAPIException):
+    status_code = status.HTTP_409_CONFLICT
+    message = SLOT_UNAVAILABLE
