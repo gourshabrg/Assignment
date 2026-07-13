@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, Query, status
-
-from enums.specialization_enum import Specialization
+from fastapi import APIRouter, Depends, status
 
 from models.user_model import User
 
 from schemas.request.doctor_profile_update_request import (
     DoctorProfileUpdateRequest
 )
+from schemas.request.doctor_search_request import DoctorSearchRequest
 
 from services.doctor_service import DoctorService
 
@@ -61,11 +60,7 @@ async def update_my_profile(
     status_code=status.HTTP_200_OK
 )
 async def search_doctors(
-    name: str | None = Query(default=None),
-    specialization: Specialization | None = Query(default=None),
-    location: str | None = Query(default=None),
-    min_experience: int | None = Query(default=None, ge=0),
-    max_fee: float | None = Query(default=None, gt=0),
+    request: DoctorSearchRequest = Depends(),
     current_user: User = Depends(
         get_current_user
     )
@@ -73,11 +68,11 @@ async def search_doctors(
     """Searches active doctors by optional filters."""
 
     return await doctor_service.search_doctors(
-        name=name,
-        specialization=specialization,
-        location=location,
-        min_experience=min_experience,
-        max_fee=max_fee
+        name=request.name,
+        specialization=request.specialization,
+        location=request.location,
+        min_experience=request.min_experience,
+        max_fee=request.max_fee
     )
 
 
