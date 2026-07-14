@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./authContext";
+import { getProfile } from "../api/authApi";
 import { decodeJwt, isTokenExpired } from "../utils/jwt";
 import { TOKEN_STORAGE_KEY } from "../utils/constants";
 
@@ -27,6 +28,26 @@ const loadInitialUser = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(loadInitialUser);
+
+  // The token only carries the email, so the display name comes from the API.
+  useEffect(() => {
+    if (!user || user.fullName) {
+      return;
+    }
+
+    const loadName = async () => {
+      try {
+        const response = await getProfile();
+        setUser((prev) =>
+          prev ? { ...prev, fullName: response.data.data.full_name } : prev
+        );
+      } catch {
+        // The email stays as the fallback display name.
+      }
+    };
+
+    loadName();
+  }, [user]);
 
   const login = (token) => {
     localStorage.setItem(TOKEN_STORAGE_KEY, token);

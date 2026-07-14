@@ -9,6 +9,8 @@ import {
   ClipboardIcon,
   UsersIcon,
   DashboardIcon,
+  UserIcon,
+  LockIcon,
   LogoutIcon
 } from "../common/Icons";
 
@@ -22,7 +24,8 @@ const NAV_ITEMS = {
     { to: "/", label: "Home", Icon: HomeIcon },
     { to: "/doctor/dashboard", label: "Dashboard", Icon: DashboardIcon },
     { to: "/doctor/availability", label: "Availability", Icon: CalendarIcon },
-    { to: "/doctor/appointments", label: "Appointments", Icon: ClipboardIcon }
+    { to: "/doctor/appointments", label: "Appointments", Icon: ClipboardIcon },
+    { to: "/doctor/profile", label: "My Profile", Icon: UserIcon }
   ],
   [ROLES.ADMIN]: [
     { to: "/", label: "Home", Icon: HomeIcon },
@@ -35,6 +38,10 @@ const NAV_ITEMS = {
     }
   ]
 };
+
+const COMMON_ITEMS = [
+  { to: "/change-password", label: "Change Password", Icon: LockIcon }
+];
 
 const ROLE_SUBTITLE = {
   [ROLES.PATIENT]: "Patient Portal",
@@ -53,8 +60,9 @@ const Sidebar = () => {
     navigate("/login");
   };
 
-  const items = NAV_ITEMS[user.role] ?? [];
-  const initial = user.email[0].toUpperCase();
+  const items = [...(NAV_ITEMS[user.role] ?? []), ...COMMON_ITEMS];
+  const displayName = user.fullName ?? user.email;
+  const initial = displayName[0].toUpperCase();
 
   return (
     <aside className="sidebar">
@@ -82,7 +90,7 @@ const Sidebar = () => {
       <div className="sidebar-footer">
         <div className="sidebar-user">
           <div className="user-badge">{initial}</div>
-          <p className="user-email">{user.email}</p>
+          <p className="user-email">{displayName}</p>
         </div>
         <button
           type="button"
