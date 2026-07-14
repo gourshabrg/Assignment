@@ -10,6 +10,7 @@ import {
   rejectCancellation
 } from "../../api/adminApi";
 import { useFetch } from "../../hooks/useFetch";
+import { formatDoctorName } from "../../utils/format";
 import { getApiErrorMessage } from "../../utils/apiError";
 import "../../styles/appointment.css";
 
@@ -66,7 +67,7 @@ const AdminCancellationsPage = () => {
               <AppointmentCard
                 key={appointment.id}
                 appointment={appointment}
-                name={`Dr ${appointment.doctor_name}`}
+                name={formatDoctorName(appointment.doctor_name)}
                 actions={
                   <>
                     <Button

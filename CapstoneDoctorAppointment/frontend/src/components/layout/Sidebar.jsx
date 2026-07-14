@@ -30,7 +30,7 @@ const NAV_ITEMS = {
     { to: "/admin/doctors", label: "Doctors", Icon: UsersIcon },
     {
       to: "/admin/cancellations",
-      label: "Cancellations",
+      label: "Cancellation Requests",
       Icon: ClipboardIcon
     }
   ]

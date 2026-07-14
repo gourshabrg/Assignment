@@ -12,7 +12,7 @@ import {
 } from "../../components/common/Icons";
 import { getDashboard } from "../../api/adminApi";
 import { useFetch } from "../../hooks/useFetch";
-import { formatDate } from "../../utils/format";
+import { formatDate, formatDoctorName } from "../../utils/format";
 import "../../styles/appointment.css";
 
 const AdminDashboardPage = () => {
@@ -91,8 +91,8 @@ const AdminDashboardPage = () => {
                 <article key={appointment.id} className="appointment-card">
                   <div className="appointment-info">
                     <h3 className="doctor-name">
-                      {appointment.patient_name} with Dr{" "}
-                      {appointment.doctor_name}
+                      {appointment.patient_name} with{" "}
+                      {formatDoctorName(appointment.doctor_name)}
                     </h3>
                     <p className="doctor-line">
                       <CalendarIcon />
