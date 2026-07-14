@@ -1,3 +1,35 @@
+export const UserIcon = (props) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" {...props}>
+    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8" />
+    <path
+      d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+export const LockIcon = (props) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" {...props}>
+    <rect
+      x="4"
+      y="10"
+      width="16"
+      height="11"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    />
+    <path
+      d="M8 10V7a4 4 0 018 0v3"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 export const HomeIcon = (props) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" {...props}>
     <path

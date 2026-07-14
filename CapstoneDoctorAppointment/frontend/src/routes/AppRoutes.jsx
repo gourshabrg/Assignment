@@ -1,9 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import GuestRoute from "../components/common/GuestRoute";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage";
+import ChangePasswordPage from "../pages/auth/ChangePasswordPage";
+import DoctorProfilePage from "../pages/doctor/DoctorProfilePage";
 import DoctorSearchPage from "../pages/patient/DoctorSearchPage";
 import DoctorDetailsPage from "../pages/patient/DoctorDetailsPage";
 import PaymentPage from "../pages/patient/PaymentPage";
@@ -21,9 +24,38 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route
+        path="/login"
+        element={
+          <GuestRoute>
+            <LoginPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <GuestRoute>
+            <RegisterPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <GuestRoute>
+            <ResetPasswordPage />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePasswordPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/doctors"
@@ -63,6 +95,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
             <DoctorDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/profile"
+        element={
+          <ProtectedRoute allowedRoles={[ROLES.DOCTOR]}>
+            <DoctorProfilePage />
           </ProtectedRoute>
         }
       />
