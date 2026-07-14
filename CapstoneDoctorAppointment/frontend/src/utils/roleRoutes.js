@@ -9,5 +9,5 @@ export const getRoleLandingPath = (role) => {
     return "/admin/dashboard";
   }
 
-  return "/";
+  return "/doctors";
 };
