@@ -1,0 +1,167 @@
+.appointment-tabs {
+  max-width: 480px;
+}
+
+.appointment-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.appointment-card .doctor-avatar {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  font-size: 1.1rem;
+}
+
+.appointment-info {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.appointment-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 0 0 auto;
+}
+
+.cancel-reason {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.status-badge {
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-booked {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.status-pending_payment,
+.status-cancellation_requested {
+  background: #fff4e0;
+  color: #a15c00;
+}
+
+.status-completed {
+  background: #e6f6ec;
+  color: var(--color-success);
+}
+
+.status-cancelled,
+.status-not_attended {
+  background: #fdecec;
+  color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+  .appointment-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .appointment-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+/* ---- payment ---- */
+
+.payment-summary {
+  margin-bottom: var(--spacing-lg);
+}
+
+.payment-summary > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.payment-summary dt {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.payment-summary dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.payment-success {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.payment-success-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: var(--spacing-md);
+}
+
+.payment-success .payment-summary {
+  text-align: left;
+  margin-top: var(--spacing-lg);
+}
+
+.success-tick {
+  width: 84px;
+  height: 84px;
+}
+
+.success-tick-circle {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: tick-circle 0.5s ease-out forwards;
+}
+
+.success-tick-check {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: tick-check 0.35s 0.45s ease-out forwards;
+}
+
+@keyframes tick-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes tick-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .success-tick-circle,
+  .success-tick-check {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

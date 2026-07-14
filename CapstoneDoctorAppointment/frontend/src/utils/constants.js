@@ -6,6 +6,41 @@ export const ROLES = {
   ADMIN: "ADMIN"
 };
 
+export const APPOINTMENT_STATUS = {
+  PENDING_PAYMENT: "PENDING_PAYMENT",
+  BOOKED: "BOOKED",
+  CANCELLATION_REQUESTED: "CANCELLATION_REQUESTED",
+  CANCELLED: "CANCELLED",
+  COMPLETED: "COMPLETED",
+  NOT_ATTENDED: "NOT_ATTENDED"
+};
+
+// Tabs on the appointments page, mapped to the statuses they show.
+export const APPOINTMENT_TABS = [
+  {
+    key: "upcoming",
+    label: "Upcoming",
+    statuses: [
+      APPOINTMENT_STATUS.PENDING_PAYMENT,
+      APPOINTMENT_STATUS.BOOKED,
+      APPOINTMENT_STATUS.CANCELLATION_REQUESTED
+    ]
+  },
+  {
+    key: "completed",
+    label: "Completed",
+    statuses: [
+      APPOINTMENT_STATUS.COMPLETED,
+      APPOINTMENT_STATUS.NOT_ATTENDED
+    ]
+  },
+  {
+    key: "cancelled",
+    label: "Cancelled",
+    statuses: [APPOINTMENT_STATUS.CANCELLED]
+  }
+];
+
 export const GENDER_OPTIONS = [
   { value: "MALE", label: "Male" },
   { value: "FEMALE", label: "Female" },
