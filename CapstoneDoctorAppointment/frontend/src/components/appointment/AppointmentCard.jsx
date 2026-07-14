@@ -6,6 +6,7 @@ import {
   formatDate,
   formatTime,
   formatStatus,
+  formatDoctorName,
   getInitials
 } from "../../utils/format";
 
@@ -22,7 +23,9 @@ const AppointmentCard = ({ appointment, onCancel, cancelling }) => {
       </div>
 
       <div className="appointment-info">
-        <h3 className="doctor-name">Dr {appointment.doctor_name}</h3>
+        <h3 className="doctor-name">
+          {formatDoctorName(appointment.doctor_name)}
+        </h3>
 
         <p className="doctor-line">
           <CalendarIcon />
