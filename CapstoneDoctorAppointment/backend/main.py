@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from database.database import MongoDatabase
+from middleware.cors import add_cors_middleware
 from routers import (
     auth_router,
     doctor_router,
@@ -28,6 +29,8 @@ app = FastAPI(
     title="Doctor Appointment Booking System",
     lifespan=lifespan
 )
+
+add_cors_middleware(app)
 
 app.include_router(auth_router)
 app.include_router(doctor_router)
