@@ -109,12 +109,15 @@
 }
 
 .status-pending_payment,
-.status-cancellation_requested {
+.status-cancellation_requested,
+.status-pending {
   background: #fff4e0;
   color: #a15c00;
 }
 
-.status-completed {
+.status-completed,
+.status-verified,
+.status-available {
   background: #e6f6ec;
   color: var(--color-success);
 }

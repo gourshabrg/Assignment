@@ -1,5 +1,6 @@
 import { CalendarIcon } from "../common/Icons";
-import { formatDate, formatTime, formatStatus, getInitials } from "../../utils/format";
+import StatusBadge from "../common/StatusBadge";
+import { formatDate, formatTime, getInitials } from "../../utils/format";
 
 // Shared by the patient and doctor views: `name` is whichever party the
 // viewer cares about, `actions` are the buttons for that view.
@@ -28,11 +29,7 @@ const AppointmentCard = ({ appointment, name, actions }) => {
       </div>
 
       <div className="appointment-actions">
-        <span
-          className={`status-badge status-${appointment.status.toLowerCase()}`}
-        >
-          {formatStatus(appointment.status)}
-        </span>
+        <StatusBadge status={appointment.status} />
         {actions}
       </div>
     </article>

@@ -27,7 +27,12 @@ const NAV_ITEMS = {
   [ROLES.ADMIN]: [
     { to: "/", label: "Home", Icon: HomeIcon },
     { to: "/admin/dashboard", label: "Dashboard", Icon: DashboardIcon },
-    { to: "/admin/doctors", label: "Doctors", Icon: UsersIcon }
+    { to: "/admin/doctors", label: "Doctors", Icon: UsersIcon },
+    {
+      to: "/admin/cancellations",
+      label: "Cancellation Requests",
+      Icon: ClipboardIcon
+    }
   ]
 };
 

@@ -4,6 +4,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import PageHeader from "../../components/layout/PageHeader";
 import Loader from "../../components/common/Loader";
+import StatusBadge from "../../components/common/StatusBadge";
 import {
   createSlot,
   getMySlots,
@@ -184,13 +185,7 @@ const MyAvailabilityPage = () => {
               </div>
 
               <div className="appointment-actions">
-                <span
-                  className={`status-badge ${
-                    slot.is_booked ? "status-booked" : "status-completed"
-                  }`}
-                >
-                  {slot.is_booked ? "Booked" : "Available"}
-                </span>
+                <StatusBadge status={slot.is_booked ? "BOOKED" : "AVAILABLE"} />
 
                 {!slot.is_booked && (
                   <>
