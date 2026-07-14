@@ -1,0 +1,13 @@
+import axiosInstance from "./axiosInstance";
+
+export const registerPatient = (data) =>
+  axiosInstance.post("/auth/register/patient", data);
+
+export const registerDoctor = (data) =>
+  axiosInstance.post("/auth/register/doctor", data);
+
+export const login = (data) =>
+  axiosInstance.post("/auth/login", data);
+
+export const resetPassword = (data) =>
+  axiosInstance.post("/auth/reset-password", data);

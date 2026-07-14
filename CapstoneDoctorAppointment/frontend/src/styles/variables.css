@@ -1,6 +1,9 @@
 :root {
   --color-primary: #16a596;
   --color-primary-dark: #0f7a6f;
+  --color-primary-light: #e3f5f2;
+  --color-navbar-bg: #ffffff;
+  --color-navbar-text: #0e5249;
   --color-text: #1a1a1a;
   --color-muted: #6b7280;
   --color-bg: #f4f7fb;
