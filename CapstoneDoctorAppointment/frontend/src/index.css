@@ -1,0 +1,20 @@
+#root {
+  min-height: 100vh;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.page-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
