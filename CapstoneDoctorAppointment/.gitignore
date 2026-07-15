@@ -6,3 +6,7 @@ node_modules/
 __init__.py
 build/
 dist/
+.vite/
+.coverage
+htmlcov/
+.pytest_cache/
