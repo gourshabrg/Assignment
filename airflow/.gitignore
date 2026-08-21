@@ -1,0 +1,6 @@
+airflow_505/logs/
+airflow_505/airflow.cfg
+airflow_505/webserver_config.py
+**/__pycache__/
+*.pyc
+docker-compose.yaml
